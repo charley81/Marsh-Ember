@@ -1,3 +1,5 @@
+import type { EventRecord } from "./events";
+
 export const navigation = [
   { href: "/our-story", label: "Our Story" },
   { href: "/menus", label: "Menus" },
@@ -86,16 +88,6 @@ export const dinnerSections: readonly MenuSection[] = [
   },
 ] as const;
 
-export type EventRecord = {
-  slug: string;
-  title: string;
-  summary: string;
-  date: string;
-  time: string;
-  format: string;
-  status: string;
-};
-
 export const events: readonly EventRecord[] = [
   {
     slug: "harvest-at-the-hearth",
@@ -103,37 +95,82 @@ export const events: readonly EventRecord[] = [
     summary: "A seasonal dinner centered on the hearth, late-summer produce, and a shared menu created for one evening.",
     date: "September 24, 2026",
     time: "6:30 PM",
+    schedule: "September 24, 2026 · 6:30 PM – Approximately 9 PM · Marsh & Ember, Charleston, South Carolina",
+    location: "Marsh & Ember, Charleston",
     format: "Multi-course shared dinner",
-    status: "RSVP Open",
+    availability: { state: "accepting", label: "RSVP Open" },
+    detail: {
+      heroImage: "/images/event-primary-harvest-dinner.jpg",
+      heroAlt: "Harvest at the Hearth dinner served around a shared table",
+      availabilityNote: "Limited seats available",
+      facts: [
+        { label: "Date", value: "September 24, 2026" },
+        { label: "Time", value: "6:30 PM – Approximately 9 PM" },
+        { label: "Time Zone", value: "Eastern Time" },
+        { label: "Format", value: "Multi-course shared dinner" },
+        { label: "Location", value: "Marsh & Ember, Charleston" },
+        { label: "Registration", value: "RSVP required" },
+      ],
+      intro: {
+        title: "An evening around the hearth",
+        paragraphs: [
+          "Harvest at the Hearth is a one-night dinner inspired by the transition from late summer into fall. The menu follows ingredients through the fire—from vegetables and seafood to grains, smoke, and the final course.",
+          "Guests will be seated for a shared multi-course experience. The evening is designed to unfold as one menu, with beverages available separately unless otherwise noted during confirmation.",
+        ],
+        images: [
+          { src: "/images/event-food-prep-image.jpg", alt: "Seasonal ingredients being prepared for the event" },
+          { src: "/images/event-dining-room-setup.jpg", alt: "The dining room prepared for Harvest at the Hearth" },
+        ],
+      },
+      expectations: [
+        { title: "Shared multi-course menu", copy: "The kitchen will serve one seasonal menu across the evening." },
+        { title: "Communal experience", copy: "Seating may include shared tables or neighboring parties depending on the final event format." },
+        { title: "Set arrival time", copy: "Guests should plan to arrive before the 6:30 PM start so the menu can begin together." },
+        { title: "Dietary communication", copy: "Share dietary needs in the RSVP request. The team will review requests before confirming attendance, but not every accommodation can be guaranteed." },
+      ],
+      courses: [
+        { name: "Hearth Bread", description: "Benne, cultured butter, smoked sea salt" },
+        { name: "Ember-Roasted Vegetables", description: "Field peas, herbs, preserved lemon", tags: ["VG", "GA"] },
+        { name: "Market Fish", description: "Carolina Gold rice, shrimp broth, seasonal vegetables" },
+        { name: "Wood-Grilled Pork", description: "Mustard greens, peach, natural jus" },
+        { name: "Cornmeal Cake", description: "Late-summer fruit, cultured cream", tags: ["V"] },
+      ],
+    },
   },
   {
     slug: "lowcountry-oyster-roast",
     title: "Lowcountry Oyster Roast",
     summary: "Oysters from the coast, food from the fire, cold drinks, and an afternoon designed for gathering.",
-    date: "October 11, 2026 · 4–7 PM",
+    date: "October 11, 2026",
     time: "4–7 PM",
+    schedule: "October 11, 2026 · 4–7 PM · Marsh & Ember, Charleston, South Carolina",
+    location: "Marsh & Ember, Charleston",
     format: "Courtyard gathering",
-    status: "Upcoming",
+    availability: { state: "accepting", label: "RSVP Open" },
   },
   {
     slug: "benne-and-bourbon",
     title: "Benne & Bourbon",
     summary: "An evening exploring benne, bourbon, and the ways each can shape a menu from first course to dessert.",
-    date: "November 5, 2026 · 6:30 PM",
+    date: "November 5, 2026",
     time: "6:30 PM",
+    schedule: "November 5, 2026 · 6:30 PM · Marsh & Ember, Charleston, South Carolina",
+    location: "Marsh & Ember, Charleston",
     format: "Guided dinner",
-    status: "Limited Availability",
+    availability: { state: "accepting", label: "Limited Availability" },
   },
   {
     slug: "sunday-supper",
     title: "Sunday Supper",
     summary: "A relaxed Sunday supper built around a seasonal family-style menu and a communal table.",
-    date: "November 22, 2026 · 5 PM",
+    date: "November 22, 2026",
     time: "5 PM",
+    schedule: "November 22, 2026 · 5 PM · Marsh & Ember, Charleston, South Carolina",
+    location: "Marsh & Ember, Charleston",
     format: "Shared-table dinner",
-    status: "Upcoming",
+    availability: { state: "accepting", label: "RSVP Open" },
   },
-] as const;
+];
 
 export function getEvent(slug: string) {
   return events.find((event) => event.slug === slug);
