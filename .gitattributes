@@ -1,0 +1,2 @@
+# Preserve upstream skill documentation exactly as locked.
+.pi/skills/** whitespace=-blank-at-eol
