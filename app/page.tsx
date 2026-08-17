@@ -1,69 +1,31 @@
-import Image from "next/image";
+import type { Metadata } from "next";
+import { Actions, ButtonLink, Eyebrow, FactGrid, MediaFrame, MenuItem, SectionHeading } from "@/components/ui";
+
+export const metadata: Metadata = { title: "Lowcountry ingredients. Shaped by fire.", description: "Experience live-fire Lowcountry cooking and thoughtful hospitality in the heart of Charleston." };
+
+const preview = [
+  { name: "Hearth Bread", price: "$9", description: "Benne, cultured butter, smoked sea salt. Baked fresh over hickory wood coals daily.", tags: ["Hearth-Baked"] },
+  { name: "Charred Okra", price: "$16", description: "Field pea hummus, preserved lemon, sesame, extra virgin olive oil.", tags: ["VG", "GA"] },
+  { name: "Market Fish", price: "MP", description: "Summer squash, shrimp broth, local garden herbs. Day-boat seafood cooked directly on the ash.", tags: ["GA"] },
+] as const;
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+  return <>
+    <section className="hero hero--mobile-image-first hero--compact-title">
+      <div className="hero__content"><Eyebrow>Charleston, South Carolina</Eyebrow><h1>Lowcountry ingredients. Shaped by fire.</h1><p className="lede">Marsh &amp; Ember brings the season to the table through live-fire cooking, thoughtful hospitality, and a warm Charleston dining room.</p><Actions><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="/menus" variant="secondary">View Menus</ButtonLink></Actions></div>
+      <MediaFrame src="/images/home-hero-image.jpg" mobileSrc="/images/home-mobile-hero.jpg" alt="A wood-fired Lowcountry dish at Marsh and Ember" priority />
+    </section>
+
+    <section className="section section--sand"><div className="split-section split-section--mobile-media-first"><div className="split-section__copy"><SectionHeading eyebrow="Our Philosophy" title="From coast and field to flame" /><p className="lede">The menu follows the Lowcountry through the ingredients at their best—seafood from nearby waters, regional produce, heritage grains, and preparations drawn toward the hearth. The result is grounded in place without being held to the past.</p><ButtonLink href="/our-story" variant="secondary">Our Story</ButtonLink></div><MediaFrame src="/images/home-story-image.jpg" mobileSrc="/images/home-mobile-story.jpg" alt="A chef preparing seasonal ingredients beside the hearth" className="media-frame--landscape" /></div></section>
+
+    <section className="section"><div className="section__inner"><div className="menu-header-row"><SectionHeading eyebrow="Menus" title="On the table now" intro="Dinner changes with the season and the people who grow, harvest, and land what we cook." /><nav className="menu-tabs" aria-label="Featured menus"><span>Dinner</span><span>Brunch</span><span>Cocktails</span><span>Selected Wines</span></nav></div><div className="menu-preview">{preview.map((item) => <MenuItem item={item} key={item.name} />)}</div><Actions centered><ButtonLink href="/menus">Explore the Menus</ButtonLink></Actions></div></section>
+
+    <section className="section section--sand"><div className="split-section"><div className="split-section__copy"><SectionHeading eyebrow="The Atmosphere" title="A room with warmth" /><p className="lede">Settle into a dining room designed for conversation, celebration, and the pleasure of staying a little longer. The atmosphere is polished but easy; the welcome is attentive without ceremony.</p></div><div className="atmosphere-media"><MediaFrame src="/images/home-main-room-image.jpg" mobileSrc="/images/home-mobile-atmosphere-one.jpg" alt="The warm Marsh and Ember dining room" className="media-frame--landscape" /><MediaFrame src="/images/home-main-room-image.jpg" mobileSrc="/images/home-mobile-atmosphere-two.jpg" alt="Guests gathering around a table" className="media-frame--wide mobile-only" /></div></div></section>
+
+    <section className="section"><div className="split-section"><MediaFrame src="/images/home-private-dining-image.jpg" mobileSrc="/images/home-mobile-private.jpg" alt="A private table prepared for a gathering" className="media-frame--portrait home-private-media" /><div className="split-section__copy"><SectionHeading eyebrow="Private Events" title="Your gathering, considered" /><p className="lede">A private room, a shared table, and a menu shaped around the occasion—from family celebrations to business dinners and intimate receptions.</p><ButtonLink href="/private-dining" variant="secondary">Explore Private Dining</ButtonLink></div></div></section>
+
+    <section className="section section--navy"><div className="section__inner"><SectionHeading eyebrow="Location & Hours" title="Join us in Charleston" intro="Dinner Sunday through Thursday until 10 PM, and Friday and Saturday until 11 PM." centered light /><FactGrid facts={[{ label: "Our Address", value: "184 King Street, Charleston, SC 29401" }, { label: "Our Hours", value: "Sunday–Thursday 5–10 PM · Friday–Saturday 5–11 PM" }]} /><Actions centered><ButtonLink href="/visit" variant="light">Plan Your Visit</ButtonLink><ButtonLink href="https://maps.google.com/?q=184+King+Street+Charleston+SC+29401" variant="light" external>Get Directions</ButtonLink></Actions></div></section>
+
+    <section className="section section--sand"><div className="section__inner"><SectionHeading title="A table is waiting" intro="Come for the fire. Stay for the evening." centered /><Actions centered><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="https://instagram.com" variant="text" external>Follow Marsh &amp; Ember on Instagram</ButtonLink></Actions></div></section>
+  </>;
 }
