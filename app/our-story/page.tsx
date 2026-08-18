@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, MediaFrame, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = { title: "Our Story", description: "Discover the Lowcountry ingredients, live-fire cooking, and warm hospitality behind Marsh & Ember." };
@@ -17,6 +18,6 @@ export default function OurStoryPage() {
 
     <section className="section section--sand"><div className="split-section split-section--reverse split-section--mobile-copy-first"><MediaFrame src="/images/story-ingredient-detail-image.jpg" mobileSrc="/images/story-mobile-ingredients.jpg" alt="Seasonal ingredients selected for the menu" /><div className="split-section__copy"><SectionHeading eyebrow="Thoughtful Sourcing" title="Relationships before labels" /><p className="lede">Our sourcing changes with the season and with availability. We prioritize thoughtful relationships, responsible purchasing, and ingredients that make sense for the place and moment.</p></div></div></section>
 
-    <section className="section section--sand"><div className="section__inner"><SectionHeading title="Experience Marsh & Ember" intro="Discover the menus, plan your visit, or reserve a table for an evening shaped by the Lowcountry." centered /><Actions centered><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="/menus" variant="secondary">View Menus</ButtonLink><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
+    <section className="section section--sand"><div className="section__inner"><SectionHeading title="Experience Marsh & Ember" intro="Discover the menus, plan your visit, or reserve a table for an evening shaped by the Lowcountry." centered /><Actions centered><ReservationTrigger>Reserve a Table</ReservationTrigger><ButtonLink href="/menus" variant="secondary">View Menus</ButtonLink><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
   </>;
 }

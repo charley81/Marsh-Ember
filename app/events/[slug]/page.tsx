@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EventHero, EventRsvpSection } from "@/components/events/event-detail";
+import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, FactGrid, MediaFrame, SectionHeading, Tags } from "@/components/ui";
 import { getDetailEventSlugs, getEventBySlug, getSiteSettings } from "@/lib/content";
 import { getEventAvailabilityPresentation } from "@/lib/events";
@@ -55,7 +56,7 @@ export default async function EventDetailPage({ params }: PageProps<"/events/[sl
       <EventRsvpSection event={event} />
 
       <section className="section section--sand"><div className="section__inner"><SectionHeading title="Questions about the event?" centered /><Actions centered><ButtonLink href={`mailto:${settings.eventEmail}`} variant="secondary">{settings.eventEmail}</ButtonLink><ButtonLink href={settings.eventPhoneHref} variant="secondary">{settings.eventPhone}</ButtonLink></Actions></div></section>
-      <section className="section section--sand"><div className="section__inner"><SectionHeading eyebrow="Marsh & Ember" title="Looking for a regular reservation?" intro="For dinner on another evening, reserve a table through our standard online booking experience." centered /><Actions centered><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="/events" variant="secondary">Explore All Events</ButtonLink><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
+      <section className="section section--sand"><div className="section__inner"><SectionHeading eyebrow="Marsh & Ember" title="Looking for a regular reservation?" intro="For dinner on another evening, reserve a table through our standard online booking experience." centered /><Actions centered><ReservationTrigger>Reserve a Table</ReservationTrigger><ButtonLink href="/events" variant="secondary">Explore All Events</ButtonLink><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
     </div>
   );
 }
