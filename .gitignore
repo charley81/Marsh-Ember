@@ -44,8 +44,9 @@ yarn-error.log*
 !.env.example
 !studio/.env.example
 
-# vercel
+# deployment tool state and local build output
 .vercel
+.netlify/
 
 # typescript
 *.tsbuildinfo
