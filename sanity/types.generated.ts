@@ -12,616 +12,660 @@
  * ---------------------------------------------------------------------------------
  */
 
-export declare const internalGroqTypeReferenceTo: unique symbol;
+export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: schema.json
 export type DietaryMarkerReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "dietaryMarker";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'dietaryMarker'
+}
 
 export type EventCourse = {
-  _type: "eventCourse";
-  name: string;
-  description: string;
-  dietaryMarkers?: Array<{
-    _key: string;
-  } & DietaryMarkerReference>;
-};
+  _type: 'eventCourse'
+  name: string
+  description: string
+  dietaryMarkers?: Array<
+    {
+      _key: string
+    } & DietaryMarkerReference
+  >
+}
 
 export type EventExpectation = {
-  _type: "eventExpectation";
-  title: string;
-  copy: string;
-};
+  _type: 'eventExpectation'
+  title: string
+  copy: string
+}
 
 export type EventFact = {
-  _type: "eventFact";
-  label: string;
-  value: string;
-};
+  _type: 'eventFact'
+  label: string
+  value: string
+}
 
 export type MenuItem = {
-  _type: "menuItem";
-  name: string;
-  price?: string;
-  description: string;
-  dietaryMarkers?: Array<{
-    _key: string;
-  } & DietaryMarkerReference>;
-  editorialTag?: string;
-  featuredOnLanding?: boolean;
-};
+  _type: 'menuItem'
+  name: string
+  price?: string
+  description: string
+  dietaryMarkers?: Array<
+    {
+      _key: string
+    } & DietaryMarkerReference
+  >
+  editorialTag?: string
+  featuredOnLanding?: boolean
+}
 
 export type MenuSection = {
-  _type: "menuSection";
-  title: string;
-  anchor: string;
-  image?: EditorialImage;
-  items: Array<{
-    _key: string;
-  } & MenuItem>;
-};
+  _type: 'menuSection'
+  title: string
+  anchor: string
+  image?: EditorialImage
+  items: Array<
+    {
+      _key: string
+    } & MenuItem
+  >
+}
 
 export type SanityImageAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+}
 
 export type EditorialImage = {
-  _type: "editorialImage";
-  asset?: SanityImageAssetReference;
-  media?: unknown;
-  hotspot?: SanityImageHotspot;
-  crop?: SanityImageCrop;
-  alt: string;
-  caption?: string;
-};
+  _type: 'editorialImage'
+  asset?: SanityImageAssetReference
+  media?: unknown
+  hotspot?: SanityImageHotspot
+  crop?: SanityImageCrop
+  alt: string
+  caption?: string
+}
 
 export type ServiceHours = {
-  _type: "serviceHours";
-  days: string;
-  time: string;
-};
+  _type: 'serviceHours'
+  days: string
+  time: string
+}
 
 export type Announcement = {
-  _type: "announcement";
-  enabled?: boolean;
-  message?: string;
-  linkLabel?: string;
-  linkPath?: string;
-  dismissalVersion: string;
-};
+  _type: 'announcement'
+  enabled?: boolean
+  message?: string
+  linkLabel?: string
+  linkPath?: string
+  dismissalVersion: string
+}
 
 export type Address = {
-  _type: "address";
-  street: string;
-  city: string;
-  region: string;
-  postalCode: string;
-  country: string;
-};
+  _type: 'address'
+  street: string
+  city: string
+  region: string
+  postalCode: string
+  country: string
+}
 
 export type DietaryMarker = {
-  _id: string;
-  _type: "dietaryMarker";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  code: string;
-  label: string;
-  detail: string;
-  sourceKey?: string;
-};
+  _id: string
+  _type: 'dietaryMarker'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  code: string
+  label: string
+  detail: string
+  sourceKey?: string
+}
 
 export type Menu = {
-  _id: string;
-  _type: "menu";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  category: "dinner" | "brunch" | "spirits" | "wine";
-  summary: string;
-  service?: string;
-  displayOrder: number;
-  hasDetailPage?: boolean;
-  updatedAt?: string;
-  listingImage?: EditorialImage;
-  detailImage?: EditorialImage;
-  sections?: Array<{
-    _key: string;
-  } & MenuSection>;
-  sourceKey?: string;
-};
+  _id: string
+  _type: 'menu'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  category: 'dinner' | 'brunch' | 'spirits' | 'wine'
+  summary: string
+  service?: string
+  displayOrder: number
+  hasDetailPage?: boolean
+  updatedAt?: string
+  listingImage?: EditorialImage
+  detailImage?: EditorialImage
+  sections?: Array<
+    {
+      _key: string
+    } & MenuSection
+  >
+  sourceKey?: string
+}
 
 export type Slug = {
-  _type: "slug";
-  current: string;
-  source?: string;
-};
+  _type: 'slug'
+  current: string
+  source?: string
+}
 
 export type EventReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "event";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'event'
+}
 
 export type SiteSettings = {
-  _id: string;
-  _type: "siteSettings";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name: string;
-  descriptor: string;
-  tagline: string;
-  address: Address;
-  mapUrl: string;
-  phone: string;
-  phoneHref: string;
-  email: string;
-  eventEmail: string;
-  eventPhone: string;
-  eventPhoneHref: string;
-  privateDiningEmail: string;
-  privateDiningPhone: string;
-  privateDiningPhoneHref: string;
-  instagramUrl?: string;
-  facebookUrl?: string;
-  hours: Array<{
-    _key: string;
-  } & ServiceHours>;
-  announcement?: Announcement;
-  featuredEvent?: EventReference;
-};
+  _id: string
+  _type: 'siteSettings'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name: string
+  descriptor: string
+  tagline: string
+  address: Address
+  mapUrl: string
+  phone: string
+  phoneHref: string
+  email: string
+  eventEmail: string
+  eventPhone: string
+  eventPhoneHref: string
+  privateDiningEmail: string
+  privateDiningPhone: string
+  privateDiningPhoneHref: string
+  instagramUrl?: string
+  facebookUrl?: string
+  hours: Array<
+    {
+      _key: string
+    } & ServiceHours
+  >
+  announcement?: Announcement
+  featuredEvent?: EventReference
+}
 
 export type Event = {
-  _id: string;
-  _type: "event";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  summary: string;
-  format: string;
-  listingImage: EditorialImage;
-  startsAt: string;
-  endsAt: string;
-  approximateEnd?: boolean;
-  timeZone: string;
-  location: string;
-  status: "accepting" | "closed" | "soldOut" | "cancelled" | "past";
-  acceptingLabel?: "open" | "limited";
-  heroImage?: EditorialImage;
-  availabilityNote?: string;
-  facts?: Array<{
-    _key: string;
-  } & EventFact>;
-  introTitle?: string;
-  introParagraphs?: Array<string>;
-  introImages?: Array<{
-    _key: string;
-  } & EditorialImage>;
-  expectations?: Array<{
-    _key: string;
-  } & EventExpectation>;
-  courses?: Array<{
-    _key: string;
-  } & EventCourse>;
-  sourceKey?: string;
-};
+  _id: string
+  _type: 'event'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  summary: string
+  format: string
+  listingImage: EditorialImage
+  startsAt: string
+  endsAt: string
+  approximateEnd?: boolean
+  timeZone: string
+  location: string
+  status: 'accepting' | 'closed' | 'soldOut' | 'cancelled' | 'past'
+  acceptingLabel?: 'open' | 'limited'
+  heroImage?: EditorialImage
+  availabilityNote?: string
+  facts?: Array<
+    {
+      _key: string
+    } & EventFact
+  >
+  introTitle?: string
+  introParagraphs?: Array<string>
+  introImages?: Array<
+    {
+      _key: string
+    } & EditorialImage
+  >
+  expectations?: Array<
+    {
+      _key: string
+    } & EventExpectation
+  >
+  courses?: Array<
+    {
+      _key: string
+    } & EventCourse
+  >
+  sourceKey?: string
+}
 
 export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-};
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
 
 export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
-};
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
 
 export type SanityImagePaletteSwatch = {
-  _type: "sanity.imagePaletteSwatch";
-  background?: string;
-  foreground?: string;
-  population?: number;
-  title?: string;
-};
+  _type: 'sanity.imagePaletteSwatch'
+  background?: string
+  foreground?: string
+  population?: number
+  title?: string
+}
 
 export type SanityImagePalette = {
-  _type: "sanity.imagePalette";
-  darkMuted?: SanityImagePaletteSwatch;
-  lightVibrant?: SanityImagePaletteSwatch;
-  darkVibrant?: SanityImagePaletteSwatch;
-  vibrant?: SanityImagePaletteSwatch;
-  dominant?: SanityImagePaletteSwatch;
-  lightMuted?: SanityImagePaletteSwatch;
-  muted?: SanityImagePaletteSwatch;
-};
+  _type: 'sanity.imagePalette'
+  darkMuted?: SanityImagePaletteSwatch
+  lightVibrant?: SanityImagePaletteSwatch
+  darkVibrant?: SanityImagePaletteSwatch
+  vibrant?: SanityImagePaletteSwatch
+  dominant?: SanityImagePaletteSwatch
+  lightMuted?: SanityImagePaletteSwatch
+  muted?: SanityImagePaletteSwatch
+}
 
 export type SanityImageDimensions = {
-  _type: "sanity.imageDimensions";
-  height: number;
-  width: number;
-  aspectRatio: number;
-};
+  _type: 'sanity.imageDimensions'
+  height: number
+  width: number
+  aspectRatio: number
+}
 
 export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata";
-  location?: Geopoint;
-  dimensions?: SanityImageDimensions;
-  palette?: SanityImagePalette;
-  lqip?: string;
-  blurHash?: string;
-  thumbHash?: string;
-  hasAlpha?: boolean;
-  isOpaque?: boolean;
-};
+  _type: 'sanity.imageMetadata'
+  location?: Geopoint
+  dimensions?: SanityImageDimensions
+  palette?: SanityImagePalette
+  lqip?: string
+  blurHash?: string
+  thumbHash?: string
+  hasAlpha?: boolean
+  isOpaque?: boolean
+}
 
 export type SanityFileAsset = {
-  _id: string;
-  _type: "sanity.fileAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash: string;
-  extension: string;
-  mimeType: string;
-  size: number;
-  assetId: string;
-  uploadId?: string;
-  path: string;
-  url: string;
-  source?: SanityAssetSourceData;
-};
+  _id: string
+  _type: 'sanity.fileAsset'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  originalFilename?: string
+  label?: string
+  title?: string
+  description?: string
+  altText?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
+  uploadId?: string
+  path: string
+  url: string
+  source?: SanityAssetSourceData
+}
 
 export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
-  name?: string;
-  id?: string;
-  url?: string;
-};
+  _type: 'sanity.assetSourceData'
+  name?: string
+  id?: string
+  url?: string
+}
 
 export type SanityImageAsset = {
-  _id: string;
-  _type: "sanity.imageAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash: string;
-  extension: string;
-  mimeType: string;
-  size: number;
-  assetId: string;
-  uploadId?: string;
-  path: string;
-  url: string;
-  metadata?: SanityImageMetadata;
-  source?: SanityAssetSourceData;
-};
+  _id: string
+  _type: 'sanity.imageAsset'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  originalFilename?: string
+  label?: string
+  title?: string
+  description?: string
+  altText?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
+  uploadId?: string
+  path: string
+  url: string
+  metadata?: SanityImageMetadata
+  source?: SanityAssetSourceData
+}
 
 export type Geopoint = {
-  _type: "geopoint";
-  lat?: number;
-  lng?: number;
-  alt?: number;
-};
+  _type: 'geopoint'
+  lat?: number
+  lng?: number
+  alt?: number
+}
 
-export type AllSanitySchemaTypes = DietaryMarkerReference | EventCourse | EventExpectation | EventFact | MenuItem | MenuSection | SanityImageAssetReference | EditorialImage | ServiceHours | Announcement | Address | DietaryMarker | Menu | Slug | EventReference | SiteSettings | Event | SanityImageCrop | SanityImageHotspot | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes =
+  | DietaryMarkerReference
+  | EventCourse
+  | EventExpectation
+  | EventFact
+  | MenuItem
+  | MenuSection
+  | SanityImageAssetReference
+  | EditorialImage
+  | ServiceHours
+  | Announcement
+  | Address
+  | DietaryMarker
+  | Menu
+  | Slug
+  | EventReference
+  | SiteSettings
+  | Event
+  | SanityImageCrop
+  | SanityImageHotspot
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageMetadata
+  | SanityFileAsset
+  | SanityAssetSourceData
+  | SanityImageAsset
+  | Geopoint
 
 // Source: ../sanity/queries/dietary.ts
 // Variable: DIETARY_MARKERS_QUERY
 // Query: *[_type == "dietaryMarker"] | order(code asc){code, label, detail}
 export type DIETARY_MARKERS_QUERY_RESULT = Array<{
-  code: string;
-  label: string;
-  detail: string;
-}>;
+  code: string
+  label: string
+  detail: string
+}>
 
 // Source: ../sanity/queries/events.ts
 // Variable: EVENT_LIST_QUERY
 // Query: *[_type == "event" && defined(slug.current) && status != "past"] | order(startsAt asc){      _id,  title,  "slug": slug.current,  summary,  format,  startsAt,  endsAt,  approximateEnd,  timeZone,  location,  status,  acceptingLabel,  listingImage{asset, crop, hotspot, alt},  heroImage{asset, crop, hotspot, alt},  availabilityNote,  facts[]{_key, label, value},  introTitle,  introParagraphs,  introImages[]{_key, asset, crop, hotspot, alt},  expectations[]{_key, title, copy},  courses[]{    _key,    name,    description,    dietaryMarkers[]->{code, label}  }  }
 export type EVENT_LIST_QUERY_RESULT = Array<{
-  _id: string;
-  title: string;
-  slug: string;
-  summary: string;
-  format: string;
-  startsAt: string;
-  endsAt: string;
-  approximateEnd: boolean | null;
-  timeZone: string;
-  location: string;
-  status: "accepting" | "cancelled" | "closed" | "past" | "soldOut";
-  acceptingLabel: "limited" | "open" | null;
+  _id: string
+  title: string
+  slug: string
+  summary: string
+  format: string
+  startsAt: string
+  endsAt: string
+  approximateEnd: boolean | null
+  timeZone: string
+  location: string
+  status: 'accepting' | 'cancelled' | 'closed' | 'past' | 'soldOut'
+  acceptingLabel: 'limited' | 'open' | null
   listingImage: {
-    asset: SanityImageAssetReference | null;
-    crop: SanityImageCrop | null;
-    hotspot: SanityImageHotspot | null;
-    alt: string;
-  };
+    asset: SanityImageAssetReference | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    alt: string
+  }
   heroImage: {
-    asset: SanityImageAssetReference | null;
-    crop: SanityImageCrop | null;
-    hotspot: SanityImageHotspot | null;
-    alt: string;
-  } | null;
-  availabilityNote: string | null;
+    asset: SanityImageAssetReference | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    alt: string
+  } | null
+  availabilityNote: string | null
   facts: Array<{
-    _key: string;
-    label: string;
-    value: string;
-  }> | null;
-  introTitle: string | null;
-  introParagraphs: Array<string> | null;
+    _key: string
+    label: string
+    value: string
+  }> | null
+  introTitle: string | null
+  introParagraphs: Array<string> | null
   introImages: Array<{
-    _key: string;
-    asset: SanityImageAssetReference | null;
-    crop: SanityImageCrop | null;
-    hotspot: SanityImageHotspot | null;
-    alt: string;
-  }> | null;
+    _key: string
+    asset: SanityImageAssetReference | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    alt: string
+  }> | null
   expectations: Array<{
-    _key: string;
-    title: string;
-    copy: string;
-  }> | null;
+    _key: string
+    title: string
+    copy: string
+  }> | null
   courses: Array<{
-    _key: string;
-    name: string;
-    description: string;
+    _key: string
+    name: string
+    description: string
     dietaryMarkers: Array<{
-      code: string;
-      label: string;
-    }> | null;
-  }> | null;
-}>;
+      code: string
+      label: string
+    }> | null
+  }> | null
+}>
 
 // Source: ../sanity/queries/events.ts
 // Variable: EVENT_BY_SLUG_QUERY
 // Query: *[_type == "event" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  format,  startsAt,  endsAt,  approximateEnd,  timeZone,  location,  status,  acceptingLabel,  listingImage{asset, crop, hotspot, alt},  heroImage{asset, crop, hotspot, alt},  availabilityNote,  facts[]{_key, label, value},  introTitle,  introParagraphs,  introImages[]{_key, asset, crop, hotspot, alt},  expectations[]{_key, title, copy},  courses[]{    _key,    name,    description,    dietaryMarkers[]->{code, label}  }  }
 export type EVENT_BY_SLUG_QUERY_RESULT = {
-  _id: string;
-  title: string;
-  slug: string;
-  summary: string;
-  format: string;
-  startsAt: string;
-  endsAt: string;
-  approximateEnd: boolean | null;
-  timeZone: string;
-  location: string;
-  status: "accepting" | "cancelled" | "closed" | "past" | "soldOut";
-  acceptingLabel: "limited" | "open" | null;
+  _id: string
+  title: string
+  slug: string
+  summary: string
+  format: string
+  startsAt: string
+  endsAt: string
+  approximateEnd: boolean | null
+  timeZone: string
+  location: string
+  status: 'accepting' | 'cancelled' | 'closed' | 'past' | 'soldOut'
+  acceptingLabel: 'limited' | 'open' | null
   listingImage: {
-    asset: SanityImageAssetReference | null;
-    crop: SanityImageCrop | null;
-    hotspot: SanityImageHotspot | null;
-    alt: string;
-  };
+    asset: SanityImageAssetReference | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    alt: string
+  }
   heroImage: {
-    asset: SanityImageAssetReference | null;
-    crop: SanityImageCrop | null;
-    hotspot: SanityImageHotspot | null;
-    alt: string;
-  } | null;
-  availabilityNote: string | null;
+    asset: SanityImageAssetReference | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    alt: string
+  } | null
+  availabilityNote: string | null
   facts: Array<{
-    _key: string;
-    label: string;
-    value: string;
-  }> | null;
-  introTitle: string | null;
-  introParagraphs: Array<string> | null;
+    _key: string
+    label: string
+    value: string
+  }> | null
+  introTitle: string | null
+  introParagraphs: Array<string> | null
   introImages: Array<{
-    _key: string;
-    asset: SanityImageAssetReference | null;
-    crop: SanityImageCrop | null;
-    hotspot: SanityImageHotspot | null;
-    alt: string;
-  }> | null;
+    _key: string
+    asset: SanityImageAssetReference | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    alt: string
+  }> | null
   expectations: Array<{
-    _key: string;
-    title: string;
-    copy: string;
-  }> | null;
+    _key: string
+    title: string
+    copy: string
+  }> | null
   courses: Array<{
-    _key: string;
-    name: string;
-    description: string;
+    _key: string
+    name: string
+    description: string
     dietaryMarkers: Array<{
-      code: string;
-      label: string;
-    }> | null;
-  }> | null;
-} | null;
+      code: string
+      label: string
+    }> | null
+  }> | null
+} | null
 
 // Source: ../sanity/queries/events.ts
 // Variable: EVENT_DETAIL_SLUGS_QUERY
 // Query: *[_type == "event" && defined(slug.current) && defined(heroImage.asset)] | order(startsAt asc){    "slug": slug.current  }
 export type EVENT_DETAIL_SLUGS_QUERY_RESULT = Array<{
-  slug: string;
-}>;
+  slug: string
+}>
 
 // Source: ../sanity/queries/menus.ts
 // Variable: MENU_LIST_QUERY
 // Query: *[_type == "menu" && defined(slug.current)] | order(displayOrder asc, title asc){      _id,  title,  "slug": slug.current,  category,  summary,  service,  displayOrder,  hasDetailPage,  updatedAt,  listingImage{asset, crop, hotspot, alt},  detailImage{asset, crop, hotspot, alt},  sections[]{    _key,    title,    anchor,    image{asset, crop, hotspot, alt},    items[]{      _key,      name,      price,      description,      editorialTag,      featuredOnLanding,      dietaryMarkers[]->{code, label}    }  }  }
 export type MENU_LIST_QUERY_RESULT = Array<{
-  _id: string;
-  title: string;
-  slug: string;
-  category: "brunch" | "dinner" | "spirits" | "wine";
-  summary: string;
-  service: string | null;
-  displayOrder: number;
-  hasDetailPage: boolean | null;
-  updatedAt: string | null;
+  _id: string
+  title: string
+  slug: string
+  category: 'brunch' | 'dinner' | 'spirits' | 'wine'
+  summary: string
+  service: string | null
+  displayOrder: number
+  hasDetailPage: boolean | null
+  updatedAt: string | null
   listingImage: {
-    asset: SanityImageAssetReference | null;
-    crop: SanityImageCrop | null;
-    hotspot: SanityImageHotspot | null;
-    alt: string;
-  } | null;
+    asset: SanityImageAssetReference | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    alt: string
+  } | null
   detailImage: {
-    asset: SanityImageAssetReference | null;
-    crop: SanityImageCrop | null;
-    hotspot: SanityImageHotspot | null;
-    alt: string;
-  } | null;
+    asset: SanityImageAssetReference | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    alt: string
+  } | null
   sections: Array<{
-    _key: string;
-    title: string;
-    anchor: string;
+    _key: string
+    title: string
+    anchor: string
     image: {
-      asset: SanityImageAssetReference | null;
-      crop: SanityImageCrop | null;
-      hotspot: SanityImageHotspot | null;
-      alt: string;
-    } | null;
+      asset: SanityImageAssetReference | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
+      alt: string
+    } | null
     items: Array<{
-      _key: string;
-      name: string;
-      price: string | null;
-      description: string;
-      editorialTag: string | null;
-      featuredOnLanding: boolean | null;
+      _key: string
+      name: string
+      price: string | null
+      description: string
+      editorialTag: string | null
+      featuredOnLanding: boolean | null
       dietaryMarkers: Array<{
-        code: string;
-        label: string;
-      }> | null;
-    }>;
-  }> | null;
-}>;
+        code: string
+        label: string
+      }> | null
+    }>
+  }> | null
+}>
 
 // Source: ../sanity/queries/menus.ts
 // Variable: MENU_BY_SLUG_QUERY
 // Query: *[_type == "menu" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  category,  summary,  service,  displayOrder,  hasDetailPage,  updatedAt,  listingImage{asset, crop, hotspot, alt},  detailImage{asset, crop, hotspot, alt},  sections[]{    _key,    title,    anchor,    image{asset, crop, hotspot, alt},    items[]{      _key,      name,      price,      description,      editorialTag,      featuredOnLanding,      dietaryMarkers[]->{code, label}    }  }  }
 export type MENU_BY_SLUG_QUERY_RESULT = {
-  _id: string;
-  title: string;
-  slug: string;
-  category: "brunch" | "dinner" | "spirits" | "wine";
-  summary: string;
-  service: string | null;
-  displayOrder: number;
-  hasDetailPage: boolean | null;
-  updatedAt: string | null;
+  _id: string
+  title: string
+  slug: string
+  category: 'brunch' | 'dinner' | 'spirits' | 'wine'
+  summary: string
+  service: string | null
+  displayOrder: number
+  hasDetailPage: boolean | null
+  updatedAt: string | null
   listingImage: {
-    asset: SanityImageAssetReference | null;
-    crop: SanityImageCrop | null;
-    hotspot: SanityImageHotspot | null;
-    alt: string;
-  } | null;
+    asset: SanityImageAssetReference | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    alt: string
+  } | null
   detailImage: {
-    asset: SanityImageAssetReference | null;
-    crop: SanityImageCrop | null;
-    hotspot: SanityImageHotspot | null;
-    alt: string;
-  } | null;
+    asset: SanityImageAssetReference | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    alt: string
+  } | null
   sections: Array<{
-    _key: string;
-    title: string;
-    anchor: string;
+    _key: string
+    title: string
+    anchor: string
     image: {
-      asset: SanityImageAssetReference | null;
-      crop: SanityImageCrop | null;
-      hotspot: SanityImageHotspot | null;
-      alt: string;
-    } | null;
+      asset: SanityImageAssetReference | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
+      alt: string
+    } | null
     items: Array<{
-      _key: string;
-      name: string;
-      price: string | null;
-      description: string;
-      editorialTag: string | null;
-      featuredOnLanding: boolean | null;
+      _key: string
+      name: string
+      price: string | null
+      description: string
+      editorialTag: string | null
+      featuredOnLanding: boolean | null
       dietaryMarkers: Array<{
-        code: string;
-        label: string;
-      }> | null;
-    }>;
-  }> | null;
-} | null;
+        code: string
+        label: string
+      }> | null
+    }>
+  }> | null
+} | null
 
 // Source: ../sanity/queries/settings.ts
 // Variable: SITE_SETTINGS_QUERY
 // Query: *[_type == "siteSettings" && _id == "siteSettings"][0]{    _id,    _updatedAt,    name,    descriptor,    tagline,    address{street, city, region, postalCode, country},    mapUrl,    phone,    phoneHref,    email,    eventEmail,    eventPhone,    eventPhoneHref,    privateDiningEmail,    privateDiningPhone,    privateDiningPhoneHref,    instagramUrl,    facebookUrl,    hours[]{_key, days, time},    announcement{enabled, message, linkLabel, linkPath, dismissalVersion},    "featuredEventSlug": featuredEvent->slug.current  }
 export type SITE_SETTINGS_QUERY_RESULT = {
-  _id: "siteSettings";
-  _updatedAt: string;
-  name: string;
-  descriptor: string;
-  tagline: string;
+  _id: 'siteSettings'
+  _updatedAt: string
+  name: string
+  descriptor: string
+  tagline: string
   address: {
-    street: string;
-    city: string;
-    region: string;
-    postalCode: string;
-    country: string;
-  };
-  mapUrl: string;
-  phone: string;
-  phoneHref: string;
-  email: string;
-  eventEmail: string;
-  eventPhone: string;
-  eventPhoneHref: string;
-  privateDiningEmail: string;
-  privateDiningPhone: string;
-  privateDiningPhoneHref: string;
-  instagramUrl: string | null;
-  facebookUrl: string | null;
+    street: string
+    city: string
+    region: string
+    postalCode: string
+    country: string
+  }
+  mapUrl: string
+  phone: string
+  phoneHref: string
+  email: string
+  eventEmail: string
+  eventPhone: string
+  eventPhoneHref: string
+  privateDiningEmail: string
+  privateDiningPhone: string
+  privateDiningPhoneHref: string
+  instagramUrl: string | null
+  facebookUrl: string | null
   hours: Array<{
-    _key: string;
-    days: string;
-    time: string;
-  }>;
+    _key: string
+    days: string
+    time: string
+  }>
   announcement: {
-    enabled: boolean | null;
-    message: string | null;
-    linkLabel: string | null;
-    linkPath: string | null;
-    dismissalVersion: string;
-  } | null;
-  featuredEventSlug: string | null;
-} | null;
+    enabled: boolean | null
+    message: string | null
+    linkLabel: string | null
+    linkPath: string | null
+    dismissalVersion: string
+  } | null
+  featuredEventSlug: string | null
+} | null
 
 // Query TypeMap
-import "@sanity/client";
-declare module "@sanity/client" {
+import '@sanity/client'
+declare module '@sanity/client' {
   interface SanityQueries {
-    "\n  *[_type == \"dietaryMarker\"] | order(code asc){code, label, detail}\n": DIETARY_MARKERS_QUERY_RESULT;
-    "\n  *[_type == \"event\" && defined(slug.current) && status != \"past\"] | order(startsAt asc){\n    \n  _id,\n  title,\n  \"slug\": slug.current,\n  summary,\n  format,\n  startsAt,\n  endsAt,\n  approximateEnd,\n  timeZone,\n  location,\n  status,\n  acceptingLabel,\n  listingImage{asset, crop, hotspot, alt},\n  heroImage{asset, crop, hotspot, alt},\n  availabilityNote,\n  facts[]{_key, label, value},\n  introTitle,\n  introParagraphs,\n  introImages[]{_key, asset, crop, hotspot, alt},\n  expectations[]{_key, title, copy},\n  courses[]{\n    _key,\n    name,\n    description,\n    dietaryMarkers[]->{code, label}\n  }\n\n  }\n": EVENT_LIST_QUERY_RESULT;
-    "\n  *[_type == \"event\" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  \"slug\": slug.current,\n  summary,\n  format,\n  startsAt,\n  endsAt,\n  approximateEnd,\n  timeZone,\n  location,\n  status,\n  acceptingLabel,\n  listingImage{asset, crop, hotspot, alt},\n  heroImage{asset, crop, hotspot, alt},\n  availabilityNote,\n  facts[]{_key, label, value},\n  introTitle,\n  introParagraphs,\n  introImages[]{_key, asset, crop, hotspot, alt},\n  expectations[]{_key, title, copy},\n  courses[]{\n    _key,\n    name,\n    description,\n    dietaryMarkers[]->{code, label}\n  }\n\n  }\n": EVENT_BY_SLUG_QUERY_RESULT;
-    "\n  *[_type == \"event\" && defined(slug.current) && defined(heroImage.asset)] | order(startsAt asc){\n    \"slug\": slug.current\n  }\n": EVENT_DETAIL_SLUGS_QUERY_RESULT;
-    "\n  *[_type == \"menu\" && defined(slug.current)] | order(displayOrder asc, title asc){\n    \n  _id,\n  title,\n  \"slug\": slug.current,\n  category,\n  summary,\n  service,\n  displayOrder,\n  hasDetailPage,\n  updatedAt,\n  listingImage{asset, crop, hotspot, alt},\n  detailImage{asset, crop, hotspot, alt},\n  sections[]{\n    _key,\n    title,\n    anchor,\n    image{asset, crop, hotspot, alt},\n    items[]{\n      _key,\n      name,\n      price,\n      description,\n      editorialTag,\n      featuredOnLanding,\n      dietaryMarkers[]->{code, label}\n    }\n  }\n\n  }\n": MENU_LIST_QUERY_RESULT;
-    "\n  *[_type == \"menu\" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  \"slug\": slug.current,\n  category,\n  summary,\n  service,\n  displayOrder,\n  hasDetailPage,\n  updatedAt,\n  listingImage{asset, crop, hotspot, alt},\n  detailImage{asset, crop, hotspot, alt},\n  sections[]{\n    _key,\n    title,\n    anchor,\n    image{asset, crop, hotspot, alt},\n    items[]{\n      _key,\n      name,\n      price,\n      description,\n      editorialTag,\n      featuredOnLanding,\n      dietaryMarkers[]->{code, label}\n    }\n  }\n\n  }\n": MENU_BY_SLUG_QUERY_RESULT;
-    "\n  *[_type == \"siteSettings\" && _id == \"siteSettings\"][0]{\n    _id,\n    _updatedAt,\n    name,\n    descriptor,\n    tagline,\n    address{street, city, region, postalCode, country},\n    mapUrl,\n    phone,\n    phoneHref,\n    email,\n    eventEmail,\n    eventPhone,\n    eventPhoneHref,\n    privateDiningEmail,\n    privateDiningPhone,\n    privateDiningPhoneHref,\n    instagramUrl,\n    facebookUrl,\n    hours[]{_key, days, time},\n    announcement{enabled, message, linkLabel, linkPath, dismissalVersion},\n    \"featuredEventSlug\": featuredEvent->slug.current\n  }\n": SITE_SETTINGS_QUERY_RESULT;
+    '\n  *[_type == "dietaryMarker"] | order(code asc){code, label, detail}\n': DIETARY_MARKERS_QUERY_RESULT
+    '\n  *[_type == "event" && defined(slug.current) && status != "past"] | order(startsAt asc){\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  format,\n  startsAt,\n  endsAt,\n  approximateEnd,\n  timeZone,\n  location,\n  status,\n  acceptingLabel,\n  listingImage{asset, crop, hotspot, alt},\n  heroImage{asset, crop, hotspot, alt},\n  availabilityNote,\n  facts[]{_key, label, value},\n  introTitle,\n  introParagraphs,\n  introImages[]{_key, asset, crop, hotspot, alt},\n  expectations[]{_key, title, copy},\n  courses[]{\n    _key,\n    name,\n    description,\n    dietaryMarkers[]->{code, label}\n  }\n\n  }\n': EVENT_LIST_QUERY_RESULT
+    '\n  *[_type == "event" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  format,\n  startsAt,\n  endsAt,\n  approximateEnd,\n  timeZone,\n  location,\n  status,\n  acceptingLabel,\n  listingImage{asset, crop, hotspot, alt},\n  heroImage{asset, crop, hotspot, alt},\n  availabilityNote,\n  facts[]{_key, label, value},\n  introTitle,\n  introParagraphs,\n  introImages[]{_key, asset, crop, hotspot, alt},\n  expectations[]{_key, title, copy},\n  courses[]{\n    _key,\n    name,\n    description,\n    dietaryMarkers[]->{code, label}\n  }\n\n  }\n': EVENT_BY_SLUG_QUERY_RESULT
+    '\n  *[_type == "event" && defined(slug.current) && defined(heroImage.asset)] | order(startsAt asc){\n    "slug": slug.current\n  }\n': EVENT_DETAIL_SLUGS_QUERY_RESULT
+    '\n  *[_type == "menu" && defined(slug.current)] | order(displayOrder asc, title asc){\n    \n  _id,\n  title,\n  "slug": slug.current,\n  category,\n  summary,\n  service,\n  displayOrder,\n  hasDetailPage,\n  updatedAt,\n  listingImage{asset, crop, hotspot, alt},\n  detailImage{asset, crop, hotspot, alt},\n  sections[]{\n    _key,\n    title,\n    anchor,\n    image{asset, crop, hotspot, alt},\n    items[]{\n      _key,\n      name,\n      price,\n      description,\n      editorialTag,\n      featuredOnLanding,\n      dietaryMarkers[]->{code, label}\n    }\n  }\n\n  }\n': MENU_LIST_QUERY_RESULT
+    '\n  *[_type == "menu" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  category,\n  summary,\n  service,\n  displayOrder,\n  hasDetailPage,\n  updatedAt,\n  listingImage{asset, crop, hotspot, alt},\n  detailImage{asset, crop, hotspot, alt},\n  sections[]{\n    _key,\n    title,\n    anchor,\n    image{asset, crop, hotspot, alt},\n    items[]{\n      _key,\n      name,\n      price,\n      description,\n      editorialTag,\n      featuredOnLanding,\n      dietaryMarkers[]->{code, label}\n    }\n  }\n\n  }\n': MENU_BY_SLUG_QUERY_RESULT
+    '\n  *[_type == "siteSettings" && _id == "siteSettings"][0]{\n    _id,\n    _updatedAt,\n    name,\n    descriptor,\n    tagline,\n    address{street, city, region, postalCode, country},\n    mapUrl,\n    phone,\n    phoneHref,\n    email,\n    eventEmail,\n    eventPhone,\n    eventPhoneHref,\n    privateDiningEmail,\n    privateDiningPhone,\n    privateDiningPhoneHref,\n    instagramUrl,\n    facebookUrl,\n    hours[]{_key, days, time},\n    announcement{enabled, message, linkLabel, linkPath, dismissalVersion},\n    "featuredEventSlug": featuredEvent->slug.current\n  }\n': SITE_SETTINGS_QUERY_RESULT
   }
 }
-

@@ -76,7 +76,7 @@ Studio variables:
 
 In Sanity Manage, add `http://localhost:3000`, the production frontend origin, and any explicitly trusted preview origin to API CORS origins with credentials enabled. Do not use a broad `*.netlify.app` origin.
 
-Netlify production and trusted deploy previews need the frontend variables above. The write token is never a deployment variable. CI intentionally uses fixture mode and needs no production credential.
+Netlify production and trusted deploy previews need the frontend variables above. The write token is never a deployment variable. `netlify.toml` excludes only `.next/cache/**` from secret scanning because Turbopack may cache the server-only Viewer token there; source, server output, and browser assets remain scanned. CI intentionally uses fixture mode and needs no production credential.
 
 ## Quality checks
 
