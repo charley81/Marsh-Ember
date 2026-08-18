@@ -1,3 +1,4 @@
+import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, MediaFrame, SectionHeading } from "@/components/ui";
 import { getEventAvailabilityPresentation, hasEventDetail, type EventRecord } from "@/lib/events";
 
@@ -96,7 +97,7 @@ export function EventsLandingContent({ events }: { events: readonly EventRecord[
         <div className="section__inner">
           <SectionHeading eyebrow="Marsh & Ember" title="Join us another evening" intro="For a standard dining reservation, reserve a table through our online booking experience." centered />
           <Actions centered>
-            <ButtonLink href="/visit#contact">Reserve a Table</ButtonLink>
+            <ReservationTrigger>Reserve a Table</ReservationTrigger>
             <ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink>
           </Actions>
         </div>
@@ -117,7 +118,7 @@ export function EventsEmptyState() {
         <Actions centered>
           <ButtonLink href="/menus">Explore Our Menus</ButtonLink>
           <ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink>
-          <ButtonLink href="/visit#contact" variant="secondary">Reserve a Table</ButtonLink>
+          <ReservationTrigger variant="secondary">Reserve a Table</ReservationTrigger>
         </Actions>
       </div>
     </section>

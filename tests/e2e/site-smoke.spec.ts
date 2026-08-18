@@ -26,6 +26,56 @@ test("unsupported event detail slugs render the branded not-found page", async (
   await expect(page.getByRole("heading", { name: "This table could not be found" })).toBeVisible();
 });
 
+test("visitors can complete the reservation demo without contacting a booking provider", async ({ page }) => {
+  const externalBookingRequests: string[] = [];
+  page.on("request", (request) => {
+    if (/cal\.com|booking/i.test(request.url())) externalBookingRequests.push(request.url());
+  });
+  await page.goto("/");
+
+  const trigger = page.getByRole("button", { name: "Reserve a Table" }).first();
+  await trigger.click();
+  await expect(page.getByRole("heading", { name: "Reservation experience demo" })).toBeVisible();
+  await page.getByRole("button", { name: "Start Demo" }).click();
+  await expect(page.getByRole("heading", { name: "Choose your table" })).toBeVisible();
+
+  await page.getByLabel("Party size").selectOption("4");
+  await page.getByLabel("Date").selectOption({ index: 1 });
+  await page.getByLabel("Time").selectOption("6:45 PM");
+  await page.getByRole("button", { name: "Complete Demo" }).click();
+
+  await expect(page.getByRole("heading", { name: "Demo reservation complete" })).toBeVisible();
+  await expect(page.getByText("No table was held, no information was submitted, and no confirmation email was sent.")).toBeVisible();
+  expect(externalBookingRequests).toEqual([]);
+
+  await page.getByRole("button", { name: "Done" }).click();
+  await expect(trigger).toBeFocused();
+});
+
+test("reservation provider-error preview recovers safely", async ({ page }) => {
+  await page.goto("/");
+
+  await page.getByRole("button", { name: "Reserve a Table" }).first().click();
+  await page.getByRole("button", { name: "Preview Error State" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "Your table has not been reserved." })).toBeVisible();
+  await page.getByRole("button", { name: "Try Again" }).click();
+  await expect(page.getByRole("heading", { name: "Choose your table" })).toBeVisible();
+});
+
+test("the mobile navigation opens the reservation demo and restores safe focus", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith("mobile"), "Mobile reservation behavior");
+  await page.goto("/");
+
+  const menuTrigger = page.getByRole("button", { name: "Open menu" });
+  await menuTrigger.click();
+  await page.locator("#mobile-menu").getByRole("button", { name: "Reserve a Table" }).click();
+
+  await expect(page.locator("#mobile-menu")).toHaveAttribute("aria-hidden", "true");
+  await expect(page.getByRole("heading", { name: "Reservation experience demo" })).toBeVisible();
+  await page.getByRole("button", { name: "Close reservation demo" }).click();
+  await expect(menuTrigger).toBeFocused();
+});
+
 test("the mobile menu supports Escape and restores trigger focus", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.startsWith("mobile"), "Mobile navigation behavior");
   await page.goto("/");

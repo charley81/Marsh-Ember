@@ -1,6 +1,8 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ReservationProvider } from "@/components/reservations/reservation-provider";
+import { restaurant } from "@/lib/site-data";
 import { Announcement, SiteHeader } from "./site-interactions";
 
 vi.mock("next/navigation", () => ({
@@ -10,7 +12,7 @@ vi.mock("next/navigation", () => ({
 describe("SiteHeader", () => {
   it("moves focus into the mobile menu and restores it on Escape", async () => {
     const user = userEvent.setup();
-    render(<SiteHeader name="Marsh & Ember" descriptor="lowcountry culinary fire" />);
+    render(<ReservationProvider settings={restaurant}><SiteHeader name="Marsh & Ember" descriptor="lowcountry culinary fire" /></ReservationProvider>);
 
     const trigger = screen.getByRole("button", { name: "Open menu" });
     await user.click(trigger);

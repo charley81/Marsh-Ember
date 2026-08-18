@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, FactGrid, MediaFrame, MenuItem, SectionHeading } from "@/components/ui";
 import { getMenus, getSiteSettings } from "@/lib/content";
 
@@ -15,7 +16,7 @@ export default async function Home() {
 
   return <>
     <section className="hero hero--mobile-image-first hero--compact-title">
-      <div className="hero__content"><Eyebrow>Charleston, South Carolina</Eyebrow><h1>Lowcountry ingredients. Shaped by fire.</h1><p className="lede">Marsh &amp; Ember brings the season to the table through live-fire cooking, thoughtful hospitality, and a warm Charleston dining room.</p><Actions><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="/menus" variant="secondary">View Menus</ButtonLink></Actions></div>
+      <div className="hero__content"><Eyebrow>Charleston, South Carolina</Eyebrow><h1>Lowcountry ingredients. Shaped by fire.</h1><p className="lede">Marsh &amp; Ember brings the season to the table through live-fire cooking, thoughtful hospitality, and a warm Charleston dining room.</p><Actions><ReservationTrigger>Reserve a Table</ReservationTrigger><ButtonLink href="/menus" variant="secondary">View Menus</ButtonLink></Actions></div>
       <MediaFrame src="/images/home-hero-image.jpg" mobileSrc="/images/home-mobile-hero.jpg" alt="A wood-fired Lowcountry dish at Marsh and Ember" priority />
     </section>
 
@@ -29,6 +30,6 @@ export default async function Home() {
 
     <section className="section section--navy"><div className="section__inner"><SectionHeading eyebrow="Location & Hours" title="Join us in Charleston" intro="Dinner Sunday through Thursday until 10 PM, and Friday and Saturday until 11 PM." centered light /><FactGrid facts={[{ label: "Our Address", value: settings.address }, { label: "Our Hours", value: hours }]} /><Actions centered><ButtonLink href="/visit" variant="light">Plan Your Visit</ButtonLink><ButtonLink href={settings.mapUrl} variant="light" external>Get Directions</ButtonLink></Actions></div></section>
 
-    <section className="section section--sand"><div className="section__inner"><SectionHeading title="A table is waiting" intro="Come for the fire. Stay for the evening." centered /><Actions centered><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href={settings.instagramUrl} variant="text" external>Follow Marsh &amp; Ember on Instagram</ButtonLink></Actions></div></section>
+    <section className="section section--sand"><div className="section__inner"><SectionHeading title="A table is waiting" intro="Come for the fire. Stay for the evening." centered /><Actions centered><ReservationTrigger>Reserve a Table</ReservationTrigger><ButtonLink href={settings.instagramUrl} variant="text" external>Follow Marsh &amp; Ember on Instagram</ButtonLink></Actions></div></section>
   </>;
 }

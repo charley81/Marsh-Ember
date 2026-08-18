@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { getAnnouncementStorageKey } from "@/lib/announcement";
 import type { RestaurantSettings } from "@/lib/content-types";
 import { navigation } from "@/lib/site-data";
@@ -93,15 +94,15 @@ export function SiteHeader({ name, descriptor }: { name: string; descriptor: str
       <nav className="desktop-nav" aria-label="Primary navigation">
         {navigation.map((item) => <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined}>{item.label}</Link>)}
       </nav>
-      <Link className="button button--primary header-reserve" href="/visit#contact">Reserve a Table</Link>
+      <ReservationTrigger className="header-reserve">Reserve a Table</ReservationTrigger>
       <div className="mobile-actions">
-        <Link href="/visit#contact">Reserve</Link>
+        <ReservationTrigger className="mobile-reserve" onBeforeOpen={close}>Reserve</ReservationTrigger>
         <button ref={triggerRef} type="button" aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen((value) => !value)}>{open ? "×" : "☰"}</button>
       </div>
       <div ref={menuRef} id="mobile-menu" className={`mobile-menu${open ? " is-open" : ""}`} aria-hidden={!open}>
         <nav aria-label="Mobile navigation">
           {navigation.map((item) => <Link key={item.href} href={item.href} onClick={close} aria-current={pathname === item.href ? "page" : undefined} tabIndex={open ? 0 : -1}>{item.label}</Link>)}
-          <Link className="button button--primary" href="/visit#contact" onClick={close} tabIndex={open ? 0 : -1}>Reserve a Table</Link>
+          <ReservationTrigger onBeforeOpen={close} returnFocusRef={triggerRef} tabIndex={open ? 0 : -1}>Reserve a Table</ReservationTrigger>
         </nav>
       </div>
     </header>

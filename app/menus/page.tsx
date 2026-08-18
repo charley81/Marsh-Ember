@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, MediaFrame, MenuItem, SectionHeading } from "@/components/ui";
 import { getDietaryMarkers, getMenus } from "@/lib/content";
 import type { MenuRecord } from "@/lib/content-types";
@@ -41,6 +42,6 @@ export default async function MenusPage() {
     <section className="section section--sand"><div className="section__inner"><SectionHeading eyebrow="Care" title="Dietary guidance" intro="We are delighted to assist our guests in navigating our menu selections comfortably. Please inform your server or mention allergies or specific dietary needs during booking." /><div className="dietary-grid">{dietaryMarkers.map((marker) => <div key={marker.code}><strong>{marker.code} · {marker.label}</strong><p>{marker.detail}</p></div>)}</div><p className="lede">Menu labels are provided strictly as guidance. Our kitchen handles a range of grains, nuts, and proteins, and we cannot guarantee a completely allergen-free environment.</p></div></section>
 
     <section className="section section--tight"><aside className="notice"><h2>Menus change with the season</h2><p>Items, ingredients, and prices may change as availability shifts. The menu shown online reflects our most recently published offering but may differ slightly from the menu served during your visit.</p></aside></section>
-    <section className="section section--sand"><div className="section__inner"><SectionHeading title="Plan your table" intro="Choose the menu that fits the occasion, then join us in Charleston." centered /><Actions centered><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
+    <section className="section section--sand"><div className="section__inner"><SectionHeading title="Plan your table" intro="Choose the menu that fits the occasion, then join us in Charleston." centered /><Actions centered><ReservationTrigger>Reserve a Table</ReservationTrigger><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
   </div>;
 }

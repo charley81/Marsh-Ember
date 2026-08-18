@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Field, SelectField, StaticForm, TextAreaField } from "@/components/forms";
+import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, MediaFrame, SectionHeading } from "@/components/ui";
 import { getSiteSettings } from "@/lib/content";
 
@@ -42,6 +43,6 @@ export default async function PrivateDiningPage() {
     </StaticForm></section>
 
     <section className="section section--navy"><div className="section__inner"><SectionHeading eyebrow="Direct Connection" title="Prefer to reach out directly?" intro="Our events team is happy to answer questions or help you get started." centered light /><Actions centered><ButtonLink href={`mailto:${settings.privateDiningEmail}`} variant="light">{settings.privateDiningEmail}</ButtonLink><ButtonLink href={settings.privateDiningPhoneHref} variant="light">{settings.privateDiningPhone}</ButtonLink></Actions></div></section>
-    <section className="section section--sand"><div className="section__inner"><SectionHeading eyebrow="Marsh & Ember" title="Joining us for dinner?" intro="For a standard dining reservation, reserve a table through our online booking experience." centered /><Actions centered><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
+    <section className="section section--sand"><div className="section__inner"><SectionHeading eyebrow="Marsh & Ember" title="Joining us for dinner?" intro="For a standard dining reservation, reserve a table through our online booking experience." centered /><Actions centered><ReservationTrigger>Reserve a Table</ReservationTrigger><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
   </>;
 }
