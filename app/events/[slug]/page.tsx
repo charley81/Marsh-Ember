@@ -3,23 +3,23 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EventHero, EventRsvpSection } from "@/components/events/event-detail";
 import { Actions, ButtonLink, FactGrid, MediaFrame, SectionHeading, Tags } from "@/components/ui";
-import { getDetailEvent, getDetailEvents, getEventAvailabilityPresentation } from "@/lib/events";
-import { events } from "@/lib/site-data";
+import { getDetailEventSlugs, getEventBySlug, getSiteSettings } from "@/lib/content";
+import { getEventAvailabilityPresentation } from "@/lib/events";
 
-export function generateStaticParams() {
-  return getDetailEvents(events).map((event) => ({ slug: event.slug }));
+export async function generateStaticParams() {
+  return (await getDetailEventSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/events/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const event = getDetailEvent(events, slug);
+  const event = await getEventBySlug(slug);
   if (!event) return { title: "Event Not Found" };
   return { title: event.title, description: event.summary };
 }
 
 export default async function EventDetailPage({ params }: PageProps<"/events/[slug]">) {
   const { slug } = await params;
-  const event = getDetailEvent(events, slug);
+  const [event, settings] = await Promise.all([getEventBySlug(slug), getSiteSettings()]);
   if (!event) notFound();
 
   const presentation = getEventAvailabilityPresentation(event);
@@ -54,7 +54,7 @@ export default async function EventDetailPage({ params }: PageProps<"/events/[sl
 
       <EventRsvpSection event={event} />
 
-      <section className="section section--sand"><div className="section__inner"><SectionHeading title="Questions about the event?" centered /><Actions centered><ButtonLink href="mailto:events@marshandember.com" variant="secondary">events@marshandember.com</ButtonLink><ButtonLink href="tel:+18435550100" variant="secondary">(843) 555-0100</ButtonLink></Actions></div></section>
+      <section className="section section--sand"><div className="section__inner"><SectionHeading title="Questions about the event?" centered /><Actions centered><ButtonLink href={`mailto:${settings.eventEmail}`} variant="secondary">{settings.eventEmail}</ButtonLink><ButtonLink href={settings.eventPhoneHref} variant="secondary">{settings.eventPhone}</ButtonLink></Actions></div></section>
       <section className="section section--sand"><div className="section__inner"><SectionHeading eyebrow="Marsh & Ember" title="Looking for a regular reservation?" intro="For dinner on another evening, reserve a table through our standard online booking experience." centered /><Actions centered><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="/events" variant="secondary">Explore All Events</ButtonLink><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
     </div>
   );

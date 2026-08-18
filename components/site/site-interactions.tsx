@@ -2,33 +2,48 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { getAnnouncementStorageKey } from "@/lib/announcement";
+import type { RestaurantSettings } from "@/lib/content-types";
 import { navigation } from "@/lib/site-data";
 
-const announcementKey = "marsh-ember-announcement-dismissed";
+const announcementDismissedEvent = "marsh-ember-announcement-dismissed";
 
-export function Announcement() {
-  const [dismissed, setDismissed] = useState(false);
+function subscribeToAnnouncementDismissal(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(announcementDismissedEvent, callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(announcementDismissedEvent, callback);
+  };
+}
 
-  if (dismissed) return null;
+export function Announcement({ announcement }: { announcement: RestaurantSettings["announcement"] }) {
+  const announcementKey = announcement ? getAnnouncementStorageKey(announcement.dismissalVersion) : null;
+  const dismissed = useSyncExternalStore(
+    subscribeToAnnouncementDismissal,
+    () => announcementKey ? window.localStorage.getItem(announcementKey) === "true" : false,
+    () => false,
+  );
+
+  if (!announcement || !announcementKey || dismissed) return null;
 
   return (
     <aside className="announcement" aria-label="Restaurant announcement">
       <div className="announcement__copy">
-        <span>Reservations are now open — reserve your table online.</span>
-        <Link href="/visit#contact">Book now <span aria-hidden="true">→</span></Link>
+        <span>{announcement.message}</span>
+        {announcement.linkPath && announcement.linkLabel ? <Link href={announcement.linkPath}>{announcement.linkLabel} <span aria-hidden="true">→</span></Link> : null}
       </div>
       <button type="button" aria-label="Dismiss announcement" onClick={() => {
         window.localStorage.setItem(announcementKey, "true");
-        document.documentElement.dataset.announcementDismissed = "true";
-        setDismissed(true);
+        window.dispatchEvent(new Event(announcementDismissedEvent));
         window.requestAnimationFrame(() => document.getElementById("site-brand")?.focus());
       }}>×</button>
     </aside>
   );
 }
 
-export function SiteHeader() {
+export function SiteHeader({ name, descriptor }: { name: string; descriptor: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -73,7 +88,7 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <Link id="site-brand" className="brand" href="/" aria-label="Marsh and Ember home">
-        <span>Marsh &amp; Ember</span><small>lowcountry culinary fire</small>
+        <span>{name}</span><small>{descriptor}</small>
       </Link>
       <nav className="desktop-nav" aria-label="Primary navigation">
         {navigation.map((item) => <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined}>{item.label}</Link>)}

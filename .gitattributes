@@ -1,2 +1,5 @@
 # Preserve upstream skill documentation exactly as locked.
 .pi/skills/** whitespace=-blank-at-eol
+
+# Sanity TypeGen currently emits one final blank line; preserve generated output for drift checks.
+sanity/types.generated.ts whitespace=-blank-at-eof

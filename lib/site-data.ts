@@ -15,9 +15,24 @@ export const restaurant = {
     "Wood-fired cooking, seasonal ingredients, and warm Southern hospitality in the heart of Charleston.",
   addressLines: ["184 King Street", "Charleston, SC 29401"],
   address: "184 King Street, Charleston, SC 29401",
+  mapUrl: "https://maps.google.com/?q=184+King+Street+Charleston+SC+29401",
   phone: "843-555-0148",
   phoneHref: "tel:+18435550148",
   email: "hello@marshandember.com",
+  eventEmail: "events@marshandember.com",
+  eventPhone: "(843) 555-0100",
+  eventPhoneHref: "tel:+18435550100",
+  privateDiningEmail: "events@marshandember.com",
+  privateDiningPhone: "(843) 555-0180",
+  privateDiningPhoneHref: "tel:+18435550180",
+  instagramUrl: "https://instagram.com",
+  facebookUrl: "https://facebook.com",
+  announcement: {
+    message: "Reservations are now open — reserve your table online.",
+    linkLabel: "Book now",
+    linkPath: "/visit#contact",
+    dismissalVersion: "1",
+  },
   hours: [
     { days: "Sunday–Thursday", time: "5:00 PM–10:00 PM" },
     { days: "Friday–Saturday", time: "5:00 PM–11:00 PM" },
@@ -29,6 +44,7 @@ export type MenuItem = {
   price?: string;
   description: string;
   tags?: readonly string[];
+  featuredOnLanding?: boolean;
 };
 
 export type MenuSection = {
@@ -42,7 +58,7 @@ export const dinnerSections: readonly MenuSection[] = [
     id: "to-begin",
     title: "To Begin",
     items: [
-      { name: "Hearth Bread", price: "$9", description: "Benne, cultured butter, smoked sea salt. Baked fresh over hickory wood coals daily.", tags: ["Hearth-Baked"] },
+      { name: "Hearth Bread", price: "$9", description: "Benne, cultured butter, smoked sea salt. Baked fresh over hickory wood coals daily.", tags: ["Hearth-Baked"], featuredOnLanding: true },
       { name: "Smoked Fish Dip", price: "$14", description: "Pickled vegetables, saltines, herbs." },
       { name: "Roasted Oysters", price: "$18", description: "Garlic, breadcrumbs, ember butter." },
       { name: "Country Ham", price: "$17", description: "Seasonal preserves, warm biscuits." },
@@ -52,7 +68,7 @@ export const dinnerSections: readonly MenuSection[] = [
     id: "vegetables",
     title: "Vegetables & Grains",
     items: [
-      { name: "Charred Okra", price: "$16", description: "Field pea hummus, preserved lemon, sesame, extra virgin olive oil.", tags: ["VG", "GA"] },
+      { name: "Charred Okra", price: "$16", description: "Field pea hummus, preserved lemon, sesame, extra virgin olive oil.", tags: ["VG", "GA"], featuredOnLanding: true },
       { name: "Ember-Roasted Carrots", price: "$15", description: "Sorghum, sunflower seed, herbs." },
       { name: "Carolina Gold Rice", price: "$14", description: "Mushrooms, scallion, smoked broth." },
       { name: "Summer Squash", price: "$15", description: "Tomato, benne, basil." },
@@ -62,7 +78,7 @@ export const dinnerSections: readonly MenuSection[] = [
     id: "hearth",
     title: "From the Hearth",
     items: [
-      { name: "Market Fish", price: "MP", description: "Summer squash, shrimp broth, local garden herbs. Day-boat seafood cooked directly on the ash.", tags: ["GA"] },
+      { name: "Market Fish", price: "MP", description: "Summer squash, shrimp broth, local garden herbs. Day-boat seafood cooked directly on the ash.", tags: ["GA"], featuredOnLanding: true },
       { name: "Ember-Roasted Chicken", price: "$34", description: "Carolina Gold rice, greens, natural jus." },
       { name: "Wood-Grilled Pork", price: "$38", description: "Field peas, mustard greens, peach mostarda." },
       { name: "Hearth-Roasted Beef", price: "$46", description: "Potatoes, onion, red wine jus." },
@@ -93,6 +109,7 @@ export const events: readonly EventRecord[] = [
     slug: "harvest-at-the-hearth",
     title: "Harvest at the Hearth",
     summary: "A seasonal dinner centered on the hearth, late-summer produce, and a shared menu created for one evening.",
+    listingImage: { src: "/images/events-harvest-dinner-image.jpg", alt: "Harvest at the Hearth seasonal dinner" },
     date: "September 24, 2026",
     time: "6:30 PM",
     schedule: "September 24, 2026 · 6:30 PM – Approximately 9 PM · Marsh & Ember, Charleston, South Carolina",
@@ -141,6 +158,7 @@ export const events: readonly EventRecord[] = [
     slug: "lowcountry-oyster-roast",
     title: "Lowcountry Oyster Roast",
     summary: "Oysters from the coast, food from the fire, cold drinks, and an afternoon designed for gathering.",
+    listingImage: { src: "/images/events-oyster-roast-image.jpg", alt: "Oysters roasting over the fire at a Lowcountry gathering" },
     date: "October 11, 2026",
     time: "4–7 PM",
     schedule: "October 11, 2026 · 4–7 PM · Marsh & Ember, Charleston, South Carolina",
@@ -152,6 +170,7 @@ export const events: readonly EventRecord[] = [
     slug: "benne-and-bourbon",
     title: "Benne & Bourbon",
     summary: "An evening exploring benne, bourbon, and the ways each can shape a menu from first course to dessert.",
+    listingImage: { src: "/images/events-benne-bourbon-image.jpg", alt: "Benne and bourbon prepared for a guided dinner" },
     date: "November 5, 2026",
     time: "6:30 PM",
     schedule: "November 5, 2026 · 6:30 PM · Marsh & Ember, Charleston, South Carolina",
@@ -163,6 +182,7 @@ export const events: readonly EventRecord[] = [
     slug: "sunday-supper",
     title: "Sunday Supper",
     summary: "A relaxed Sunday supper built around a seasonal family-style menu and a communal table.",
+    listingImage: { src: "/images/events-sunday-supper-image.jpg", alt: "A seasonal shared-table Sunday supper" },
     date: "November 22, 2026",
     time: "5 PM",
     schedule: "November 22, 2026 · 5 PM · Marsh & Ember, Charleston, South Carolina",

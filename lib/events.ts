@@ -44,6 +44,7 @@ export type EventRecord = {
   slug: string;
   title: string;
   summary: string;
+  listingImage: { src: string; alt: string };
   date: string;
   time: string;
   schedule: string;

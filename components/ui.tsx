@@ -47,7 +47,7 @@ export function MediaFrame({ src, mobileSrc, alt, className = "", priority = fal
 }) {
   return <div className={`media-frame ${className}`}>
     <Image className={mobileSrc ? "media-image media-image--desktop" : "media-image"} src={src} alt={alt} fill sizes="(max-width: 768px) 100vw, 50vw" priority={priority} />
-    {mobileSrc ? <Image className="media-image media-image--mobile" src={mobileSrc} alt={alt} fill sizes="100vw" priority={priority} /> : null}
+    {mobileSrc ? <Image className="media-image media-image--mobile" src={mobileSrc} alt={alt} fill sizes="(max-width: 768px) 100vw, 1px" priority={priority} /> : null}
   </div>;
 }
 
