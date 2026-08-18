@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Libre_Baskerville, Outfit } from "next/font/google";
+import { ContentLive } from "@/components/sanity/content-live";
+import { PreviewTools } from "@/components/sanity/preview-tools";
 import { SiteShell } from "@/components/site/site-shell";
+import { getSiteSettings } from "@/lib/content";
 import "./globals.css";
 
 const libre = Libre_Baskerville({
@@ -22,13 +25,12 @@ export const metadata: Metadata = {
   description: "Wood-fired cooking, seasonal ingredients, and warm Southern hospitality in Charleston, South Carolina.",
 };
 
-const announcementScript = `try{if(localStorage.getItem('marsh-ember-announcement-dismissed')==='true'){document.documentElement.dataset.announcementDismissed='true'}}catch(e){}`;
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const settings = await getSiteSettings();
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${libre.variable} ${outfit.variable}`} suppressHydrationWarning >
-      <head><script dangerouslySetInnerHTML={{ __html: announcementScript }} /></head>
-      <body><a className="sr-only" href="#main-content">Skip to content</a><SiteShell>{children}</SiteShell></body>
+      <body><a className="sr-only" href="#main-content">Skip to content</a><SiteShell settings={settings}>{children}</SiteShell><ContentLive /><PreviewTools /></body>
     </html>
   );
 }

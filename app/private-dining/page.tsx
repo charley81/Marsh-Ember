@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Field, SelectField, StaticForm, TextAreaField } from "@/components/forms";
 import { Actions, ButtonLink, Eyebrow, MediaFrame, SectionHeading } from "@/components/ui";
+import { getSiteSettings } from "@/lib/content";
 
 export const metadata: Metadata = { title: "Private Dining", description: "Explore private dining and gathering spaces at Marsh & Ember in Charleston." };
 
@@ -12,7 +13,9 @@ const questions = [
   { question: "Can I make a regular dinner reservation here?" },
 ] as const;
 
-export default function PrivateDiningPage() {
+export default async function PrivateDiningPage() {
+  const settings = await getSiteSettings();
+
   return <>
     <section className="hero"><div className="hero__content"><Eyebrow>Private Dining</Eyebrow><h1>Gather around a table of your own.</h1><p className="lede">From intimate celebrations to business dinners and full-room gatherings, Marsh & Ember creates private experiences shaped around the people, the occasion, and the season.</p><Actions><ButtonLink href="#inquiry">Start Your Inquiry</ButtonLink><ButtonLink href="#experience" variant="secondary">Explore the Experience</ButtonLink></Actions></div><MediaFrame src="/images/private-candlelit-dining-atmosphere.jpg" mobileSrc="/images/private-mobile-hero.jpg" alt="A candlelit private table at Marsh and Ember" priority /></section>
 
@@ -38,7 +41,7 @@ export default function PrivateDiningPage() {
       <TextAreaField label="Additional information" name="additional-information" placeholder="Share the occasion, desired atmosphere, dietary considerations, accessibility needs, or other helpful details." />
     </StaticForm></section>
 
-    <section className="section section--navy"><div className="section__inner"><SectionHeading eyebrow="Direct Connection" title="Prefer to reach out directly?" intro="Our events team is happy to answer questions or help you get started." centered light /><Actions centered><ButtonLink href="mailto:events@marshandember.com" variant="light">events@marshandember.com</ButtonLink><ButtonLink href="tel:+18435550180" variant="light">(843) 555-0180</ButtonLink></Actions></div></section>
+    <section className="section section--navy"><div className="section__inner"><SectionHeading eyebrow="Direct Connection" title="Prefer to reach out directly?" intro="Our events team is happy to answer questions or help you get started." centered light /><Actions centered><ButtonLink href={`mailto:${settings.privateDiningEmail}`} variant="light">{settings.privateDiningEmail}</ButtonLink><ButtonLink href={settings.privateDiningPhoneHref} variant="light">{settings.privateDiningPhone}</ButtonLink></Actions></div></section>
     <section className="section section--sand"><div className="section__inner"><SectionHeading eyebrow="Marsh & Ember" title="Joining us for dinner?" intro="For a standard dining reservation, reserve a table through our online booking experience." centered /><Actions centered><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
   </>;
 }

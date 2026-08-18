@@ -1,0 +1,8 @@
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  # The server-only Sanity token can be cached by Turbopack during the build.
+  # Keep scanning all source and deploy output while excluding only disposable build cache files.
+  SECRETS_SCAN_OMIT_PATHS = ".next/cache/**"

@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import { Actions, ButtonLink, Eyebrow, FactGrid, MediaFrame, MenuItem, SectionHeading } from "@/components/ui";
+import { getMenus, getSiteSettings } from "@/lib/content";
 
 export const metadata: Metadata = { title: "Lowcountry ingredients. Shaped by fire.", description: "Experience live-fire Lowcountry cooking and thoughtful hospitality in the heart of Charleston." };
 
-const preview = [
-  { name: "Hearth Bread", price: "$9", description: "Benne, cultured butter, smoked sea salt. Baked fresh over hickory wood coals daily.", tags: ["Hearth-Baked"] },
-  { name: "Charred Okra", price: "$16", description: "Field pea hummus, preserved lemon, sesame, extra virgin olive oil.", tags: ["VG", "GA"] },
-  { name: "Market Fish", price: "MP", description: "Summer squash, shrimp broth, local garden herbs. Day-boat seafood cooked directly on the ash.", tags: ["GA"] },
-] as const;
+export default async function Home() {
+  const [settings, menus] = await Promise.all([getSiteSettings(), getMenus()]);
+  const dinner = menus.find((menu) => menu.category === "dinner");
+  if (!dinner) throw new Error("Dinner menu content is unavailable");
+  const allDinnerItems = dinner.sections.flatMap((section) => section.items);
+  const featuredItems = allDinnerItems.filter((item) => item.featuredOnLanding);
+  const preview = (featuredItems.length ? featuredItems : allDinnerItems).slice(0, 3);
+  const hours = settings.hours.map((row) => `${row.days} ${row.time}`).join(" · ");
 
-export default function Home() {
   return <>
     <section className="hero hero--mobile-image-first hero--compact-title">
       <div className="hero__content"><Eyebrow>Charleston, South Carolina</Eyebrow><h1>Lowcountry ingredients. Shaped by fire.</h1><p className="lede">Marsh &amp; Ember brings the season to the table through live-fire cooking, thoughtful hospitality, and a warm Charleston dining room.</p><Actions><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="/menus" variant="secondary">View Menus</ButtonLink></Actions></div>
@@ -24,8 +27,8 @@ export default function Home() {
 
     <section className="section"><div className="split-section"><MediaFrame src="/images/home-private-dining-image.jpg" mobileSrc="/images/home-mobile-private.jpg" alt="A private table prepared for a gathering" className="media-frame--portrait home-private-media" /><div className="split-section__copy"><SectionHeading eyebrow="Private Events" title="Your gathering, considered" /><p className="lede">A private room, a shared table, and a menu shaped around the occasion—from family celebrations to business dinners and intimate receptions.</p><ButtonLink href="/private-dining" variant="secondary">Explore Private Dining</ButtonLink></div></div></section>
 
-    <section className="section section--navy"><div className="section__inner"><SectionHeading eyebrow="Location & Hours" title="Join us in Charleston" intro="Dinner Sunday through Thursday until 10 PM, and Friday and Saturday until 11 PM." centered light /><FactGrid facts={[{ label: "Our Address", value: "184 King Street, Charleston, SC 29401" }, { label: "Our Hours", value: "Sunday–Thursday 5–10 PM · Friday–Saturday 5–11 PM" }]} /><Actions centered><ButtonLink href="/visit" variant="light">Plan Your Visit</ButtonLink><ButtonLink href="https://maps.google.com/?q=184+King+Street+Charleston+SC+29401" variant="light" external>Get Directions</ButtonLink></Actions></div></section>
+    <section className="section section--navy"><div className="section__inner"><SectionHeading eyebrow="Location & Hours" title="Join us in Charleston" intro="Dinner Sunday through Thursday until 10 PM, and Friday and Saturday until 11 PM." centered light /><FactGrid facts={[{ label: "Our Address", value: settings.address }, { label: "Our Hours", value: hours }]} /><Actions centered><ButtonLink href="/visit" variant="light">Plan Your Visit</ButtonLink><ButtonLink href={settings.mapUrl} variant="light" external>Get Directions</ButtonLink></Actions></div></section>
 
-    <section className="section section--sand"><div className="section__inner"><SectionHeading title="A table is waiting" intro="Come for the fire. Stay for the evening." centered /><Actions centered><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href="https://instagram.com" variant="text" external>Follow Marsh &amp; Ember on Instagram</ButtonLink></Actions></div></section>
+    <section className="section section--sand"><div className="section__inner"><SectionHeading title="A table is waiting" intro="Come for the fire. Stay for the evening." centered /><Actions centered><ButtonLink href="/visit#contact">Reserve a Table</ButtonLink><ButtonLink href={settings.instagramUrl} variant="text" external>Follow Marsh &amp; Ember on Instagram</ButtonLink></Actions></div></section>
   </>;
 }

@@ -1,0 +1,36 @@
+import {defineArrayMember, defineField, defineType} from 'sanity'
+
+export const siteSettings = defineType({
+  name: 'siteSettings',
+  title: 'Restaurant settings',
+  type: 'document',
+  groups: [
+    {name: 'identity', title: 'Identity', default: true},
+    {name: 'contact', title: 'Contact & location'},
+    {name: 'hours', title: 'Hours'},
+    {name: 'announcement', title: 'Announcement'},
+    {name: 'events', title: 'Events'},
+  ],
+  fields: [
+    defineField({name: 'name', title: 'Restaurant name', type: 'string', group: 'identity', validation: (rule) => rule.required()}),
+    defineField({name: 'descriptor', type: 'string', group: 'identity', validation: (rule) => rule.required()}),
+    defineField({name: 'tagline', type: 'text', rows: 2, group: 'identity', validation: (rule) => rule.required()}),
+    defineField({name: 'address', type: 'address', group: 'contact', validation: (rule) => rule.required()}),
+    defineField({name: 'mapUrl', title: 'Map URL', type: 'url', group: 'contact', validation: (rule) => rule.required().uri({scheme: ['https']})}),
+    defineField({name: 'phone', title: 'Phone display value', type: 'string', group: 'contact', validation: (rule) => rule.required()}),
+    defineField({name: 'phoneHref', title: 'Telephone URI', description: 'For example tel:+18435550148.', type: 'string', group: 'contact', validation: (rule) => rule.required().regex(/^tel:\+[1-9]\d{7,14}$/, {name: 'telephone URI'})}),
+    defineField({name: 'email', type: 'string', group: 'contact', validation: (rule) => rule.required().email()}),
+    defineField({name: 'eventEmail', title: 'Event email', type: 'string', group: 'contact', validation: (rule) => rule.required().email()}),
+    defineField({name: 'eventPhone', title: 'Event phone display value', type: 'string', group: 'contact', validation: (rule) => rule.required()}),
+    defineField({name: 'eventPhoneHref', title: 'Event telephone URI', type: 'string', group: 'contact', validation: (rule) => rule.required().regex(/^tel:\+[1-9]\d{7,14}$/, {name: 'telephone URI'})}),
+    defineField({name: 'privateDiningEmail', title: 'Private dining email', type: 'string', group: 'contact', validation: (rule) => rule.required().email()}),
+    defineField({name: 'privateDiningPhone', title: 'Private dining phone display value', type: 'string', group: 'contact', validation: (rule) => rule.required()}),
+    defineField({name: 'privateDiningPhoneHref', title: 'Private dining telephone URI', type: 'string', group: 'contact', validation: (rule) => rule.required().regex(/^tel:\+[1-9]\d{7,14}$/, {name: 'telephone URI'})}),
+    defineField({name: 'instagramUrl', title: 'Instagram URL', type: 'url', group: 'contact', validation: (rule) => rule.uri({scheme: ['https']})}),
+    defineField({name: 'facebookUrl', title: 'Facebook URL', type: 'url', group: 'contact', validation: (rule) => rule.uri({scheme: ['https']})}),
+    defineField({name: 'hours', title: 'Service hours', type: 'array', group: 'hours', of: [defineArrayMember({type: 'serviceHours'})], validation: (rule) => rule.required().min(1)}),
+    defineField({name: 'announcement', type: 'announcement', group: 'announcement'}),
+    defineField({name: 'featuredEvent', title: 'Featured event', type: 'reference', to: [{type: 'event'}], group: 'events'}),
+  ],
+  preview: {prepare: () => ({title: 'Restaurant settings'})},
+})

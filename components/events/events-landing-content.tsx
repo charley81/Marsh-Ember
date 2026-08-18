@@ -1,31 +1,12 @@
 import { Actions, ButtonLink, MediaFrame, SectionHeading } from "@/components/ui";
 import { getEventAvailabilityPresentation, hasEventDetail, type EventRecord } from "@/lib/events";
 
-const images: Record<string, { src: string; alt: string }> = {
-  "harvest-at-the-hearth": {
-    src: "/images/events-harvest-dinner-image.jpg",
-    alt: "Harvest at the Hearth seasonal dinner",
-  },
-  "lowcountry-oyster-roast": {
-    src: "/images/events-oyster-roast-image.jpg",
-    alt: "Oysters roasting over the fire at a Lowcountry gathering",
-  },
-  "benne-and-bourbon": {
-    src: "/images/events-benne-bourbon-image.jpg",
-    alt: "Benne and bourbon prepared for a guided dinner",
-  },
-  "sunday-supper": {
-    src: "/images/events-sunday-supper-image.jpg",
-    alt: "A seasonal shared-table Sunday supper",
-  },
-};
-
 export function EventsLandingContent({ events }: { events: readonly EventRecord[] }) {
   if (events.length === 0) return <EventsEmptyState />;
 
   const [featured, ...upcoming] = events;
   const featuredPresentation = getEventAvailabilityPresentation(featured);
-  const featuredImage = images[featured.slug];
+  const featuredImage = featured.listingImage;
 
   return (
     <>
@@ -56,7 +37,7 @@ export function EventsLandingContent({ events }: { events: readonly EventRecord[
             <div className="card-grid">
               {upcoming.map((event) => {
                 const presentation = getEventAvailabilityPresentation(event);
-                const image = images[event.slug];
+                const image = event.listingImage;
 
                 return (
                   <article className="editorial-card" key={event.slug}>

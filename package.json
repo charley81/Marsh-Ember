@@ -6,19 +6,30 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "studio:dev": "pnpm --dir studio dev",
+    "studio:build": "pnpm --dir studio build",
+    "sanity:typegen": "pnpm --dir studio typegen",
+    "sanity:validate": "pnpm --dir studio validate",
+    "content:migrate:dry-run": "tsx migration/scripts/migrate.ts",
+    "content:migrate:write": "tsx migration/scripts/migrate.ts --write",
+    "content:migrate:validate": "tsx migration/scripts/validate.ts",
+    "lint": "eslint && pnpm --dir studio lint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "pnpm build && playwright test",
     "test:e2e:run": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+    "check": "pnpm lint && pnpm sanity:typegen && pnpm typecheck && pnpm test && pnpm studio:build && pnpm build"
   },
   "dependencies": {
+    "@sanity/client": "7.26.2",
+    "@sanity/image-url": "2.1.1",
     "next": "16.3.1",
+    "next-sanity": "13.3.3",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
@@ -35,6 +46,7 @@
     "eslint-config-next": "16.3.1",
     "jsdom": "^30.0.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5",
     "vitest": "^4.1.10"
   },

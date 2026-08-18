@@ -12,6 +12,14 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      CONTENT_SOURCE: fixtures
+      NEXT_PUBLIC_SANITY_PROJECT_ID: test0000
+      NEXT_PUBLIC_SANITY_DATASET: production
+      SANITY_API_READ_TOKEN: sanity-read-token-for-ci
+      SANITY_STUDIO_PROJECT_ID: test0000
+      SANITY_STUDIO_DATASET: production
+      SANITY_STUDIO_PREVIEW_ORIGIN: http://localhost:3000
 
     steps:
       - name: Check out repository
@@ -44,6 +52,9 @@ jobs:
 
       - name: Run project checks
         run: pnpm check
+
+      - name: Verify generated Sanity artifacts are current
+        run: git diff --exit-code -- studio/schema.json sanity/types.generated.ts
 
       - name: Run browser smoke tests
         run: pnpm test:e2e:run
