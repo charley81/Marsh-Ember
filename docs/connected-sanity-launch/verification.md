@@ -1,82 +1,129 @@
 # Connected Sanity launch verification
 
-**Status:** Gate B in progress — connected preview deployment and draft-only verification underway  
-**Verified application base commit:** `26c7a9616c75fd7d09a7de26bfd039ec2f45f6db`  
-**Date:** 2026-08-19  
-**Environment:** Local fixture and local connected production builds  
-**Approved existing Netlify site and production origin:** `https://marshandember.netlify.app`  
-**Approved retained connected-preview origin:** `https://feat-connected-sanity-launch--marshandember.netlify.app`  
-**Approved Sanity Studio origin:** `https://marshandember.sanity.studio`
+- **Status:** Gate B complete — awaiting evidence review and Gate C approval
+- **Verified connected-preview application commit:** `621c0d416ffbb25bc81a12501f7fdc0c7af1bbdc`
+- **Application base commit:** `26c7a9616c75fd7d09a7de26bfd039ec2f45f6db`
+- **Date:** 2026-08-19
+- **Environment:** Local fixture checks, local connected builds, retained Netlify branch preview, and hosted Sanity Studio
+- **Approved production origin:** `https://marshandember.netlify.app`
+- **Approved retained connected-preview origin:** `https://feat-connected-sanity-launch--marshandember.netlify.app`
+- **Approved Sanity Studio origin:** `https://marshandember.sanity.studio`
 
 ## Scope completed
 
-Phase 0 local and read-only preflight is complete. With Gate A approval, the registered `default` schema was deployed, the missing exact preview CORS origin was added with credentials, and the Studio was deployed to its approved hostname. The operator confirmed that the four required variables were configured only for the approved Netlify branch context. No content or production deployment mutation has been performed.
+Phases 0–2 and Gates A–B are complete. No published content or production deployment was changed.
 
-The frontend and Studio environment files resolved to the same configured Sanity target without exposing identifiers. The operator confirmed that this is the account-owned public production dataset and that the read credential is Viewer-only. The configured content source was Sanity, the local migration write-token key was removed after connected validation, and the operator confirmed that the temporary Editor credential was revoked in Sanity Manage.
+The frontend and Studio resolve to the same operator-confirmed, account-owned public production dataset. The deployed read credential is Viewer-only. The temporary migration Editor credential was removed locally and the operator confirmed its revocation in Sanity Manage.
 
-The branch was `main`, and the verified commit matched `origin/main` after a fetch. The initial working tree also contained the untracked launch specification and a generated-types formatting change, so the specification's clean-tree starting condition was not strictly met. TypeGen restored the generated artifact to its committed deterministic form.
+With Gate A approval:
+
+- the registered `default` schema was deployed;
+- exact credentialed CORS origins were confirmed for localhost, the retained preview, and production;
+- two unrelated existing CORS entries were retained without modification;
+- Studio's preview origin was set to the retained branch preview;
+- the Studio deployment dry run passed;
+- Studio was deployed to its approved hostname with auto-updates disabled;
+- the operator configured the four required variables only for the approved Netlify branch context.
+
+With Gate B approval, the branch was committed and pushed, Netlify produced the retained connected preview, and Presentation/Draft Mode verification was completed with a reversible draft-only edit.
+
+The initial preflight started on `main` because the specification required synchronization with `origin/main`. The working tree contained the untracked specification and a generated-types formatting change, so the clean-tree starting condition was not strictly met. Work was moved to `feat/connected-sanity-launch` before commits, and TypeGen restored the generated artifact to its committed deterministic form.
 
 ## Checks run
 
 | Check | Result |
 | --- | --- |
-| `git fetch origin` and commit comparison | Pass — local commit matched `origin/main` |
+| `git fetch origin` and commit comparison | Pass — application base matched `origin/main` |
 | Safe frontend/Studio target comparison | Pass — configured targets matched |
 | `CONTENT_SOURCE=fixtures pnpm check` | Pass |
-| TypeGen artifact comparison | Pass after regeneration — committed artifact is deterministic |
+| TypeGen artifact comparison | Pass — committed artifacts deterministic |
 | `git diff --check` | Pass |
 | `CONTENT_SOURCE=fixtures pnpm test:e2e:run` | Pass — 18 tests |
 | `pnpm content:migrate:validate` | Pass — expected counts and zero reported issues |
 | `pnpm sanity:validate` | Pass |
 | `pnpm studio:build` | Pass |
-| `CONTENT_SOURCE=sanity pnpm build` | Pass |
-| Exact read-token scan of `.next/static` browser assets | Pass — 31 files inspected, no match |
-| Read-only Sanity CORS listing | Pass — four initial entries, localhost present, no wildcard observed |
+| `CONTENT_SOURCE=sanity pnpm build` | Pass, including after both connected fixes |
+| Unit suite after connected fixes | Pass — 86 tests, including the Studio URL regression test |
+| Exact read-token scan of local `.next/static` browser assets | Pass — 31 files inspected, no match |
 | `sanity schemas deploy --workspace default` | Pass |
-| Approved-origin CORS reconciliation | Pass — localhost, retained preview, and production are exact and credentialed; two unrelated existing entries were retained |
+| Approved-origin CORS reconciliation | Pass — three exact approved origins are credentialed; no wildcard |
 | Studio deployment dry run with required schema | Pass |
-| Studio deployment to `https://marshandember.sanity.studio` | Pass — HTTP 200 after deployment |
-| Post-deployment TypeGen regeneration | Pass — generated artifacts returned to their committed deterministic form |
-| Netlify local-link discovery | No linked `.netlify` state found |
+| Hosted Studio reachability | Pass — HTTP 200 |
 | Branch-scoped Netlify variables | Operator-confirmed — four required variables; no write token; production unchanged |
-| Representative fixture/mapped-output comparison | Deferred — the temporary standalone comparison could not load the framework `server-only` boundary; no product code was changed |
+| Connected preview direct routes | Pass — all 8 public routes returned HTTP 200 |
+| Connected preview client transitions | Pass — Menus, Dinner, Events, and Harvest navigation |
+| Connected preview browser diagnostics | Pass — zero console errors, page errors, and failed requests during automated smoke |
+| Responsive overflow | Pass — 320, 390, 768, 1024, and 1440px |
+| Browser-visible Viewer token scan | Pass |
+| Draft Mode authorization | Pass — unauthorized request returned 401; valid Presentation request redirected with 307 |
+| Draft indicator and POST Exit preview | Pass |
+| Draft/Stega route behavior | Pass — five representative draft routes, clean links, and metadata after the metadata fix |
+| Presentation overlays | Pass — settings, Dinner, and Harvest opened the correct documents |
+| Draft isolation | Pass — fictional tagline suffix appeared in Presentation and not in the public preview |
+| Draft cleanup | Pass — operator used Discard; verification text count is zero and published content is restored |
 
 Raw command output was kept outside the repository and is not part of this record.
 
 ## Published inventory
 
-Connected validation reported:
+Connected validation and read-only inventory queries reported:
 
 - 1 restaurant settings document;
 - 3 dietary markers;
 - 4 menus;
 - 4 events;
+- 12 image assets;
+- exactly 1 detail-capable menu (`dinner`);
 - exactly 1 detail-capable event (`harvest-at-the-hearth`);
+- event statuses in the connected dataset: 4 accepting, 0 closed, 0 sold out, 0 cancelled, and 0 past;
 - no duplicate marker codes, menu slugs, or event slugs;
 - no unresolved references;
 - no reported image-alt or event-detail completeness issues.
 
-The ignored completed migration report records 12 migrated assets and exactly one menu detail route (`dinner`). These reports remain ignored and are not committed.
+The ignored migration reports remain ignored and are not committed.
 
-## External verification pending
+## Defects found and resolved
 
-The following checks require Gate A and Gate B inputs and were not performed:
+### Netlify Viewer credential mismatch
 
-- determine the existing Netlify site's provider-side deployment and rollback state;
-- commit and push the verified branch to trigger the connected Netlify preview;
-- deploy and verify the connected Netlify preview;
-- verify public routes, client transitions, responsive layouts, console/network behavior, and token absence on a deployed origin;
-- verify Presentation locations, overlays, Draft Mode enable/exit, draft isolation, and cleanup using an approved draft-only edit;
-- exercise published Live Content invalidation;
-- promote to production or perform production smoke tests.
+Presentation initially returned HTTP 500 because the branch runtime held an outdated Viewer token. A temporary sanitized diagnostic confirmed that the token was present and well-formed but rejected by Sanity. The operator replaced it with the current Viewer token, after which the runtime access check passed and authenticated Draft Mode returned its expected redirect. The diagnostic endpoint was removed immediately.
 
-The operator approved the existing Netlify site and production origin at `https://marshandember.netlify.app`, plus the retained branch-preview origin at `https://feat-connected-sanity-launch--marshandember.netlify.app`. No external rollback target exists in local repository state; before promotion, the provider's previous successful production deployment must be recorded as the rollback target.
+### Missing visual-editing stega configuration
 
-## Gate A inputs required
+Draft Mode loaded, but overlays had no targets because the frontend Sanity client did not define `stega.studioUrl`. The client now uses the approved hosted Studio URL, and a focused regression test protects this configuration. Deployed draft HTML was confirmed to contain stega metadata before overlay verification was repeated.
 
-Execution is paused pending explicit approval of:
+### Stega in event metadata
 
-1. commit/push and connected preview deployment;
-2. one harmless fictional draft-only edit for Gate B verification.
+Connected draft-route verification found stega characters in Harvest detail metadata. Event metadata now fetches with `stega: false`. The deployed title was rechecked and is clean while body content retains overlay metadata.
 
-Production promotion remains a separate Gate C approval after preview evidence review.
+## Presentation evidence
+
+- Presentation loads the retained Netlify preview from the hosted Studio.
+- The visible “Draft preview is on” indicator appears.
+- The POST-based “Exit preview” control clears the Draft Mode cookie and indicator.
+- Settings, Dinner, and Harvest overlays target the correct documents.
+- The configured location resolver maps settings to Home, Dinner to Menus and its detail route, and Harvest to Events and its detail route. Overlay document targeting was manually verified; the location-label list was verified from the deployed resolver configuration rather than separately recorded from the Studio UI.
+- A harmless fictional tagline suffix appeared live in Presentation.
+- The suffix did not appear in a separate public preview session.
+- The operator discarded the edit, the original tagline returned, and no verification text remains.
+
+## Limitations and deferred checks
+
+- Published Live Content invalidation was not exercised because no published content mutation was approved.
+- The connected dataset currently contains only accepting events. Closed, sold-out, cancelled, past, empty-result, and transport-failure behavior remains covered by deterministic tests rather than live connected records.
+- The representative standalone mapper-comparison script could not load the framework `server-only` boundary. Connected validation, inventory queries, rendered route checks, and the completed deterministic migration reports were used instead.
+- A full accessibility, screen-reader, and Lighthouse launch audit remains out of scope for this slice.
+- The previous successful Netlify production deployment must be identified as the rollback target before Gate C promotion.
+
+## Rollback
+
+- **Dataset:** No migration write or published mutation occurred. The temporary draft edit was discarded.
+- **Frontend preview:** Remove or stop the retained branch deploy if necessary.
+- **Studio:** The frontend remains independent; local Studio is the fallback.
+- **CORS:** Changes were additive. Existing unrelated origins were retained.
+- **Credentials:** The old migration credential is revoked. If the Viewer token is suspected exposed, rotate it, update approved scopes, and redeploy.
+- **Production:** No promotion has occurred. Record the currently successful production deployment before any Gate C action.
+
+## Gate C required
+
+Production promotion remains blocked pending explicit approval. Gate C would authorize production-scoped environment configuration, promotion of the verified application commit/configuration, production smoke tests, and rollback verification. It would not authorize content publication.
