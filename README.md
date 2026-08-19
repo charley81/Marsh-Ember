@@ -74,6 +74,8 @@ Studio variables:
 - `SANITY_STUDIO_DATASET=production`
 - `SANITY_STUDIO_PREVIEW_ORIGIN` (exact frontend origin)
 
+The hosted Studio is `https://marshandember.sanity.studio`, and the approved production frontend origin is `https://marshandember.netlify.app`. The visual-editing Studio URL in `sanity/env.ts` must remain aligned with the hosted Studio origin. Verify changes through an exact retained preview origin before updating the deployed Studio preview origin or promoting production.
+
 In Sanity Manage, add `http://localhost:3000`, the production frontend origin, and any explicitly trusted preview origin to API CORS origins with credentials enabled. Do not use a broad `*.netlify.app` origin.
 
 Netlify production and trusted deploy previews need the frontend variables above. The write token is never a deployment variable. `netlify.toml` excludes only `.next/cache/**` from secret scanning because Turbopack may cache the server-only Viewer token there; source, server output, and browser assets remain scanned. CI intentionally uses fixture mode and needs no production credential.
