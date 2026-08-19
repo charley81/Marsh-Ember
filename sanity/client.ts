@@ -1,10 +1,11 @@
 import 'server-only'
 import {createClient} from 'next-sanity'
-import {getSanityPublicEnv, SANITY_API_VERSION} from './env'
+import {getSanityPublicEnv, SANITY_API_VERSION, SANITY_STUDIO_URL} from './env'
 
 export const client = createClient({
   ...getSanityPublicEnv(),
   apiVersion: SANITY_API_VERSION,
   useCdn: true,
   perspective: 'published',
+  stega: {studioUrl: SANITY_STUDIO_URL},
 })

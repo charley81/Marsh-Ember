@@ -1,6 +1,7 @@
 import 'server-only'
 
 export const SANITY_API_VERSION = '2026-08-17'
+export const SANITY_STUDIO_URL = 'https://marshandember.sanity.studio'
 
 export function getSanityPublicEnv() {
   const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
