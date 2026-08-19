@@ -25,6 +25,7 @@ import {
   type PrivateDiningInquiryField,
   type PrivateDiningInquiryValues,
 } from '@/lib/private-dining-inquiry'
+import {readPreviewScenario} from '@/lib/preview-scenario'
 
 type WorkflowState =
   | {phase: 'editing' | 'validation-error' | 'pending' | 'submission-error'; errors: PrivateDiningInquiryErrors}
@@ -116,6 +117,7 @@ export function DemoPrivateDiningForm({
   const firstNameRef = useRef<HTMLInputElement>(null)
   const controllerRef = useRef<AbortController | null>(null)
   const focusBlankFormRef = useRef(false)
+  const errorScenarioConsumedRef = useRef(false)
 
   const phase = workflow.phase
   const errors = phase === 'complete' ? {} : workflow.errors
@@ -152,13 +154,23 @@ export function DemoPrivateDiningForm({
     })
   }
 
-  async function startSubmission(scenario: DemoInquiryScenario) {
+  async function startSubmission(requestedScenario?: DemoInquiryScenario) {
     if (pending) return
 
     const nextErrors = validatePrivateDiningInquiry(values)
     if (Object.keys(nextErrors).length) {
       setWorkflow({phase: 'validation-error', errors: nextErrors})
       return
+    }
+
+    let scenario = requestedScenario ?? 'success'
+    if (
+      requestedScenario === undefined &&
+      !errorScenarioConsumedRef.current &&
+      readPreviewScenario(window.location.search) === 'private-dining-error'
+    ) {
+      errorScenarioConsumedRef.current = true
+      scenario = 'error'
     }
 
     const normalized = normalizePrivateDiningInquiry(values)
@@ -184,8 +196,7 @@ export function DemoPrivateDiningForm({
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const submitter = (event.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null
-    void startSubmission(submitter?.value === 'error' ? 'error' : 'success')
+    void startSubmission()
   }
 
   function restart() {
@@ -200,20 +211,20 @@ export function DemoPrivateDiningForm({
       <section className="form-card private-inquiry private-inquiry--complete" aria-labelledby="private-inquiry-complete-title">
         <div className="private-inquiry__success-card">
           <FormStatus
-            title="Demo inquiry complete"
+            title="Inquiry preview complete"
             message="No inquiry was created, no team will contact you, and no date is held or event confirmed."
             type="success"
             role="status"
           />
           <div className="private-inquiry__reference">
-            <p>Demo reference</p>
+            <p>Preview reference</p>
             <strong>{workflow.demoReference}</strong>
           </div>
-          <p className="private-inquiry__disclaimer">This reference belongs only to this browser demo. It is not an operational receipt.</p>
+          <p className="private-inquiry__disclaimer">This reference belongs only to this browser preview. It is not an operational receipt.</p>
         </div>
-        <h2 id="private-inquiry-complete-title" className="sr-only" tabIndex={-1} ref={completionHeadingRef}>Private Dining demo result</h2>
+        <h2 id="private-inquiry-complete-title" className="sr-only" tabIndex={-1} ref={completionHeadingRef}>Private Dining preview result</h2>
         <div className="private-inquiry__actions">
-          <button className="button button--primary" type="button" onClick={restart}>Restart Demo</button>
+          <button className="button button--primary" type="button" onClick={restart}>Start Over</button>
           <Link className="button button--secondary" href="/menus">View Menus</Link>
           <Link className="button button--secondary" href="/visit">Plan Your Visit</Link>
         </div>
@@ -225,19 +236,18 @@ export function DemoPrivateDiningForm({
     <section className="form-card private-inquiry" aria-labelledby="private-inquiry-title">
       <p className="form-card__kicker">Inquiry Form</p>
       <h2 id="private-inquiry-title">Private Dining Inquiry</h2>
-      <p className="lede">Explore the steps of a private dining inquiry without contacting a restaurant.</p>
+      <p className="lede">Explore the inquiry process without contacting a restaurant.</p>
 
       <aside className="private-inquiry__demo-notice" aria-labelledby="private-inquiry-demo-title">
-        <p className="demo-badge">Portfolio demo only</p>
-        <h3 id="private-inquiry-demo-title">Please use fictional information</h3>
-        <p>No inquiry will be sent, stored, emailed, or reviewed. No date will be reserved or held.</p>
+        <h3 id="private-inquiry-demo-title">Use fictional information only</h3>
+        <p>Marsh &amp; Ember is fictional. This portfolio preview is not sent, stored, emailed, or reviewed, and no date is reserved or held.</p>
       </aside>
 
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
         {phase === 'validation-error' ? (
           <div className="private-inquiry__error-summary" role="alert" tabIndex={-1} ref={errorSummaryRef}>
             <h3>We need a few more details</h3>
-            <p>Review the highlighted fields before continuing the demo.</p>
+            <p>Review the highlighted fields before continuing.</p>
             <ul>
               {PRIVATE_DINING_FIELD_ORDER.filter((field) => errors[field]).map((field) => (
                 <li key={field}><a href={`#${field}`}>{fieldLabels[field]}: {errors[field]}</a></li>
@@ -248,8 +258,8 @@ export function DemoPrivateDiningForm({
 
         {phase === 'pending' ? (
           <FormStatus
-            title="Completing the inquiry demo…"
-            message="No information is being transmitted. Please wait while the local simulation finishes."
+            title="Completing the inquiry preview…"
+            message="No information is being transmitted. Please wait while the local preview finishes."
             type="loading"
             role="status"
           />
@@ -258,12 +268,12 @@ export function DemoPrivateDiningForm({
         {phase === 'submission-error' ? (
           <div ref={submissionErrorRef} tabIndex={-1}>
             <FormStatus
-              title="Simulated submission error"
-              message="This preview intentionally stopped the demo. No information was submitted and no date was held."
+              title="We couldn’t complete the inquiry preview"
+              message="Something interrupted this local preview. No information was submitted and no date was held."
               type="error"
               role="alert"
             />
-            <p className="private-inquiry__important"><strong>Important:</strong> Your fictional values remain in this form so you can retry.</p>
+            <p className="private-inquiry__important"><strong>Your entries are safe:</strong> They remain in this form so you can retry.</p>
             <div className="private-inquiry__actions">
               <button className="button button--primary" type="button" onClick={() => void startSubmission('success')}>Try Again</button>
               <a className="button button--secondary" href={`mailto:${privateDiningEmail}`}>Email Private Dining</a>
@@ -307,12 +317,11 @@ export function DemoPrivateDiningForm({
 
           <div className={errors.acknowledgment ? 'check-field check-field--error' : 'check-field'}>
             <input id="acknowledgment" name="acknowledgment" type="checkbox" checked={values.acknowledgment} required aria-invalid={errors.acknowledgment ? true : undefined} aria-describedby={errors.acknowledgment ? 'acknowledgment-error' : undefined} onChange={(event) => updateField('acknowledgment', event.target.checked)} />
-            <div><label htmlFor="acknowledgment">I understand that completing this demo does not reserve a date or confirm an event. <span className="sr-only">(required)</span></label>{errors.acknowledgment ? <p id="acknowledgment-error" className="field__error"><span aria-hidden="true">! </span>{errors.acknowledgment}</p> : null}</div>
+            <div><label htmlFor="acknowledgment">I understand that completing this preview does not reserve a date or confirm an event. <span className="sr-only">(required)</span></label>{errors.acknowledgment ? <p id="acknowledgment-error" className="field__error"><span aria-hidden="true">! </span>{errors.acknowledgment}</p> : null}</div>
           </div>
 
           <div className="private-inquiry__actions">
-            <button className="button button--primary" type="submit" name="scenario" value="success">{pending ? 'Completing Demo…' : 'Complete Demo Inquiry'}</button>
-            <button className="button button--secondary" type="submit" name="scenario" value="error">Preview Error State</button>
+            <button className="button button--primary" type="submit">{pending ? 'Completing Preview…' : 'Complete Inquiry Preview'}</button>
           </div>
         </fieldset>
         <p className="form-privacy">Fictional values remain only in this open form and are cleared after completion. Nothing is transmitted or saved.</p>

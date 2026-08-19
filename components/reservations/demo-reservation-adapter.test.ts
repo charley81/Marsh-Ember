@@ -34,7 +34,7 @@ describe('demo reservation adapter', () => {
 
     await expect(adapter.complete(selection, new AbortController().signal)).resolves.toEqual({
       ...selection,
-      demoReference: 'DEMO-20261024-P4',
+      demoReference: 'PREVIEW-20261024-P4',
     })
   })
 

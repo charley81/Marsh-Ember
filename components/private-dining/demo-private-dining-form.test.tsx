@@ -1,7 +1,11 @@
 import {render, screen, waitFor} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import {beforeEach, describe, expect, it, vi} from 'vitest'
-import {createDemoPrivateDiningAdapter, type DemoInquiryResult, type DemoPrivateDiningAdapter} from '@/lib/private-dining-inquiry'
+import {
+  createDemoPrivateDiningAdapter,
+  type DemoInquiryResult,
+  type DemoPrivateDiningAdapter,
+} from '@/lib/private-dining-inquiry'
 import {DemoPrivateDiningForm} from './demo-private-dining-form'
 
 const settings = {
@@ -26,19 +30,20 @@ async function fillValidInquiry(user: ReturnType<typeof userEvent.setup>) {
   await user.click(screen.getByLabelText(/^I understand/))
 }
 
-describe('demo private dining form', () => {
+describe('private dining inquiry preview', () => {
   beforeEach(() => {
     vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({matches: true}))
   })
 
-  it('discloses the local demo and focuses an associated validation summary', async () => {
+  it('discloses the local preview and focuses an associated validation summary', async () => {
     const user = userEvent.setup()
     renderForm()
 
-    expect(screen.getByText('Portfolio demo only')).toBeInTheDocument()
-    expect(screen.getByText(/No inquiry will be sent, stored, emailed, or reviewed/)).toBeInTheDocument()
+    expect(screen.getByRole('heading', {name: 'Use fictional information only'})).toBeInTheDocument()
+    expect(screen.getByText(/This portfolio preview is not sent, stored, emailed, or reviewed/)).toBeInTheDocument()
+    expect(screen.queryByRole('button', {name: 'Preview Error State'})).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', {name: 'Complete Demo Inquiry'}))
+    await user.click(screen.getByRole('button', {name: 'Complete Inquiry Preview'}))
 
     const summary = screen.getByRole('alert')
     expect(summary).toHaveFocus()
@@ -53,7 +58,7 @@ describe('demo private dining form', () => {
   })
 
   it('shows a disabled truthful pending state, then clears personal values on completion', async () => {
-    let resolveCompletion: ((value: {demoReference: `DEMO-PD-${string}`}) => void) | undefined
+    let resolveCompletion: ((value: DemoInquiryResult) => void) | undefined
     const adapter: DemoPrivateDiningAdapter = {
       complete: vi.fn(() => new Promise<DemoInquiryResult>((resolve) => { resolveCompletion = resolve })),
     }
@@ -62,47 +67,58 @@ describe('demo private dining form', () => {
     await fillValidInquiry(user)
     await user.type(screen.getByLabelText('Additional information'), 'Secret fictional note')
 
-    await user.click(screen.getByRole('button', {name: 'Complete Demo Inquiry'}))
+    await user.click(screen.getByRole('button', {name: 'Complete Inquiry Preview'}))
 
     expect(screen.getByRole('status')).toHaveTextContent('No information is being transmitted')
-    expect(screen.getByRole('button', {name: 'Completing Demo…'})).toBeDisabled()
+    expect(screen.getByRole('button', {name: 'Completing Preview…'})).toBeDisabled()
     expect(screen.getByLabelText(/^First name/)).toBeDisabled()
 
-    resolveCompletion?.({demoReference: 'DEMO-PD-TEST-0001'})
+    resolveCompletion?.({demoReference: 'PREVIEW-PD-TEST-0001'})
 
-    await waitFor(() => expect(screen.getByRole('heading', {name: 'Demo inquiry complete'})).toBeInTheDocument())
-    expect(screen.getByText('DEMO-PD-TEST-0001')).toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.getByRole('heading', {name: 'Inquiry preview complete'})).toBeInTheDocument(),
+    )
+    expect(screen.getByText('PREVIEW-PD-TEST-0001')).toBeInTheDocument()
     expect(screen.getByText(/no team will contact you/i)).toBeInTheDocument()
     expect(screen.queryByDisplayValue('Avery')).not.toBeInTheDocument()
     expect(screen.queryByText('Secret fictional note')).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', {name: 'Restart Demo'}))
+    await user.click(screen.getByRole('button', {name: 'Start Over'}))
     expect(screen.getByLabelText(/^First name/)).toHaveValue('')
     expect(screen.getByLabelText(/^First name/)).toHaveFocus()
   })
 
-  it('validates the error preview, preserves values, and retries successfully', async () => {
-    const complete = vi.fn(async (_inquiry, _signal, scenario) => {
-      if (scenario === 'error') throw new Error('Intentional test failure')
-      return {demoReference: 'DEMO-PD-RETRY-0001' as const}
+  it('preserves values through a controlled failure and retries successfully', async () => {
+    let attempts = 0
+    const complete: DemoPrivateDiningAdapter['complete'] = vi.fn(async () => {
+      if (attempts++ === 0) throw new Error('Controlled submission failure')
+      return {demoReference: 'PREVIEW-PD-RETRY-0001' as const}
     })
     const user = userEvent.setup()
     renderForm({complete})
 
-    await user.click(screen.getByRole('button', {name: 'Preview Error State'}))
+    await user.click(screen.getByRole('button', {name: 'Complete Inquiry Preview'}))
     expect(screen.getByRole('alert')).toHaveTextContent('First name is required')
     expect(complete).not.toHaveBeenCalled()
 
     await fillValidInquiry(user)
-    await user.click(screen.getByRole('button', {name: 'Preview Error State'}))
+    await user.click(screen.getByRole('button', {name: 'Complete Inquiry Preview'}))
 
-    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('Simulated submission error'))
+    await waitFor(() =>
+      expect(screen.getByRole('alert')).toHaveTextContent('We couldn’t complete the inquiry preview'),
+    )
     expect(screen.getByLabelText(/^First name/)).toHaveValue('Avery')
     expect(screen.getByText(/No information was submitted and no date was held/)).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', {name: 'Try Again'}))
 
-    await waitFor(() => expect(screen.getByRole('heading', {name: 'Demo inquiry complete'})).toBeInTheDocument())
-    expect(complete).toHaveBeenLastCalledWith(expect.objectContaining({firstName: 'Avery'}), expect.any(AbortSignal), 'success')
+    await waitFor(() =>
+      expect(screen.getByRole('heading', {name: 'Inquiry preview complete'})).toBeInTheDocument(),
+    )
+    expect(complete).toHaveBeenLastCalledWith(
+      expect.objectContaining({firstName: 'Avery'}),
+      expect.any(AbortSignal),
+      'success',
+    )
   })
 })

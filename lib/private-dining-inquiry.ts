@@ -35,7 +35,7 @@ export type PrivateDiningInquiryField = keyof PrivateDiningInquiryValues
 export type PrivateDiningInquiryErrors = Partial<Record<PrivateDiningInquiryField, string>>
 export type NormalizedPrivateDiningInquiry = PrivateDiningInquiryValues
 export type DemoInquiryScenario = 'success' | 'error'
-export type DemoInquiryResult = {demoReference: `DEMO-PD-${string}`}
+export type DemoInquiryResult = {demoReference: `PREVIEW-PD-${string}`}
 
 export interface DemoPrivateDiningAdapter {
   complete(
@@ -172,7 +172,7 @@ export function createDemoPrivateDiningAdapter({delay = 650}: {delay?: number} =
       void inquiry
       await wait(delay, signal)
       if (scenario === 'error') throw new Error('Simulated inquiry failure')
-      return {demoReference: 'DEMO-PD-LOCAL-0001'}
+      return {demoReference: 'PREVIEW-PD-LOCAL-0001'}
     },
   }
 }

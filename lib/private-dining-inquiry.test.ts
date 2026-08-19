@@ -78,7 +78,7 @@ describe('demo private dining adapter', () => {
 
     const result = await adapter.complete(validInquiry, new AbortController().signal)
 
-    expect(result).toEqual({demoReference: 'DEMO-PD-LOCAL-0001'})
+    expect(result).toEqual({demoReference: 'PREVIEW-PD-LOCAL-0001'})
     expect(JSON.stringify(result)).not.toMatch(/Avery|example\.com|555|anniversary/i)
   })
 
@@ -90,7 +90,7 @@ describe('demo private dining adapter', () => {
     ).rejects.toThrow('Simulated inquiry failure')
     await expect(
       adapter.complete(validInquiry, new AbortController().signal),
-    ).resolves.toMatchObject({demoReference: expect.stringMatching(/^DEMO-PD-/)})
+    ).resolves.toMatchObject({demoReference: expect.stringMatching(/^PREVIEW-PD-/)})
   })
 
   it('aborts pending work', async () => {
