@@ -62,6 +62,61 @@ test("reservation provider-error preview recovers safely", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Choose your table" })).toBeVisible();
 });
 
+test("visitors can complete the Private Dining inquiry demo without transmitting values", async ({ page }) => {
+  await page.goto("/private-dining#inquiry");
+
+  await expect(page.getByText("Portfolio demo only")).toBeVisible();
+  await page.getByRole("button", { name: "Complete Demo Inquiry" }).click();
+  const summary = page.getByRole("alert").filter({ hasText: "We need a few more details" });
+  await expect(summary).toBeFocused();
+  await expect(summary).toContainText("First name is required");
+
+  await page.getByLabel(/^First name/).fill("Avery");
+  await page.getByLabel(/^Last name/).fill("Example");
+  await page.getByLabel(/^Email address/).fill("avery@example.com");
+  await page.getByLabel(/^Phone number/).fill("(843) 555-0100");
+  await page.getByLabel(/^Event type/).selectOption("Celebration");
+  await page.getByLabel(/^Preferred date/).fill("2099-11-15");
+  await page.getByLabel(/^Preferred time of day/).selectOption("Evening");
+  await page.getByLabel(/^Estimated guest count/).fill("24");
+  await page.getByLabel(/^I understand/).check();
+
+  const submissionRequests: string[] = [];
+  page.on("request", (request) => {
+    if (["fetch", "xhr"].includes(request.resourceType())) submissionRequests.push(request.url());
+  });
+  await page.getByRole("button", { name: "Complete Demo Inquiry" }).click();
+
+  await expect(page.getByRole("heading", { name: "Demo inquiry complete" })).toBeVisible();
+  await expect(page.getByText(/no team will contact you/i)).toBeVisible();
+  await expect(page.getByText(/^DEMO-PD-/)).toBeVisible();
+  expect(submissionRequests).toEqual([]);
+
+  await page.getByRole("button", { name: "Restart Demo" }).click();
+  await expect(page.getByLabel(/^First name/)).toBeFocused();
+  await expect(page.getByLabel(/^First name/)).toHaveValue("");
+});
+
+test("Private Dining simulated submission failure preserves values and retries", async ({ page }) => {
+  await page.goto("/private-dining#inquiry");
+
+  await page.getByLabel(/^First name/).fill("Avery");
+  await page.getByLabel(/^Last name/).fill("Example");
+  await page.getByLabel(/^Email address/).fill("avery@example.com");
+  await page.getByLabel(/^Phone number/).fill("(843) 555-0100");
+  await page.getByLabel(/^Event type/).selectOption("Celebration");
+  await page.getByLabel(/^Preferred date/).fill("2099-11-15");
+  await page.getByLabel(/^Preferred time of day/).selectOption("Evening");
+  await page.getByLabel(/^Estimated guest count/).fill("24");
+  await page.getByLabel(/^I understand/).check();
+  await page.getByRole("button", { name: "Preview Error State" }).click();
+
+  await expect(page.getByRole("alert").filter({ hasText: "Simulated submission error" })).toBeVisible();
+  await expect(page.getByLabel(/^First name/)).toHaveValue("Avery");
+  await page.getByRole("button", { name: "Try Again" }).click();
+  await expect(page.getByRole("heading", { name: "Demo inquiry complete" })).toBeVisible();
+});
+
 test("the mobile navigation opens the reservation demo and restores safe focus", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.startsWith("mobile"), "Mobile reservation behavior");
   await page.goto("/");

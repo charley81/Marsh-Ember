@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Field, SelectField, StaticForm, TextAreaField } from "@/components/forms";
+import { DemoPrivateDiningForm } from "@/components/private-dining/demo-private-dining-form";
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, MediaFrame, SectionHeading } from "@/components/ui";
 import { getSiteSettings } from "@/lib/content";
@@ -30,17 +30,7 @@ export default async function PrivateDiningPage() {
 
     <section className="section section--sand"><div className="section__inner"><SectionHeading title="Common questions" intro="Details about private dining at Marsh & Ember." centered /><div className="faq">{questions.map((item) => "answer" in item ? <details key={item.question} open><summary>{item.question}</summary><p>{item.answer}</p></details> : <p className="faq__question" key={item.question}>{item.question}</p>)}</div></div></section>
 
-    <section id="inquiry" className="section section--sand form-section private-form-section"><StaticForm title="Private Dining Inquiry" intro="Tell us about your gathering. Share a few details and our events team will be in touch to begin the conversation. Submitting this inquiry does not reserve a date or confirm an event." acknowledgment="I understand that submitting this inquiry does not reserve a date or confirm an event." buttonLabel="Send Inquiry" privacy="Your information will be used only to respond to this inquiry.">
-      <Field label="First name" name="first-name" required /><Field label="Last name" name="last-name" required />
-      <Field label="Email address" name="email" type="email" placeholder="name@example.com" help="We'll use this address to respond to your inquiry." required /><Field label="Phone number" name="phone" type="tel" placeholder="(843) 555-0123" required />
-      <SelectField label="Event type" name="event-type" placeholder="Select an event type" options={["Celebration", "Business dinner", "Reception", "Other gathering"]} required />
-      <Field label="Preferred date" name="preferred-date" type="date" required /><SelectField label="Preferred time of day" name="preferred-time" placeholder="Select a time" options={["Afternoon", "Evening", "Flexible"]} required />
-      <Field label="Estimated guest count" name="guest-count" type="number" placeholder="Number of guests" help="An estimate is fine." required />
-      <Field label="Alternate date" name="alternate-date" type="date" />
-      <SelectField label="Space preference" name="space" placeholder="Select a preference" options={["Private Dining Room", "Full Restaurant Gathering", "Open to recommendation"]} />
-      <SelectField label="Estimated food and beverage budget" name="budget" placeholder="Select a range" options={["Prefer to discuss with the events team"]} />
-      <TextAreaField label="Additional information" name="additional-information" placeholder="Share the occasion, desired atmosphere, dietary considerations, accessibility needs, or other helpful details." />
-    </StaticForm></section>
+    <section id="inquiry" className="section section--sand form-section private-form-section"><DemoPrivateDiningForm privateDiningEmail={settings.privateDiningEmail} privateDiningPhone={settings.privateDiningPhone} privateDiningPhoneHref={settings.privateDiningPhoneHref} /></section>
 
     <section className="section section--navy"><div className="section__inner"><SectionHeading eyebrow="Direct Connection" title="Prefer to reach out directly?" intro="Our events team is happy to answer questions or help you get started." centered light /><Actions centered><ButtonLink href={`mailto:${settings.privateDiningEmail}`} variant="light">{settings.privateDiningEmail}</ButtonLink><ButtonLink href={settings.privateDiningPhoneHref} variant="light">{settings.privateDiningPhone}</ButtonLink></Actions></div></section>
     <section className="section section--sand"><div className="section__inner"><SectionHeading eyebrow="Marsh & Ember" title="Joining us for dinner?" intro="For a standard dining reservation, reserve a table through our online booking experience." centered /><Actions centered><ReservationTrigger>Reserve a Table</ReservationTrigger><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
