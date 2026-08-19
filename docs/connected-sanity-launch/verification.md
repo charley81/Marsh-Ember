@@ -1,6 +1,6 @@
 # Connected Sanity launch verification
 
-- **Status:** Gate B complete — awaiting evidence review and Gate C approval
+- **Status:** Gate C in progress — production environment and Studio target configured; PR and production promotion pending
 - **Verified connected-preview application commit:** `621c0d416ffbb25bc81a12501f7fdc0c7af1bbdc`
 - **Application base commit:** `26c7a9616c75fd7d09a7de26bfd039ec2f45f6db`
 - **Date:** 2026-08-19
@@ -11,7 +11,7 @@
 
 ## Scope completed
 
-Phases 0–2 and Gates A–B are complete. No published content or production deployment was changed.
+Phases 0–2 and Gates A–B are complete. Gate C was explicitly approved. Production-scoped Netlify variables are configured and the hosted Studio now targets the approved production origin, but the frontend production deployment has not yet been promoted. No published content was changed.
 
 The frontend and Studio resolve to the same operator-confirmed, account-owned public production dataset. The deployed read credential is Viewer-only. The temporary migration Editor credential was removed locally and the operator confirmed its revocation in Sanity Manage.
 
@@ -49,7 +49,9 @@ The initial preflight started on `main` because the specification required synch
 | Approved-origin CORS reconciliation | Pass — three exact approved origins are credentialed; no wildcard |
 | Studio deployment dry run with required schema | Pass |
 | Hosted Studio reachability | Pass — HTTP 200 |
-| Branch-scoped Netlify variables | Operator-confirmed — four required variables; no write token; production unchanged |
+| Branch-scoped Netlify variables | Operator-confirmed — four required variables; no write token |
+| Production-scoped Netlify variables | Operator-confirmed — four required variables with current Viewer token; no write token |
+| Production-target Studio build, dry run, and deployment | Pass — hosted Studio remained reachable with HTTP 200 |
 | Connected preview direct routes | Pass — all 8 public routes returned HTTP 200 |
 | Connected preview client transitions | Pass — Menus, Dinner, Events, and Harvest navigation |
 | Connected preview browser diagnostics | Pass — zero console errors, page errors, and failed requests during automated smoke |
@@ -113,7 +115,7 @@ Connected draft-route verification found stega characters in Harvest detail meta
 - The connected dataset currently contains only accepting events. Closed, sold-out, cancelled, past, empty-result, and transport-failure behavior remains covered by deterministic tests rather than live connected records.
 - The representative standalone mapper-comparison script could not load the framework `server-only` boundary. Connected validation, inventory queries, rendered route checks, and the completed deterministic migration reports were used instead.
 - A full accessibility, screen-reader, and Lighthouse launch audit remains out of scope for this slice.
-- The previous successful Netlify production deployment must be identified as the rollback target before Gate C promotion.
+- The operator confirmed that the currently published Netlify deployment remains available through the provider's rollback/publish-deploy action.
 
 ## Rollback
 
@@ -122,8 +124,8 @@ Connected draft-route verification found stega characters in Harvest detail meta
 - **Studio:** The frontend remains independent; local Studio is the fallback.
 - **CORS:** Changes were additive. Existing unrelated origins were retained.
 - **Credentials:** The old migration credential is revoked. If the Viewer token is suspected exposed, rotate it, update approved scopes, and redeploy.
-- **Production:** No promotion has occurred. Record the currently successful production deployment before any Gate C action.
+- **Production:** No promotion has occurred. The operator confirmed the currently successful production deployment is available as the immediate rollback target.
 
-## Gate C required
+## Gate C progress
 
-Production promotion remains blocked pending explicit approval. Gate C would authorize production-scoped environment configuration, promotion of the verified application commit/configuration, production smoke tests, and rollback verification. It would not authorize content publication.
+Gate C was explicitly approved. Production-scoped environment configuration and the production-target Studio redeployment are complete. Remaining work is to review and merge the branch PR, allow Netlify to build production, run production smoke and Draft Mode checks, and roll back immediately if those checks fail. Gate C does not authorize content publication.
