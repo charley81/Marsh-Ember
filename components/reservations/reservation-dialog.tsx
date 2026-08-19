@@ -2,6 +2,7 @@
 
 import {type FormEvent, type KeyboardEvent, useEffect, useRef, useState} from 'react'
 import type {RestaurantSettings} from '@/lib/content-types'
+import {readPreviewScenario} from '@/lib/preview-scenario'
 import {
   createDemoReservationAdapter,
   type AvailabilityScenario,
@@ -22,15 +23,18 @@ function isAbortError(error: unknown) {
 export function ReservationDialog({
   onRequestClose,
   settings,
+  adapter,
 }: {
   onRequestClose: () => void
   settings: Pick<RestaurantSettings, 'mapUrl' | 'phone' | 'phoneHref'>
+  adapter?: ReservationProviderAdapter
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const startRef = useRef<HTMLButtonElement>(null)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const abortRef = useRef<AbortController | null>(null)
-  const adapterRef = useRef<ReservationProviderAdapter | null>(null)
+  const adapterRef = useRef<ReservationProviderAdapter | null>(adapter ?? null)
+  const errorScenarioConsumedRef = useRef(false)
   const [phase, setPhase] = useState<Phase>('introduction')
   const [availability, setAvailability] = useState<DemoAvailability | null>(null)
   const [selection, setSelection] = useState<DemoSelection>(emptySelection)
@@ -78,7 +82,15 @@ export function ReservationDialog({
     }
   }
 
-  const submitDemo = async (event: FormEvent<HTMLFormElement>) => {
+  const loadInitialAvailability = () => {
+    const forceError =
+      !errorScenarioConsumedRef.current &&
+      readPreviewScenario(window.location.search) === 'reservation-error'
+    if (forceError) errorScenarioConsumedRef.current = true
+    void loadAvailability(forceError ? 'error' : 'normal')
+  }
+
+  const submitPreview = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!selection.date || !selection.time || !selection.partySize) {
       setShowValidation(true)
@@ -150,7 +162,7 @@ export function ReservationDialog({
             <button
               className="reservation-dialog__close"
               type="button"
-              aria-label="Close reservation demo"
+              aria-label="Close reservation preview"
               onClick={onRequestClose}
             >
               ×
@@ -161,13 +173,12 @@ export function ReservationDialog({
 
         {phase === 'introduction' ? (
           <div className="reservation-dialog__body reservation-intro">
-            <p className="demo-badge">Portfolio demonstration</p>
             <p id="reservation-description">
-              Marsh &amp; Ember is a fictional restaurant. Explore the booking experience, but no
-              reservation will be created.
+              Marsh &amp; Ember is a fictional restaurant. This portfolio preview does not contact a
+              booking provider or create a reservation.
             </p>
             <div className="reservation-demo-notice">
-              <strong>No personal information is collected.</strong>
+              <strong>Nothing is booked or collected.</strong>
               <span>No table will be held and nothing will be submitted or emailed.</span>
             </div>
             <div className="reservation-dialog__actions">
@@ -175,16 +186,9 @@ export function ReservationDialog({
                 ref={startRef}
                 className="button button--primary"
                 type="button"
-                onClick={() => void loadAvailability('normal')}
+                onClick={loadInitialAvailability}
               >
-                Start Demo
-              </button>
-              <button
-                className="button button--secondary"
-                type="button"
-                onClick={() => void loadAvailability('error')}
-              >
-                Preview Error State
+                Check Availability
               </button>
             </div>
           </div>
@@ -211,8 +215,8 @@ export function ReservationDialog({
             </div>
             <p>
               {phase === 'loading'
-                ? 'Loading fictional dates and times…'
-                : 'Completing the demonstration…'}
+                ? 'Checking fictional dates and times…'
+                : 'Finishing the reservation preview…'}
             </p>
           </div>
         ) : null}
@@ -220,12 +224,12 @@ export function ReservationDialog({
         {phase === 'availability' && availability ? (
           <form
             className="reservation-dialog__body reservation-booking"
-            onSubmit={(event) => void submitDemo(event)}
+            onSubmit={(event) => void submitPreview(event)}
             noValidate
           >
             <p id="reservation-description">
               Choose fictional reservation details. They remain only in this browser tab and are
-              cleared when the demo resets.
+              cleared when the preview resets.
             </p>
             {showValidation ? (
               <div
@@ -297,10 +301,10 @@ export function ReservationDialog({
                 </select>
               </label>
             </div>
-            <p className="reservation-privacy">Demo selections are not persisted or transmitted.</p>
+            <p className="reservation-privacy">Preview selections are not persisted or transmitted.</p>
             <div className="reservation-dialog__actions">
               <button className="button button--primary" type="submit">
-                Complete Demo
+                Finish Preview
               </button>
               <button
                 className="button button--secondary"
@@ -316,16 +320,14 @@ export function ReservationDialog({
         {phase === 'error' ? (
           <div className="reservation-dialog__body reservation-error">
             <p id="reservation-description">
-              The simulated online reservation provider is unavailable. This preview demonstrates a
-              safe recovery path.
+              We couldn&apos;t reach the reservation service. No booking information was processed.
             </p>
             <div className="reservation-status reservation-status--error" role="alert">
               <span aria-hidden="true">!</span>
               <div>
                 <strong>Your table has not been reserved.</strong>
                 <p>
-                  No data was processed. Try again or contact the fictional restaurant using the
-                  options below.
+                  Try again or contact the fictional restaurant using the options below.
                 </p>
               </div>
             </div>
@@ -341,7 +343,7 @@ export function ReservationDialog({
                 Call {settings.phone}
               </a>
               <button className="button button--secondary" type="button" onClick={onRequestClose}>
-                Close Demo
+                Close
               </button>
             </div>
           </div>
@@ -354,8 +356,8 @@ export function ReservationDialog({
             aria-live="polite"
           >
             <p id="reservation-description">
-              You completed the fictional booking journey. No reservation was created and no email
-              was sent.
+              This reservation preview is complete. No reservation was created and no email was
+              sent.
             </p>
             <dl className="reservation-details">
               <div>
@@ -373,12 +375,12 @@ export function ReservationDialog({
                 </dd>
               </div>
               <div>
-                <dt>Demo reference</dt>
+                <dt>Preview reference</dt>
                 <dd>{completion.demoReference}</dd>
               </div>
             </dl>
             <div className="reservation-demo-notice">
-              <strong>Demonstration complete</strong>
+              <strong>Preview complete</strong>
               <span>
                 No table was held, no information was submitted, and no confirmation email was sent.
               </span>
@@ -400,7 +402,7 @@ export function ReservationDialog({
                 type="button"
                 onClick={() => setPhase('introduction')}
               >
-                Restart Demo
+                Start Over
               </button>
             </div>
           </div>
@@ -413,16 +415,16 @@ export function ReservationDialog({
 function DialogHeading({phase}: {phase: Phase}) {
   const content = {
     introduction: [
-      'Reservation experience demo',
-      'Review how a standard table reservation would work.',
+      'Reserve a Table',
+      'Explore how standard table availability would work.',
     ],
-    loading: ['Loading reservations', "We're preparing fictional dates and times."],
-    availability: ['Choose your table', 'Select details to continue through the demonstration.'],
-    completing: ['Completing the demo', "We're preparing your fictional reservation details."],
-    error: ["We couldn't load reservations", 'The simulated provider is temporarily unavailable.'],
+    loading: ['Checking availability', "We're preparing fictional dates and times."],
+    availability: ['Choose your table', 'Select fictional details to continue.'],
+    completing: ['Finishing your preview', "We're preparing your fictional reservation details."],
+    error: ['Reservations are unavailable', 'The reservation service could not be reached.'],
     complete: [
-      'Demo reservation complete',
-      'This preview does not represent a real restaurant booking.',
+      'Reservation preview complete',
+      'No real restaurant booking was made.',
     ],
   }[phase]
 

@@ -2,24 +2,25 @@ import {render, screen, waitFor} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import {beforeEach, describe, expect, it, vi} from 'vitest'
 import {restaurant} from '@/lib/site-data'
+import {createDemoReservationAdapter, type ReservationProviderAdapter} from './demo-reservation-adapter'
 import {ReservationProvider} from './reservation-provider'
 import {ReservationTrigger} from './reservation-trigger'
 
-function renderReservationTriggers() {
+function renderReservationTriggers(adapter?: ReservationProviderAdapter) {
   return render(
-    <ReservationProvider settings={restaurant}>
+    <ReservationProvider settings={restaurant} adapter={adapter}>
       <ReservationTrigger>Reserve from header</ReservationTrigger>
       <ReservationTrigger variant="secondary">Reserve from page</ReservationTrigger>
     </ReservationProvider>,
   )
 }
 
-describe('demo reservation dialog', () => {
+describe('reservation preview dialog', () => {
   beforeEach(() => {
     vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({matches: true}))
   })
 
-  it('discloses the demo and restores focus to the exact trigger', async () => {
+  it('discloses the fictional preview and restores focus to the exact trigger', async () => {
     const user = userEvent.setup()
     renderReservationTriggers()
     const trigger = screen.getByRole('button', {name: 'Reserve from page'})
@@ -29,10 +30,13 @@ describe('demo reservation dialog', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     expect(
       screen.getByText(
-        'Marsh & Ember is a fictional restaurant. Explore the booking experience, but no reservation will be created.',
+        'Marsh & Ember is a fictional restaurant. This portfolio preview does not contact a booking provider or create a reservation.',
       ),
     ).toBeInTheDocument()
-    await waitFor(() => expect(screen.getByRole('button', {name: 'Start Demo'})).toHaveFocus())
+    expect(screen.queryByRole('button', {name: 'Preview Error State'})).not.toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.getByRole('button', {name: 'Check Availability'})).toHaveFocus(),
+    )
 
     await user.keyboard('{Escape}')
 
@@ -40,12 +44,12 @@ describe('demo reservation dialog', () => {
     expect(screen.queryByRole('dialog', {hidden: true})).not.toBeInTheDocument()
   })
 
-  it('completes a truthful in-memory demo journey', async () => {
+  it('completes a truthful in-memory reservation preview', async () => {
     const user = userEvent.setup()
     renderReservationTriggers()
 
     await user.click(screen.getByRole('button', {name: 'Reserve from header'}))
-    await user.click(screen.getByRole('button', {name: 'Start Demo'}))
+    await user.click(screen.getByRole('button', {name: 'Check Availability'}))
 
     await waitFor(() =>
       expect(screen.getByRole('heading', {name: 'Choose your table'})).toBeInTheDocument(),
@@ -54,17 +58,19 @@ describe('demo reservation dialog', () => {
     const date = screen.getByLabelText('Date')
     await user.selectOptions(date, (date.querySelectorAll('option')[1] as HTMLOptionElement).value)
     await user.selectOptions(screen.getByLabelText('Time'), '6:45 PM')
-    await user.click(screen.getByRole('button', {name: 'Complete Demo'}))
+    await user.click(screen.getByRole('button', {name: 'Finish Preview'}))
 
     await waitFor(() =>
-      expect(screen.getByRole('heading', {name: 'Demo reservation complete'})).toBeInTheDocument(),
+      expect(
+        screen.getByRole('heading', {name: 'Reservation preview complete'}),
+      ).toBeInTheDocument(),
     )
     expect(
       screen.getByText(
         'No table was held, no information was submitted, and no confirmation email was sent.',
       ),
     ).toBeInTheDocument()
-    expect(screen.getByText(/^DEMO-/)).toBeInTheDocument()
+    expect(screen.getByText(/^PREVIEW-/)).toBeInTheDocument()
     expect(screen.queryByLabelText(/email|name|phone/i)).not.toBeInTheDocument()
   })
 
@@ -73,23 +79,33 @@ describe('demo reservation dialog', () => {
     renderReservationTriggers()
 
     await user.click(screen.getByRole('button', {name: 'Reserve from header'}))
-    await user.click(screen.getByRole('button', {name: 'Start Demo'}))
+    await user.click(screen.getByRole('button', {name: 'Check Availability'}))
     await waitFor(() =>
       expect(screen.getByRole('heading', {name: 'Choose your table'})).toBeInTheDocument(),
     )
-    await user.click(screen.getByRole('button', {name: 'Complete Demo'}))
+    await user.click(screen.getByRole('button', {name: 'Finish Preview'}))
 
     expect(screen.getByRole('alert')).toHaveTextContent('party size, date, time')
     expect(screen.getByLabelText('Party size')).toHaveAttribute('aria-invalid', 'true')
     expect(screen.getByRole('heading', {name: 'Choose your table'})).toBeInTheDocument()
   })
 
-  it('previews provider failure and recovers on retry', async () => {
+  it('handles provider failure and recovers without exposing test controls', async () => {
+    const successAdapter = createDemoReservationAdapter({delay: 0})
+    let attempts = 0
+    const adapter: ReservationProviderAdapter = {
+      loadAvailability(signal) {
+        if (attempts++ === 0) return Promise.reject(new Error('Controlled provider failure'))
+        return successAdapter.loadAvailability(signal)
+      },
+      complete: successAdapter.complete,
+    }
     const user = userEvent.setup()
-    renderReservationTriggers()
+    renderReservationTriggers(adapter)
 
     await user.click(screen.getByRole('button', {name: 'Reserve from header'}))
-    await user.click(screen.getByRole('button', {name: 'Preview Error State'}))
+    expect(screen.queryByRole('button', {name: 'Preview Error State'})).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', {name: 'Check Availability'}))
 
     await waitFor(() =>
       expect(screen.getByRole('alert')).toHaveTextContent('Your table has not been reserved.'),

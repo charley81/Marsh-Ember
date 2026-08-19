@@ -97,7 +97,7 @@ export function createDemoReservationAdapter({
       await wait(Math.min(delay, 400), signal)
       return {
         ...selection,
-        demoReference: `DEMO-${selection.date.replaceAll('-', '')}-P${selection.partySize}`,
+        demoReference: `PREVIEW-${selection.date.replaceAll('-', '')}-P${selection.partySize}`,
       }
     },
   }
