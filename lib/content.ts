@@ -84,7 +84,7 @@ export async function getEvents(): Promise<EventRecord[]> {
   return [events[featuredIndex], ...events.slice(0, featuredIndex), ...events.slice(featuredIndex + 1)]
 }
 
-export async function getEventBySlug(slug: string): Promise<DetailEventRecord | null> {
+export async function getEventBySlug(slug: string, options: {stega?: boolean} = {}): Promise<DetailEventRecord | null> {
   if (getContentSource() === 'fixtures') {
     const event = fixtureContent.events.find((candidate) => candidate.slug === slug)
     return event?.detail ? event as DetailEventRecord : null
@@ -92,7 +92,7 @@ export async function getEventBySlug(slug: string): Promise<DetailEventRecord | 
   const [{sanityFetch}, {EVENT_BY_SLUG_QUERY}, {mapDetailEvent}] = await Promise.all([
     import('@/sanity/live'), import('@/sanity/queries'), import('@/sanity/mappers'),
   ])
-  const {data} = await sanityFetch({query: EVENT_BY_SLUG_QUERY, params: {slug}})
+  const {data} = await sanityFetch({query: EVENT_BY_SLUG_QUERY, params: {slug}, stega: options.stega})
   return mapDetailEvent(data)
 }
 
