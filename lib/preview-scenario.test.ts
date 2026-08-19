@@ -5,6 +5,7 @@ describe('preview scenario', () => {
   it.each([
     ['?previewScenario=reservation-error', 'reservation-error'],
     ['?previewScenario=private-dining-error', 'private-dining-error'],
+    ['?previewScenario=event-rsvp-error', 'event-rsvp-error'],
   ] as const)('reads the supported scenario from %s', (search, scenario) => {
     expect(readPreviewScenario(search)).toBe(scenario)
   })

@@ -9,7 +9,7 @@ test("visitors can navigate from menus to the dinner menu", async ({ page }) => 
   await expect(page.getByRole("heading", { level: 1, name: "Dinner" })).toBeVisible();
 });
 
-test("visitors can open the accepting event and see the RSVP request form", async ({ page }) => {
+test("visitors can complete the event RSVP preview without transmitting values", async ({ page }) => {
   await page.goto("/events");
 
   await page.getByRole("link", { name: "View Event" }).click();
@@ -17,6 +17,52 @@ test("visitors can open the accepting event and see the RSVP request form", asyn
   await expect(page).toHaveURL(/\/events\/harvest-at-the-hearth$/);
   await expect(page.getByRole("heading", { level: 1, name: "Harvest at the Hearth" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Request an RSVP" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Use fictional information only" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /preview error|simulate failure/i })).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Complete RSVP Preview" }).click();
+  const summary = page.getByRole("alert").filter({ hasText: "We need a few more details" });
+  await expect(summary).toBeFocused();
+  await expect(summary).toContainText("First name is required");
+
+  await page.getByLabel(/^First name/).fill("Avery");
+  await page.getByLabel(/^Last name/).fill("Example");
+  await page.getByLabel(/^Email address/).fill("avery@example.com");
+  await page.getByLabel(/^Phone number/).fill("(843) 555-0100");
+  await page.getByLabel(/^Number of guests/).selectOption("2");
+  await page.getByLabel("Dietary or accessibility information").fill("Secret fictional note");
+  await page.getByLabel(/^I understand/).check();
+
+  const submissionRequests: string[] = [];
+  page.on("request", (request) => {
+    if (["fetch", "xhr"].includes(request.resourceType())) submissionRequests.push(request.url());
+  });
+  await page.getByRole("button", { name: "Complete RSVP Preview" }).click();
+
+  await expect(page.getByRole("heading", { name: "RSVP preview complete" })).toBeFocused();
+  await expect(page.getByText(/no RSVP request was created/i)).toBeVisible();
+  await expect(page.getByText("Party of 2")).toBeVisible();
+  await expect(page.getByText(/^PREVIEW-ER-/)).toBeVisible();
+  await expect(page.getByText("avery@example.com")).toHaveCount(0);
+  await expect(page.getByText("Secret fictional note")).toHaveCount(0);
+  expect(submissionRequests).toEqual([]);
+});
+
+test("event RSVP error scenario preserves values and retries", async ({ page }) => {
+  await page.goto("/events/harvest-at-the-hearth?previewScenario=event-rsvp-error#rsvp");
+
+  await page.getByLabel(/^First name/).fill("Avery");
+  await page.getByLabel(/^Last name/).fill("Example");
+  await page.getByLabel(/^Email address/).fill("avery@example.com");
+  await page.getByLabel(/^Phone number/).fill("(843) 555-0100");
+  await page.getByLabel(/^Number of guests/).selectOption("2");
+  await page.getByLabel(/^I understand/).check();
+  await page.getByRole("button", { name: "Complete RSVP Preview" }).click();
+
+  await expect(page.getByRole("alert").filter({ hasText: "We couldn’t complete the RSVP preview" })).toBeFocused();
+  await expect(page.getByLabel(/^First name/)).toHaveValue("Avery");
+  await page.getByRole("button", { name: "Try Again" }).click();
+  await expect(page.getByRole("heading", { name: "RSVP preview complete" })).toBeVisible();
 });
 
 test("unsupported event detail slugs render the branded not-found page", async ({ page }) => {

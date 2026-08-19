@@ -1,4 +1,4 @@
-import { Field, SelectField, StaticForm, TextAreaField } from "@/components/forms";
+import { DemoEventRsvpForm } from "@/components/events/demo-event-rsvp-form";
 import { Actions, ButtonLink, Eyebrow, MediaFrame } from "@/components/ui";
 import { getEventAvailabilityPresentation, type DetailEventRecord } from "@/lib/events";
 
@@ -62,21 +62,12 @@ export function EventRsvpSection({ event }: { event: DetailEventRecord }) {
 
   return (
     <section id="rsvp" className="section form-section event-form-section">
-      <StaticForm
-        kicker="Request an RSVP"
-        title="Request an RSVP"
-        intro="Tell us who will be attending. We'll review availability and send confirmation or next-step information by email. Attendance is not confirmed until a confirmation email is issued."
-        acknowledgment="I understand that submitting this request does not confirm attendance and is not a standard dining reservation."
-        buttonLabel="Request RSVP"
-        privacy="Information submitted through this form will be used to process this event RSVP and communicate event updates."
-      >
-        <Field label="First name" name="first-name" required />
-        <Field label="Last name" name="last-name" required />
-        <Field label="Email address" name="email" type="email" placeholder="name@example.com" help="Event confirmation and updates will be sent here." required />
-        <Field label="Phone number" name="phone" type="tel" placeholder="(843) 555-0123" required />
-        <SelectField label="Number of guests" name="guest-count" placeholder="Select party size" options={["1", "2", "3", "4", "5", "6"]} required />
-        <TextAreaField label="Dietary or accessibility information" name="details" placeholder="Share dietary needs, allergies, mobility considerations, or other information that may help us prepare." help="Please do not include medical diagnoses or unrelated sensitive information." />
-      </StaticForm>
+      <DemoEventRsvpForm event={{
+        slug: event.slug,
+        title: event.title,
+        date: event.date,
+        time: event.time,
+      }} />
     </section>
   );
 }
