@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, MediaFrame, SectionHeading } from "@/components/ui";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Our Story", description: "Discover the Lowcountry ingredients, live-fire cooking, and warm hospitality behind Marsh & Ember." };
+export const metadata = createPageMetadata({title: "Our Story", description: "Discover the Lowcountry ingredients, live-fire cooking, and warm hospitality behind Marsh & Ember.", path: "/our-story", image: "/images/story-landscape-image.jpg", imageAlt: "The Lowcountry landscape surrounding Charleston"});
 
 export default function OurStoryPage() {
   return <>

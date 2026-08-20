@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
 import { DemoPrivateDiningForm } from "@/components/private-dining/demo-private-dining-form";
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, MediaFrame, SectionHeading } from "@/components/ui";
 import { getSiteSettings } from "@/lib/content";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Private Dining", description: "Explore private dining and gathering spaces at Marsh & Ember in Charleston." };
+export const metadata = createPageMetadata({title: "Private Dining", description: "Explore private dining and gathering spaces at Marsh & Ember in Charleston.", path: "/private-dining", image: "/images/private-full-dining-room-interior.jpg", imageAlt: "A private dining room prepared for a gathering at Marsh and Ember"});
 
 const questions = [
   { question: "Does submitting the form reserve my date?", answer: "No. The form begins the conversation. Dates and spaces remain unconfirmed until availability, event details, an agreement, and required payment are completed." },

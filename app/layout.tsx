@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { Libre_Baskerville, Outfit } from "next/font/google";
 import { ContentLive } from "@/components/sanity/content-live";
 import { PreviewTools } from "@/components/sanity/preview-tools";
+import { JsonLd } from "@/components/seo/json-ld";
 import { SiteShell } from "@/components/site/site-shell";
 import { getSiteSettings } from "@/lib/content";
+import { createPageMetadata, DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { createRestaurantJsonLd } from "@/lib/structured-data";
 import "./globals.css";
 
 const libre = Libre_Baskerville({
@@ -19,10 +22,13 @@ const outfit = Outfit({
   display: "swap",
 });
 
+const rootMetadata = createPageMetadata({title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION, path: "/"});
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://marshandember.com"),
-  title: { default: "Marsh & Ember | Charleston Restaurant", template: "%s | Marsh & Ember" },
-  description: "Wood-fired cooking, seasonal ingredients, and warm Southern hospitality in Charleston, South Carolina.",
+  ...rootMetadata,
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
+  title: { default: DEFAULT_TITLE, template: `%s | ${SITE_NAME}` },
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
@@ -30,7 +36,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
 
   return (
     <html lang="en" className={`${libre.variable} ${outfit.variable}`} suppressHydrationWarning >
-      <body><a className="sr-only" href="#main-content">Skip to content</a><SiteShell settings={settings}>{children}</SiteShell><ContentLive /><PreviewTools /></body>
+      <body><JsonLd data={createRestaurantJsonLd(settings)} /><a className="sr-only" href="#main-content">Skip to content</a><SiteShell settings={settings}>{children}</SiteShell><ContentLive /><PreviewTools /></body>
     </html>
   );
 }

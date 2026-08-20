@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, MediaFrame, MenuItem, SectionHeading } from "@/components/ui";
 import { getDietaryMarkers, getMenus } from "@/lib/content";
 import type { MenuRecord } from "@/lib/content-types";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Menus", description: "Explore seasonal dinner, weekend brunch, cocktails, and wine at Marsh & Ember." };
+export const metadata = createPageMetadata({title: "Menus", description: "Explore seasonal dinner, weekend brunch, cocktails, and wine at Marsh & Ember.", path: "/menus", image: "/images/menus-hero-image.jpg", imageAlt: "Seasonal dishes from the Marsh and Ember menus"});
 
 function previewItems(menu: MenuRecord) {
   const items = menu.sections.flatMap((section) => section.items);

@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
 import { EventsLandingContent } from "@/components/events/events-landing-content";
 import { Eyebrow, MediaFrame } from "@/components/ui";
 import { getEvents } from "@/lib/content";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Events", description: "Discover seasonal dinners and special gatherings at Marsh & Ember in Charleston." };
+export const metadata = createPageMetadata({title: "Events", description: "Discover seasonal dinners and special gatherings at Marsh & Ember in Charleston.", path: "/events", image: "/images/events-dining-room-special-gathering-image.jpg", imageAlt: "A special gathering in the Marsh and Ember dining room"});
 
 export default async function EventsPage() {
   const events = await getEvents();
