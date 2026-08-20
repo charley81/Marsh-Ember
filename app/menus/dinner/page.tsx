@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, MediaFrame, MenuItem, SectionHeading } from "@/components/ui";
 import { getDietaryMarkers, getMenuBySlug } from "@/lib/content";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Dinner Menu", description: "Seasonal Lowcountry cooking shaped by the hearth, nearby waters, and ingredients at their best." };
+export const metadata = createPageMetadata({title: "Dinner Menu", description: "Seasonal Lowcountry cooking shaped by the hearth, nearby waters, and ingredients at their best.", path: "/menus/dinner", image: "/images/dinner-hero-dinner-image.jpg", imageAlt: "Dinner dishes served at Marsh and Ember"});
 
 export default async function DinnerPage() {
   const [menu, dietaryMarkers] = await Promise.all([getMenuBySlug("dinner"), getDietaryMarkers()]);

@@ -96,7 +96,7 @@ export function mapEvent(value: unknown): EventRecord | null {
   if (!formatted) return null
   const detail = mapDetail(source)
 
-  return {slug, title, summary, listingImage, ...formatted, location, format, availability, detail}
+  return {slug, title, summary, listingImage, startsAt, endsAt, ...formatted, location, format, availability, detail}
 }
 
 export function mapEvents(value: unknown): EventRecord[] {

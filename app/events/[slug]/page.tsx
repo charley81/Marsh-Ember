@@ -3,9 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EventHero, EventRsvpSection } from "@/components/events/event-detail";
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Actions, ButtonLink, FactGrid, MediaFrame, SectionHeading, Tags } from "@/components/ui";
 import { getDetailEventSlugs, getEventBySlug, getSiteSettings } from "@/lib/content";
 import { getEventAvailabilityPresentation } from "@/lib/events";
+import { createPageMetadata } from "@/lib/seo";
+import { createEventJsonLd } from "@/lib/structured-data";
 
 export async function generateStaticParams() {
   return (await getDetailEventSlugs()).map((slug) => ({ slug }));
@@ -14,8 +17,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/events/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const event = await getEventBySlug(slug, { stega: false });
-  if (!event) return { title: "Event Not Found" };
-  return { title: event.title, description: event.summary };
+  if (!event) return { title: "Event Not Found", robots: {index: false, follow: false} };
+  return createPageMetadata({title: event.title, description: event.summary, path: `/events/${slug}`, image: event.detail.heroImage, imageAlt: event.detail.heroAlt});
 }
 
 export default async function EventDetailPage({ params }: PageProps<"/events/[slug]">) {
@@ -27,7 +30,9 @@ export default async function EventDetailPage({ params }: PageProps<"/events/[sl
   const facts = [...event.detail.facts, { label: "Status", value: presentation.label }];
 
   return (
-    <div className="event-detail-page">
+    <>
+      <JsonLd data={createEventJsonLd(event, settings)} />
+      <div className="event-detail-page">
       <div className="section event-back"><div className="section__inner"><Link className="button button--text" href="/events">← Back to All Events</Link></div></div>
       <EventHero event={event} />
 
@@ -57,6 +62,7 @@ export default async function EventDetailPage({ params }: PageProps<"/events/[sl
 
       <section className="section section--sand"><div className="section__inner"><SectionHeading title="Questions about the event?" centered /><Actions centered><ButtonLink href={`mailto:${settings.eventEmail}`} variant="secondary">{settings.eventEmail}</ButtonLink><ButtonLink href={settings.eventPhoneHref} variant="secondary">{settings.eventPhone}</ButtonLink></Actions></div></section>
       <section className="section section--sand"><div className="section__inner"><SectionHeading eyebrow="Marsh & Ember" title="Looking for a regular reservation?" intro="For dinner on another evening, reserve a table through our standard online booking experience." centered /><Actions centered><ReservationTrigger>Reserve a Table</ReservationTrigger><ButtonLink href="/events" variant="secondary">Explore All Events</ButtonLink><ButtonLink href="/visit" variant="secondary">Plan Your Visit</ButtonLink></Actions></div></section>
-    </div>
+      </div>
+    </>
   );
 }

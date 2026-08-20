@@ -1,9 +1,6 @@
-import type { Metadata } from "next";
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, FactGrid, MediaFrame, MenuItem, SectionHeading } from "@/components/ui";
 import { getMenus, getSiteSettings } from "@/lib/content";
-
-export const metadata: Metadata = { title: "Lowcountry ingredients. Shaped by fire.", description: "Experience live-fire Lowcountry cooking and thoughtful hospitality in the heart of Charleston." };
 
 export default async function Home() {
   const [settings, menus] = await Promise.all([getSiteSettings(), getMenus()]);

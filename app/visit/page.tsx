@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, FactGrid, MediaFrame, SectionHeading } from "@/components/ui";
 import { getSiteSettings } from "@/lib/content";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Visit", description: "Find hours, directions, accessibility information, and arrival guidance for Marsh & Ember in Charleston." };
+export const metadata = createPageMetadata({title: "Visit", description: "Find hours, directions, accessibility information, and arrival guidance for Marsh & Ember in Charleston.", path: "/visit", image: "/images/visit-main-exterior-dusk-image.jpg", imageAlt: "Marsh and Ember exterior at dusk in Charleston"});
 
 const questions = [
   { question: "Is there a dress code?", answer: "There is no formal dress code. Guests are encouraged to come as they are and dress for the occasion." },
