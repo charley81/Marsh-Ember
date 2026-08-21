@@ -27,7 +27,7 @@ describe('reservation preview dialog', () => {
 
     await user.click(trigger)
 
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(await screen.findByRole('dialog')).toBeInTheDocument()
     expect(
       screen.getByText(
         'Marsh & Ember is a fictional restaurant. This portfolio preview does not contact a booking provider or create a reservation.',
@@ -49,7 +49,7 @@ describe('reservation preview dialog', () => {
     renderReservationTriggers()
 
     await user.click(screen.getByRole('button', {name: 'Reserve from header'}))
-    await user.click(screen.getByRole('button', {name: 'Check Availability'}))
+    await user.click(await screen.findByRole('button', {name: 'Check Availability'}))
 
     await waitFor(() =>
       expect(screen.getByRole('heading', {name: 'Choose your table'})).toBeInTheDocument(),
@@ -79,7 +79,7 @@ describe('reservation preview dialog', () => {
     renderReservationTriggers()
 
     await user.click(screen.getByRole('button', {name: 'Reserve from header'}))
-    await user.click(screen.getByRole('button', {name: 'Check Availability'}))
+    await user.click(await screen.findByRole('button', {name: 'Check Availability'}))
     await waitFor(() =>
       expect(screen.getByRole('heading', {name: 'Choose your table'})).toBeInTheDocument(),
     )
@@ -105,7 +105,7 @@ describe('reservation preview dialog', () => {
 
     await user.click(screen.getByRole('button', {name: 'Reserve from header'}))
     expect(screen.queryByRole('button', {name: 'Preview Error State'})).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', {name: 'Check Availability'}))
+    await user.click(await screen.findByRole('button', {name: 'Check Availability'}))
 
     await waitFor(() =>
       expect(screen.getByRole('alert')).toHaveTextContent('Your table has not been reserved.'),

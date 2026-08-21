@@ -1,5 +1,102 @@
 import { expect, test } from "@playwright/test";
 
+const publicRoutes = [
+  "/",
+  "/menus",
+  "/menus/dinner",
+  "/visit",
+  "/our-story",
+  "/private-dining",
+  "/events",
+  "/events/harvest-at-the-hearth",
+  "/privacy",
+  "/accessibility",
+] as const;
+
+test("public responses include the launch security headers", async ({ page }) => {
+  const response = await page.goto("/");
+  const headers = response?.headers() ?? {};
+
+  expect(headers["content-security-policy"]).toContain("frame-ancestors 'self' https://marshandember.sanity.studio http://localhost:3333");
+  expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+  expect(headers["permissions-policy"]).toContain("camera=()");
+  expect(headers["x-content-type-options"]).toBe("nosniff");
+  expect(headers["x-powered-by"]).toBeUndefined();
+});
+
+test("every internal destination and fragment is useful", async ({ page, request }) => {
+  const destinations = new Set<string>();
+
+  for (const route of publicRoutes) {
+    await page.goto(route);
+    const links = await page.locator("a[href]").evaluateAll((anchors) => anchors.map((anchor) => {
+      const link = anchor as HTMLAnchorElement;
+      const containingSection = link.closest<HTMLElement>("section[id]");
+      return {
+        href: link.getAttribute("href") ?? "",
+        sameOrigin: link.origin === window.location.origin,
+        selfSection: Boolean(link.hash && containingSection?.id === link.hash.slice(1)),
+      };
+    }));
+
+    expect(links.filter((link) => link.selfSection), `${route} contains a CTA that targets its own section`).toEqual([]);
+    for (const link of links) {
+      if (link.sameOrigin && link.href && !link.href.startsWith("mailto:") && !link.href.startsWith("tel:")) {
+        destinations.add(new URL(link.href, page.url()).toString());
+      }
+    }
+  }
+
+  for (const destination of destinations) {
+    const url = new URL(destination);
+    const response = await request.get(`${url.pathname}${url.search}`);
+    expect(response.status(), destination).toBeLessThan(400);
+
+    if (url.hash) {
+      await page.goto(`${url.pathname}${url.search}${url.hash}`);
+      const targetId = decodeURIComponent(url.hash.slice(1));
+      const target = page.locator(`[id="${targetId.replaceAll('"', '\\"')}"]`);
+      await expect(target, destination).toHaveCount(1);
+    }
+  }
+});
+
+test("menu pathways lead to distinct previews without redundant actions", async ({ page }) => {
+  await page.goto("/");
+  const homeMenuNavigation = page.getByRole("navigation", { name: "Browse menus" });
+  await expect(homeMenuNavigation.getByRole("link")).toHaveCount(4);
+  await homeMenuNavigation.getByRole("link", { name: "Brunch" }).click();
+  await expect(page).toHaveURL(/\/menus#brunch$/);
+  const brunchTarget = page.locator("#brunch");
+  await expect(brunchTarget.getByRole("heading", { name: "A slower part of the week" })).toBeVisible();
+  const headerBox = await page.locator(".site-header").boundingBox();
+  await expect.poll(async () => (await brunchTarget.boundingBox())?.y ?? Number.POSITIVE_INFINITY).toBeLessThan(page.viewportSize()?.height ?? 0);
+  expect((await brunchTarget.boundingBox())?.y ?? -1).toBeGreaterThanOrEqual((headerBox?.height ?? 0) - 1);
+
+  await page.goto("/menus");
+
+  await page.getByRole("link", { name: "View Weekend Brunch" }).click();
+  await expect(page).toHaveURL(/\/menus#brunch$/);
+  await expect(page.locator("#brunch").getByRole("heading", { name: "A slower part of the week" })).toBeVisible();
+  await expect(page.locator("#brunch").getByRole("link", { name: /brunch menu/i })).toHaveCount(0);
+
+  await page.goto("/menus/dinner");
+  await expect(page.getByRole("navigation", { name: "Browse menus" })).toContainText("Weekend Brunch preview");
+  await page.getByRole("link", { name: "Wine preview" }).click();
+  await expect(page).toHaveURL(/\/menus#cellar$/);
+  await expect(page.locator("#cellar").getByRole("heading", { name: "Wines for the table" })).toBeVisible();
+});
+
+test("announcement dismissal persists and moves focus safely", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Dismiss announcement" }).click();
+  await expect(page.getByRole("link", { name: "Marsh and Ember home" })).toBeFocused();
+  await expect(page.getByRole("complementary", { name: "Restaurant announcement" })).toHaveCount(0);
+
+  await page.reload();
+  await expect(page.getByRole("complementary", { name: "Restaurant announcement" })).toHaveCount(0);
+});
+
 test("visitors can navigate from menus to the dinner menu", async ({ page }) => {
   await page.goto("/menus");
 

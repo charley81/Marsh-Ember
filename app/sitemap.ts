@@ -2,7 +2,7 @@ import type {MetadataRoute} from 'next'
 import {getDetailEventSlugs} from '@/lib/content'
 import {absoluteUrl} from '@/lib/seo'
 
-const staticRoutes = ['/', '/menus', '/menus/dinner', '/visit', '/our-story', '/private-dining', '/events'] as const
+const staticRoutes = ['/', '/menus', '/menus/dinner', '/visit', '/our-story', '/private-dining', '/events', '/privacy', '/accessibility'] as const
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const eventSlugs = await getDetailEventSlugs()

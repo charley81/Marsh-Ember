@@ -19,7 +19,7 @@ function SiteFooter({ settings: restaurant }: { settings: RestaurantSettings }) 
         <div><h2>Visit</h2><address><a href={restaurant.mapUrl} target="_blank" rel="noreferrer">{restaurant.addressLines[0]}<br />{restaurant.addressLines[1]}</a></address><a href={restaurant.phoneHref}>{restaurant.phone}</a><a href={`mailto:${restaurant.email}`}>{restaurant.email}</a></div>
         <div><h2>Hours</h2>{restaurant.hours.map((hours) => <p key={hours.days}>{hours.days}<br />{hours.time}</p>)}</div>
       </div>
-      <div className="site-footer__utility page-gutter"><div><a href={restaurant.instagramUrl} target="_blank" rel="noreferrer">Instagram <span className="sr-only">(opens in a new tab)</span></a><a href={restaurant.facebookUrl} target="_blank" rel="noreferrer">Facebook <span className="sr-only">(opens in a new tab)</span></a></div><div><span>Privacy</span><span>Accessibility</span><span>© {new Date().getFullYear()} {restaurant.name}. All rights reserved.</span></div></div>
+      <div className="site-footer__utility page-gutter"><div><a href={restaurant.instagramUrl} target="_blank" rel="noreferrer">Instagram <span className="sr-only">platform home (opens in a new tab)</span></a><a href={restaurant.facebookUrl} target="_blank" rel="noreferrer">Facebook <span className="sr-only">platform home (opens in a new tab)</span></a></div><nav className="footer-legal" aria-label="Legal and accessibility"><Link href="/privacy" prefetch={false}>Privacy</Link><Link href="/accessibility" prefetch={false}>Accessibility</Link><span>© {new Date().getFullYear()} {restaurant.name}. All rights reserved.</span></nav></div>
     </footer>
   );
 }
