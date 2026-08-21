@@ -1,4 +1,4 @@
-export type PreviewScenario =
+type PreviewScenario =
   | 'reservation-error'
   | 'private-dining-error'
   | 'event-rsvp-error'

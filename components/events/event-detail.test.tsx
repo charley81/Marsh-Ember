@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { getDetailEvent, type DetailEventRecord, type EventAvailability } from "@/lib/events";
+import { type DetailEventRecord, type EventAvailability } from "@/lib/events";
 import { events } from "@/lib/site-data";
 import { EventHero, EventRsvpSection } from "./event-detail";
 
-const harvest = getDetailEvent(events, "harvest-at-the-hearth")!;
+const harvest = events[0] as DetailEventRecord;
 
 function withAvailability(availability: EventAvailability): DetailEventRecord {
   return { ...harvest, availability };

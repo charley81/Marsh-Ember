@@ -1,6 +1,6 @@
 import 'server-only'
 
-export type ContentSource = 'fixtures' | 'sanity'
+type ContentSource = 'fixtures' | 'sanity'
 
 export function getContentSource(): ContentSource {
   const source = process.env.CONTENT_SOURCE ?? (process.env.NODE_ENV === 'production' ? undefined : 'fixtures')

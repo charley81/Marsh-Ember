@@ -2,7 +2,7 @@ import {stegaClean} from 'next-sanity'
 import type {ContentImage} from '@/lib/content-types'
 import {imageUrl} from '../image'
 
-export type UnknownRecord = Record<string, unknown>
+type UnknownRecord = Record<string, unknown>
 
 export function record(value: unknown): UnknownRecord | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value) ? value as UnknownRecord : null

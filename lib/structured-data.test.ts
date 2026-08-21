@@ -1,9 +1,9 @@
 import {describe, expect, it} from 'vitest'
+import type {DetailEventRecord} from './events'
 import {events, restaurant} from './site-data'
 import {createEventJsonLd, createRestaurantJsonLd, serializeJsonLd} from './structured-data'
-import {getDetailEvent} from './events'
 
-const harvest = getDetailEvent(events, 'harvest-at-the-hearth')!
+const harvest = events[0] as DetailEventRecord
 
 describe('structured data', () => {
   it('describes the restaurant and website using canonical URLs', () => {

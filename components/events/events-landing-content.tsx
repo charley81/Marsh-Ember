@@ -106,7 +106,7 @@ export function EventsLandingContent({ events }: { events: readonly EventRecord[
   );
 }
 
-export function EventsEmptyState() {
+function EventsEmptyState() {
   return (
     <section className="events-empty" aria-labelledby="events-empty-title">
       <div className="events-empty__inner">

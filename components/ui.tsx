@@ -74,10 +74,6 @@ export function Actions({ children, centered = false }: { children: ReactNode; c
   return <div className={`actions${centered ? " actions--centered" : ""}`}>{children}</div>;
 }
 
-export function Notice({ title, children, dark = false }: { title: string; children: ReactNode; dark?: boolean }) {
-  return <aside className={`notice${dark ? " notice--dark" : ""}`}><h2>{title}</h2><div>{children}</div></aside>;
-}
-
 export function FactGrid({ facts }: { facts: readonly { label: string; value: string }[] }) {
   return <dl className={`fact-grid fact-grid--${facts.length}`}>{facts.map((fact) => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>;
 }

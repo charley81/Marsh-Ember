@@ -41,8 +41,6 @@ main { overflow: clip; }
 .section--navy { background: var(--navy); color: var(--white); }
 .section--tight { padding-block: clamp(3rem, 6vw, 5rem); }
 .section__inner { width: min(100%, var(--content)); margin-inline: auto; }
-.stack { display: grid; gap: 2rem; }
-
 .preview-indicator { position: fixed; z-index: 1000; right: 1rem; bottom: 1rem; display: flex; align-items: center; gap: .75rem; padding: .65rem .8rem; color: var(--white); background: var(--navy); border: 1px solid rgb(255 255 255 / .35); box-shadow: 0 .5rem 2rem rgb(0 0 0 / .2); font-size: .875rem; }
 .preview-indicator form { margin: 0; }
 .preview-indicator button { min-height: 2.25rem; padding: 0 .75rem; border: 1px solid currentColor; color: inherit; background: transparent; cursor: pointer; }
@@ -101,12 +99,6 @@ main { overflow: clip; }
 .hero h1 { margin-bottom: 1.5rem; font-family: var(--font-display), serif; font-size: clamp(3rem, 4.45vw, 4rem); font-weight: 400; line-height: 1.1; }
 .hero .lede { margin-bottom: 2rem; }
 .hero .media-frame { height: min(40vw, 36.25rem); }
-.hero--centered { min-height: auto; grid-template-columns: 1fr; text-align: center; }
-.hero--centered .hero__content { max-width: 58rem; margin-inline: auto; }
-.hero--centered .eyebrow, .hero--centered .actions { justify-content: center; }
-.hero--image-top { padding-top: 0; }
-.hero--image-top .media-frame { width: calc(100% + 2 * var(--gutter)); margin-left: calc(-1 * var(--gutter)); border-radius: 0; aspect-ratio: 16/7; }
-
 .split-section { width: min(100%, var(--content)); margin-inline: auto; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr); align-items: center; gap: clamp(3rem, 6vw, 6rem); }
 .split-section--reverse > :first-child { order: 2; }
 .split-section__copy { max-width: 34rem; }
@@ -184,8 +176,6 @@ main { overflow: clip; }
 .dietary-grid strong { display: block; margin-bottom: .4rem; }
 .notice { width: min(100%, var(--content)); margin-inline: auto; padding: clamp(2rem, 4vw, 3rem); display: grid; grid-template-columns: minmax(14rem, .45fr) 1fr; gap: 2rem; background: var(--sand); border: 1px solid var(--line); }
 .notice h2 { font-family: var(--font-display), serif; font-size: 1.75rem; font-weight: 400; }
-.notice--dark { color: var(--white); background: var(--navy); border-color: #2b4764; }
-.notice--dark p { color: rgba(255,255,255,.82); }
 
 .event-back { padding-block: 2rem 0; }
 .event-hero { min-height: 0; padding-block: 2rem 4rem; }
@@ -254,7 +244,6 @@ main { overflow: clip; }
 .check-field label { display: block; }
 .check-field--error { padding-left: .75rem; border-left: 3px solid var(--ember); }
 .form-privacy { margin-top: 1rem; }
-.integration-note { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
 
 .private-inquiry { display: grid; gap: 1.5rem; }
 .private-inquiry > * { margin-bottom: 0; }
@@ -407,7 +396,6 @@ main { overflow: clip; }
   .section-heading--centered h2 { font-size: 1.75rem; }
   .lede { font-size: .9375rem; line-height: 1.6; }
   .editorial-card h3, .menu-item h3, .list-grid h3, .numbered-grid h3 { font-size: 1.125rem; }
-  .hero--image-top .media-frame { aspect-ratio: 4/3; }
   .split-section, .split-section--reverse { grid-template-columns: 1fr; gap: 2rem; }
   .story-copy-row, .story-section-intro { margin-bottom: 1.5rem; grid-template-columns: 1fr; align-items: start; gap: 1rem; }
   .story-copy-row h1 { font-size: 2rem; line-height: 1.2; }
@@ -418,7 +406,7 @@ main { overflow: clip; }
   .media-frame { min-height: 0; aspect-ratio: 4 / 3; }
   .media-frame--portrait { aspect-ratio: 4 / 5; }
   .media-frame--wide { aspect-ratio: 16 / 9; }
-  .atmosphere-media, .story-hearth-media, .events-experience-media, .event-intro-media { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  .atmosphere-media, .events-experience-media, .event-intro-media { display: grid; grid-template-columns: 1fr; gap: 1rem; }
   .atmosphere-media .media-frame, .events-experience-media .media-frame, .event-intro-media .media-frame, .events-featured .media-frame, .events-upcoming .media-frame, .events-private-media { aspect-ratio: 16 / 9; }
   .home-private-media { aspect-ratio: 16 / 9; }
   .event-back { padding-block: 1.5rem 0; }

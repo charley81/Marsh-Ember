@@ -33,7 +33,7 @@ export type PrivateDiningInquiryValues = {
 
 export type PrivateDiningInquiryField = keyof PrivateDiningInquiryValues
 export type PrivateDiningInquiryErrors = Partial<Record<PrivateDiningInquiryField, string>>
-export type NormalizedPrivateDiningInquiry = PrivateDiningInquiryValues
+type NormalizedPrivateDiningInquiry = PrivateDiningInquiryValues
 export type DemoInquiryScenario = 'success' | 'error'
 export type DemoInquiryResult = {demoReference: `PREVIEW-PD-${string}`}
 

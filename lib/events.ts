@@ -1,4 +1,4 @@
-export type AcceptingAvailability = {
+type AcceptingAvailability = {
   state: "accepting";
   label: "RSVP Open" | "Limited Availability";
 };
@@ -73,7 +73,7 @@ type UnavailablePanel = {
   actions: readonly EventAction[];
 };
 
-export type EventAvailabilityPresentation =
+type EventAvailabilityPresentation =
   | {
       label: AcceptingAvailability["label"];
       acceptsRequests: true;
@@ -164,12 +164,4 @@ export function getEventAvailabilityPresentation(event: EventRecord): EventAvail
 
 export function hasEventDetail(event: EventRecord): event is DetailEventRecord {
   return event.detail !== undefined;
-}
-
-export function getDetailEvents(records: readonly EventRecord[]): DetailEventRecord[] {
-  return records.filter(hasEventDetail);
-}
-
-export function getDetailEvent(records: readonly EventRecord[], slug: string): DetailEventRecord | undefined {
-  return records.find((event): event is DetailEventRecord => event.slug === slug && hasEventDetail(event));
 }

@@ -1,4 +1,4 @@
-export type DemoDateOption = {
+type DemoDateOption = {
   value: string
   label: string
   times: readonly string[]
