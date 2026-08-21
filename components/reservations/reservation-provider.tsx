@@ -1,9 +1,14 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import {createContext, type ReactNode, useContext, useRef, useState} from 'react'
 import type {RestaurantSettings} from '@/lib/content-types'
 import type {ReservationProviderAdapter} from './demo-reservation-adapter'
-import {ReservationDialog} from './reservation-dialog'
+
+const ReservationDialog = dynamic(
+  () => import('./reservation-dialog').then((module) => module.ReservationDialog),
+  {ssr: false},
+)
 
 type ReservationContextValue = {
   openReservation(trigger: HTMLButtonElement): void

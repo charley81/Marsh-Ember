@@ -15,6 +15,8 @@ describe('metadata routes', () => {
       'https://marshandember.netlify.app/our-story',
       'https://marshandember.netlify.app/private-dining',
       'https://marshandember.netlify.app/events',
+      'https://marshandember.netlify.app/privacy',
+      'https://marshandember.netlify.app/accessibility',
       'https://marshandember.netlify.app/events/harvest-at-the-hearth',
     ])
   })

@@ -83,8 +83,11 @@ Netlify production and trusted deploy previews need the frontend variables above
 ## Quality checks
 
 ```bash
+pnpm audit:prod
 pnpm check
 pnpm test:e2e:run
 ```
 
-`pnpm check` runs lint, schema extraction/TypeGen, type checking, unit tests, the Studio build, and the Next.js production build.
+`pnpm audit:prod` fails on known high-severity production dependency findings. `pnpm check` runs lint, schema extraction/TypeGen, type checking, unit tests, the Studio build, and the Next.js production build. The Playwright suite covers critical visitor journeys, internal destinations and fragments, responsive desktop/mobile behavior, and automated WCAG A/AA checks for every public route and key interaction states.
+
+The public route set includes Home, Menus, Dinner, Visit, Our Story, Private Dining, Events, the reusable event detail, Privacy, and Accessibility. Reservation, inquiry, and RSVP experiences remain intentionally local, no-I/O portfolio previews.

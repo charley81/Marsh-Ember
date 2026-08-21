@@ -45,9 +45,13 @@ export function MediaFrame({ src, mobileSrc, alt, className = "", priority = fal
   className?: string;
   priority?: boolean;
 }) {
+  const desktopSizes = mobileSrc
+    ? "(max-width: 767px) 1px, (max-width: 1200px) 50vw, 620px"
+    : "(max-width: 767px) calc(100vw - 40px), (max-width: 1200px) 50vw, 620px";
+
   return <div className={`media-frame ${className}`}>
-    <Image className={mobileSrc ? "media-image media-image--desktop" : "media-image"} src={src} alt={alt} fill sizes="(max-width: 768px) 100vw, 50vw" priority={priority} />
-    {mobileSrc ? <Image className="media-image media-image--mobile" src={mobileSrc} alt={alt} fill sizes="(max-width: 768px) 100vw, 1px" priority={priority} /> : null}
+    <Image className={mobileSrc ? "media-image media-image--desktop" : "media-image"} src={src} alt={alt} fill sizes={desktopSizes} fetchPriority={priority ? "high" : undefined} />
+    {mobileSrc ? <Image className="media-image media-image--mobile" src={mobileSrc} alt={alt} fill sizes="(max-width: 767px) calc(100vw - 40px), 1px" fetchPriority={priority ? "high" : undefined} /> : null}
   </div>;
 }
 
