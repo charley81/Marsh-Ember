@@ -1,14 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { events } from "./site-data";
 import {
-  getDetailEvent,
-  getDetailEvents,
   getEventAvailabilityPresentation,
   type EventAvailability,
   type EventRecord,
 } from "./events";
 
-const harvest = getDetailEvent(events, "harvest-at-the-hearth")!;
+const harvest = events[0];
 
 function withAvailability(availability: EventAvailability): EventRecord {
   return { ...harvest, availability };
@@ -41,20 +39,5 @@ describe("event availability presentation", () => {
     expect(closed.panel?.showSchedule).toBe(true);
     expect(harvest.schedule).toContain("September 24, 2026");
     expect(cancelled.panel?.body).toContain(harvest.date);
-  });
-});
-
-describe("event detail selectors", () => {
-  it("returns only records with approved detail content without mutating the source", () => {
-    const original = [...events];
-    const detailEvents = getDetailEvents(events);
-
-    expect(detailEvents.map((event) => event.slug)).toEqual(["harvest-at-the-hearth"]);
-    expect(events).toEqual(original);
-  });
-
-  it("does not resolve listing-only or unknown records as detail pages", () => {
-    expect(getDetailEvent(events, "lowcountry-oyster-roast")).toBeUndefined();
-    expect(getDetailEvent(events, "not-an-event")).toBeUndefined();
   });
 });

@@ -4,7 +4,7 @@ export const SITE_NAME = 'Marsh & Ember'
 export const SITE_URL = 'https://marshandember.netlify.app'
 export const DEFAULT_TITLE = 'Marsh & Ember | Charleston Restaurant'
 export const DEFAULT_DESCRIPTION = 'Discover wood-fired Lowcountry cooking, seasonal menus, and warm Southern hospitality at Marsh & Ember, a Charleston restaurant.'
-export const DEFAULT_OG_IMAGE = '/images/home-hero-image.jpg'
+const DEFAULT_OG_IMAGE = '/images/home-hero-image.jpg'
 
 type PageMetadataInput = {
   title: string

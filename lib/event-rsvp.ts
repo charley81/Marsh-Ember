@@ -12,7 +12,7 @@ export type EventRsvpValues = {
 
 export type EventRsvpField = keyof EventRsvpValues
 export type EventRsvpErrors = Partial<Record<EventRsvpField, string>>
-export type NormalizedEventRsvp = EventRsvpValues
+type NormalizedEventRsvp = EventRsvpValues
 export type DemoEventRsvpScenario = 'success' | 'error'
 export type DemoEventRsvpResult = {previewReference: `PREVIEW-ER-${string}`}
 

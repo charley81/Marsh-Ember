@@ -200,10 +200,6 @@ export const events: readonly EventRecord[] = [
   },
 ];
 
-export function getEvent(slug: string) {
-  return events.find((event) => event.slug === slug);
-}
-
 export const dietaryMarkers = [
   { code: "VG", label: "Vegan", detail: "No animal products utilized." },
   { code: "V", label: "Vegetarian", detail: "Made with dairy, eggs, and plants." },
