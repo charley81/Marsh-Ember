@@ -63,15 +63,13 @@ test("every internal destination and fragment is useful", async ({ page, request
 
 test("menu pathways lead to distinct previews without redundant actions", async ({ page }) => {
   await page.goto("/");
-  const homeMenuNavigation = page.getByRole("navigation", { name: "Browse menus" });
-  await expect(homeMenuNavigation.getByRole("link")).toHaveCount(4);
-  await homeMenuNavigation.getByRole("link", { name: "Brunch" }).click();
-  await expect(page).toHaveURL(/\/menus#brunch$/);
-  const brunchTarget = page.locator("#brunch");
-  await expect(brunchTarget.getByRole("heading", { name: "A slower part of the week" })).toBeVisible();
-  const headerBox = await page.locator(".site-header").boundingBox();
-  await expect.poll(async () => (await brunchTarget.boundingBox())?.y ?? Number.POSITIVE_INFINITY).toBeLessThan(page.viewportSize()?.height ?? 0);
-  expect((await brunchTarget.boundingBox())?.y ?? -1).toBeGreaterThanOrEqual((headerBox?.height ?? 0) - 1);
+  const homeMenuNavigation = page.getByRole("tablist", { name: "Browse menus" });
+  await expect(homeMenuNavigation.getByRole("tab")).toHaveCount(4);
+  const brunchTab = homeMenuNavigation.getByRole("tab", { name: "Brunch" });
+  await brunchTab.click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(brunchTab).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel", { name: "Brunch" })).toBeVisible();
 
   await page.goto("/menus");
 
@@ -87,6 +85,23 @@ test("menu pathways lead to distinct previews without redundant actions", async 
   await expect(page.locator("#cellar").getByRole("heading", { name: "Wines for the table" })).toBeVisible();
 });
 
+test("header links always return destination pages to the top", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.startsWith("mobile"), "Desktop header navigation behavior");
+  await page.goto("/");
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+  await page.locator(".desktop-nav").getByRole("link", { name: "Our Story" }).click();
+
+  await expect(page).toHaveURL(/\/our-story$/);
+  await expect(page.getByRole("heading", { level: 1, name: "A Charleston table, shaped by the Lowcountry." })).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThanOrEqual(1);
+
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.getByRole("link", { name: "Marsh and Ember home" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThanOrEqual(1);
+});
+
 test("announcement dismissal persists and moves focus safely", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Dismiss announcement" }).click();
@@ -95,6 +110,23 @@ test("announcement dismissal persists and moves focus safely", async ({ page }) 
 
   await page.reload();
   await expect(page.getByRole("complementary", { name: "Restaurant announcement" })).toHaveCount(0);
+});
+
+test("all common questions open on Private Dining and Visit", async ({ page }) => {
+  for (const route of ["/private-dining", "/visit"] as const) {
+    await page.goto(route);
+    const faq = page.locator(".faq");
+    const questions = faq.getByRole("button");
+    await expect(questions).toHaveCount(5);
+
+    for (let index = 0; index < 5; index += 1) {
+      const question = questions.nth(index);
+      if (await question.getAttribute("aria-expanded") !== "true") await question.click();
+      await expect(question).toHaveAttribute("aria-expanded", "true");
+      const panelId = await question.getAttribute("aria-controls");
+      await expect(page.locator(`[id="${panelId}"]`)).toHaveAttribute("aria-hidden", "false");
+    }
+  }
 });
 
 test("visitors can navigate from menus to the dinner menu", async ({ page }) => {

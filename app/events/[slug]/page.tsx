@@ -36,7 +36,7 @@ export default async function EventDetailPage({ params }: PageProps<"/events/[sl
       <div className="section event-back"><div className="section__inner"><Link className="button button--text" href="/events">← Back to All Events</Link></div></div>
       <EventHero event={event} />
 
-      <section id="event-details" className="section section--sand event-facts"><div className="section__inner"><SectionHeading title="Event Details" /><FactGrid facts={facts} /></div></section>
+      <section id="event-details" className="section section--sand event-facts"><div className="section__inner"><SectionHeading title="Event Details" /><FactGrid className="event-facts__grid" facts={facts} /></div></section>
 
       <section className="section">
         <div className="split-section">
@@ -52,11 +52,7 @@ export default async function EventDetailPage({ params }: PageProps<"/events/[sl
 
       <section className="section section--sand"><div className="section__inner"><SectionHeading eyebrow="Experience" title="What to expect" /><div className="list-grid">{event.detail.expectations.map((expectation) => <article key={expectation.title}><h3>{expectation.title}</h3><p>{expectation.copy}</p></article>)}</div></div></section>
 
-      <section className="section"><div className="section__inner"><SectionHeading title="A glimpse of the menu" intro="The final menu follows availability and may change before the event." /><div className="menu-section__items">{event.detail.courses.map((course) => <article className="menu-item" key={course.name}><h3>{course.name}</h3><p>{course.description}</p><Tags tags={course.tags} /></article>)}</div><p><strong>V</strong> — Vegetarian &nbsp; <strong>VG</strong> — Vegan &nbsp; <strong>GA</strong> — Gluten-aware</p><p className="meta">The menu is representative. Final courses and dietary labels require operational verification.</p></div></section>
-
-      {presentation.acceptsRequests ? (
-        <section className="section section--tight section--sand"><aside className="notice"><h2>Before trying the RSVP preview</h2><div><p><strong>Portfolio Preview</strong><br />Marsh &amp; Ember is fictional. Use fictional information only; no request or form value is sent, stored, emailed, or reviewed.</p><p><strong>No Reservation or Confirmation</strong><br />Completing the preview does not reserve event space, confirm attendance, or create a standard dining reservation.</p></div></aside></section>
-      ) : null}
+      <section className="section event-menu"><div className="section__inner"><SectionHeading title="A glimpse of the menu" intro="The final menu follows availability and may change before the event." /><div className="event-menu__courses">{event.detail.courses.map((course) => <article className="menu-item event-menu__card" key={course.name}><h3>{course.name}</h3><p>{course.description}</p><Tags tags={course.tags} /></article>)}</div><p><strong>V</strong> — Vegetarian &nbsp; <strong>VG</strong> — Vegan &nbsp; <strong>GA</strong> — Gluten-aware</p><p className="meta">The menu is representative. Final courses and dietary labels require operational verification.</p></div></section>
 
       <EventRsvpSection event={event} />
 

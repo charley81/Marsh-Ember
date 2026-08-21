@@ -49,6 +49,16 @@ export function SiteHeader({ name, descriptor }: { name: string; descriptor: str
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const previousPathnameRef = useRef(pathname);
+  const headerNavigationRef = useRef(false);
+
+  useEffect(() => {
+    if (previousPathnameRef.current !== pathname) {
+      if (headerNavigationRef.current) window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      headerNavigationRef.current = false;
+      previousPathnameRef.current = pathname;
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -85,14 +95,19 @@ export function SiteHeader({ name, descriptor }: { name: string; descriptor: str
   }, [open]);
 
   const close = () => setOpen(false);
+  const navigateFromHeader = (href: string) => {
+    close();
+    if (pathname === href) window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    else headerNavigationRef.current = true;
+  };
 
   return (
     <header className="site-header">
-      <Link id="site-brand" className="brand" href="/" aria-label="Marsh and Ember home">
+      <Link id="site-brand" className="brand" href="/" aria-label="Marsh and Ember home" onClick={() => navigateFromHeader("/")}>
         <span>{name}</span><small>{descriptor}</small>
       </Link>
       <nav className="desktop-nav" aria-label="Primary navigation">
-        {navigation.map((item) => <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined}>{item.label}</Link>)}
+        {navigation.map((item) => <Link key={item.href} href={item.href} onClick={() => navigateFromHeader(item.href)} aria-current={pathname === item.href ? "page" : undefined}>{item.label}</Link>)}
       </nav>
       <ReservationTrigger className="header-reserve">Reserve a Table</ReservationTrigger>
       <div className="mobile-actions">
@@ -101,7 +116,7 @@ export function SiteHeader({ name, descriptor }: { name: string; descriptor: str
       </div>
       <div ref={menuRef} id="mobile-menu" className={`mobile-menu${open ? " is-open" : ""}`} aria-hidden={!open}>
         <nav aria-label="Mobile navigation">
-          {navigation.map((item) => <Link key={item.href} href={item.href} onClick={close} aria-current={pathname === item.href ? "page" : undefined} tabIndex={open ? 0 : -1}>{item.label}</Link>)}
+          {navigation.map((item) => <Link key={item.href} href={item.href} onClick={() => navigateFromHeader(item.href)} aria-current={pathname === item.href ? "page" : undefined} tabIndex={open ? 0 : -1}>{item.label}</Link>)}
           <ReservationTrigger onBeforeOpen={close} returnFocusRef={triggerRef} tabIndex={open ? 0 : -1}>Reserve a Table</ReservationTrigger>
         </nav>
       </div>

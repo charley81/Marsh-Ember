@@ -19,7 +19,7 @@ export function EventsLandingContent({ events }: { events: readonly EventRecord[
             <div className="split-section__copy">
               <p className="status">{featuredPresentation.label}</p>
               <h3 className="display-subheading">{featured.title}</h3>
-              <dl className="fact-grid">
+              <dl className="fact-grid events-featured__facts">
                 <div><dt>Date</dt><dd>{featured.date}</dd></div>
                 <div><dt>Time</dt><dd>{featured.time}</dd></div>
                 <div><dt>Format</dt><dd>{featured.format}</dd></div>
@@ -44,12 +44,15 @@ export function EventsLandingContent({ events }: { events: readonly EventRecord[
                   <article className="editorial-card" key={event.slug}>
                     <MediaFrame src={image.src} alt={image.alt} />
                     <div className="editorial-card__body">
-                      <p className="meta">{event.date} · {event.time}</p>
-                      <h3>{event.title}</h3>
-                      <p className="meta">{event.format}</p>
-                      <p className="status">{presentation.label}</p>
-                      <p>{event.summary}</p>
-                      {hasEventDetail(event) ? <ButtonLink href={`/events/${event.slug}`} variant="secondary">View Event</ButtonLink> : null}
+                      <div className="events-upcoming__header">
+                        <p className="meta">{event.date} · {event.time}</p>
+                        <h3>{event.title}</h3>
+                        <div className="events-upcoming__details"><p className="meta">{event.format}</p><p className="status">{presentation.label}</p></div>
+                      </div>
+                      <div className="events-upcoming__info">
+                        <p>{event.summary}</p>
+                        {hasEventDetail(event) ? <ButtonLink href={`/events/${event.slug}`} variant="secondary">View Event</ButtonLink> : null}
+                      </div>
                     </div>
                   </article>
                 );

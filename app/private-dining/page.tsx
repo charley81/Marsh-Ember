@@ -1,3 +1,4 @@
+import { Faq } from "@/components/faq";
 import { DemoPrivateDiningForm } from "@/components/private-dining/demo-private-dining-form";
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import { Actions, ButtonLink, Eyebrow, MediaFrame, SectionHeading } from "@/components/ui";
@@ -8,10 +9,10 @@ export const metadata = createPageMetadata({title: "Private Dining", description
 
 const questions = [
   { question: "Does submitting the form reserve my date?", answer: "No. The form begins the conversation. Dates and spaces remain unconfirmed until availability, event details, an agreement, and required payment are completed." },
-  { question: "Can menus accommodate dietary needs?" },
-  { question: "Are menus and pricing fixed?" },
-  { question: "Can I request a specific room?" },
-  { question: "Can I make a regular dinner reservation here?" },
+  { question: "Can menus accommodate dietary needs?", answer: "Share dietary needs in your inquiry so the events team can discuss them with the kitchen. Available accommodations depend on the final menu and cannot be guaranteed until planning is complete." },
+  { question: "Are menus and pricing fixed?", answer: "Menus follow the season and are shaped around the gathering. The events team will review the available format, menu direction, and pricing with you before any agreement is completed." },
+  { question: "Can I request a specific room?", answer: "Yes. Include your preferred space in the inquiry. The final room depends on the date, gathering format, party size, and restaurant availability." },
+  { question: "Can I make a regular dinner reservation here?", answer: "No. This form is only for Private Dining inquiries. Use the standard reservation experience to look for a regular dinner table." },
 ] as const;
 
 export default async function PrivateDiningPage() {
@@ -28,7 +29,7 @@ export default async function PrivateDiningPage() {
 
     <section className="section"><div className="section__inner"><SectionHeading eyebrow="Planning" title="From inquiry to gathering" /><div className="numbered-grid"><article><h3>Tell us about the occasion</h3><p>Share your preferred date, estimated guest count, event type, and what you have in mind.</p></article><article><h3>Plan with our team</h3><p>We&apos;ll discuss availability, space, menu direction, beverage options, and the details that matter to your gathering.</p></article><article><h3>Confirm the experience</h3><p>Once the details are agreed upon, your event is confirmed through a separate agreement and required payment.</p></article></div><p className="meta">Submitting the inquiry does not hold a date or confirm an event.</p></div></section>
 
-    <section className="section section--sand"><div className="section__inner"><SectionHeading title="Common questions" intro="Details about private dining at Marsh & Ember." centered /><div className="faq">{questions.map((item) => "answer" in item ? <details key={item.question} open><summary>{item.question}</summary><p>{item.answer}</p></details> : <p className="faq__question" key={item.question}>{item.question}</p>)}</div></div></section>
+    <section className="section section--sand"><div className="section__inner"><SectionHeading title="Common questions" intro="Details about private dining at Marsh & Ember." centered /><Faq items={questions} /></div></section>
 
     <section id="inquiry" className="section section--sand form-section private-form-section"><DemoPrivateDiningForm privateDiningEmail={settings.privateDiningEmail} privateDiningPhone={settings.privateDiningPhone} privateDiningPhoneHref={settings.privateDiningPhoneHref} /></section>
 

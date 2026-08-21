@@ -10,6 +10,17 @@ vi.mock("next/navigation", () => ({
 }));
 
 describe("SiteHeader", () => {
+  it("returns the current route to the top from the brand link", async () => {
+    const user = userEvent.setup();
+    const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => undefined);
+    render(<ReservationProvider settings={restaurant}><SiteHeader name="Marsh & Ember" descriptor="lowcountry culinary fire" /></ReservationProvider>);
+
+    await user.click(screen.getByRole("link", { name: "Marsh and Ember home" }));
+
+    expect(scrollTo).toHaveBeenCalledWith({ top: 0, left: 0, behavior: "auto" });
+    scrollTo.mockRestore();
+  });
+
   it("moves focus into the mobile menu and restores it on Escape", async () => {
     const user = userEvent.setup();
     render(<ReservationProvider settings={restaurant}><SiteHeader name="Marsh & Ember" descriptor="lowcountry culinary fire" /></ReservationProvider>);
