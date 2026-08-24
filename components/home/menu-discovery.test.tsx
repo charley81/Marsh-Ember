@@ -6,6 +6,7 @@ import { MenuDiscovery, type MenuPreview } from "./menu-discovery";
 const menus: readonly MenuPreview[] = [
   { id: "dinner", label: "Dinner", title: "Dinner", intro: "Dinner introduction", items: [{ name: "Hearth Bread", description: "Benne" }] },
   { id: "brunch", label: "Brunch", title: "Brunch", intro: "Brunch introduction", items: [{ name: "Shrimp and Grits", description: "Shrimp" }] },
+  { id: "wine", label: "Selected Wines", title: "Wine List", intro: "Seasonally selected bottles and pours", items: [] },
 ] as const;
 
 describe("MenuDiscovery", () => {
@@ -26,5 +27,16 @@ describe("MenuDiscovery", () => {
     expect(screen.getByText("Brunch introduction")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Shrimp and Grits" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Hearth Bread" })).not.toBeInTheDocument();
+  });
+
+  it("shows the menu summary when a CMS menu has no preview items", async () => {
+    const user = userEvent.setup();
+    render(<MenuDiscovery menus={menus} />);
+
+    await user.click(screen.getByRole("tab", { name: "Selected Wines" }));
+
+    expect(screen.getByRole("tabpanel", { name: "Selected Wines" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Wine List" })).toBeInTheDocument();
+    expect(screen.getByText("Seasonally selected bottles and pours")).toBeInTheDocument();
   });
 });
