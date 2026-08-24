@@ -71,6 +71,13 @@ test("menu pathways lead to distinct previews without redundant actions", async 
   await expect(brunchTab).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("tabpanel", { name: "Brunch" })).toBeVisible();
 
+  const wineTab = homeMenuNavigation.getByRole("tab", { name: "Selected Wines" });
+  await wineTab.click();
+  const winePanel = page.getByRole("tabpanel", { name: "Selected Wines" });
+  await expect(winePanel).toBeVisible();
+  await expect(winePanel.getByRole("heading", { name: "Wine List" })).toBeVisible();
+  await expect(winePanel).toContainText("Bottles and pours carefully curated");
+
   await page.goto("/menus");
 
   await page.getByRole("link", { name: "View Weekend Brunch" }).click();

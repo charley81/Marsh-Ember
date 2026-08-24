@@ -39,7 +39,7 @@ export function MenuDiscovery({ menus }: { menus: readonly MenuPreview[] }) {
         <div className="section-heading">
           <p className="eyebrow"><span>Menus</span><i aria-hidden="true" /></p>
           <h2 id="menu-discovery-title">On the table now</h2>
-          <p className="lede" key={`${activeMenu.id}-intro`}>{activeMenu.intro}</p>
+          {activeMenu.items.length ? <p className="lede" key={`${activeMenu.id}-intro`}>{activeMenu.intro}</p> : null}
         </div>
         <div className="menu-tabs" role="tablist" aria-label="Browse menus">
           {menus.map((menu, index) => {
@@ -70,10 +70,19 @@ export function MenuDiscovery({ menus }: { menus: readonly MenuPreview[] }) {
         key={activeMenu.id}
         role="tabpanel"
       >
-        <h3 className="sr-only">{activeMenu.title}</h3>
-        <div className="menu-preview">
-          {activeMenu.items.map((item) => <MenuItem item={item} key={item.name} />)}
-        </div>
+        {activeMenu.items.length ? (
+          <>
+            <h3 className="sr-only">{activeMenu.title}</h3>
+            <div className="menu-preview">
+              {activeMenu.items.map((item) => <MenuItem item={item} key={item.name} />)}
+            </div>
+          </>
+        ) : (
+          <div className="menu-discovery__summary">
+            <h3>{activeMenu.title}</h3>
+            <p>{activeMenu.intro}</p>
+          </div>
+        )}
       </div>
     </>
   );
