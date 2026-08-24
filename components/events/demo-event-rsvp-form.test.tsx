@@ -78,7 +78,7 @@ describe('event RSVP preview', () => {
     resolveCompletion?.({previewReference: 'PREVIEW-ER-TEST-0001'})
 
     const completionHeading = await screen.findByRole('heading', {name: 'RSVP preview complete'})
-    expect(completionHeading).toHaveFocus()
+    await waitFor(() => expect(completionHeading).toHaveFocus())
     expect(screen.getByText('PREVIEW-ER-TEST-0001')).toBeInTheDocument()
     expect(screen.getByText(/no RSVP request was created/i)).toBeInTheDocument()
     expect(screen.getByText('Party of 2')).toBeInTheDocument()
