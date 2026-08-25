@@ -76,7 +76,7 @@ test("menu pathways lead to distinct previews without redundant actions", async 
   const winePanel = page.getByRole("tabpanel", { name: "Selected Wines" });
   await expect(winePanel).toBeVisible();
   await expect(winePanel.getByRole("heading", { name: "Wine List" })).toBeVisible();
-  await expect(winePanel).toContainText("Bottles and pours carefully curated");
+  await expect(winePanel).toContainText("Wines by the Glass");
 
   await page.goto("/menus");
 
@@ -89,7 +89,13 @@ test("menu pathways lead to distinct previews without redundant actions", async 
   await expect(page.getByRole("navigation", { name: "Browse menus" })).toContainText("Weekend Brunch preview");
   await page.getByRole("link", { name: "Wine preview" }).click();
   await expect(page).toHaveURL(/\/menus#cellar$/);
-  await expect(page.locator("#cellar").getByRole("heading", { name: "Wines for the table" })).toBeVisible();
+  const cellar = page.locator("#cellar");
+  await expect(cellar.getByRole("heading", { name: "Wines for the table" })).toBeVisible();
+  await expect(cellar.getByRole("heading", { level: 3 })).toHaveCount(3);
+  await expect(cellar).toContainText("Wines by the Glass");
+  const spirits = page.locator("#spirits");
+  await expect(spirits.getByRole("heading", { level: 3 })).toHaveCount(2);
+  await expect(spirits).toContainText("Ember Old Fashioned");
 });
 
 test("header links always return destination pages to the top", async ({ page }, testInfo) => {
@@ -119,7 +125,7 @@ test("announcement dismissal persists and moves focus safely", async ({ page }) 
   await expect(page.getByRole("complementary", { name: "Restaurant announcement" })).toHaveCount(0);
 });
 
-test("all common questions open on Private Dining and Visit", async ({ page }) => {
+test("common questions start closed and keep one answer open", async ({ page }) => {
   for (const route of ["/private-dining", "/visit"] as const) {
     await page.goto(route);
     const faq = page.locator(".faq");
@@ -127,12 +133,17 @@ test("all common questions open on Private Dining and Visit", async ({ page }) =
     await expect(questions).toHaveCount(5);
 
     for (let index = 0; index < 5; index += 1) {
-      const question = questions.nth(index);
-      if (await question.getAttribute("aria-expanded") !== "true") await question.click();
-      await expect(question).toHaveAttribute("aria-expanded", "true");
-      const panelId = await question.getAttribute("aria-controls");
-      await expect(page.locator(`[id="${panelId}"]`)).toHaveAttribute("aria-hidden", "false");
+      await expect(questions.nth(index)).toHaveAttribute("aria-expanded", "false");
     }
+
+    await questions.nth(0).click();
+    await expect(questions.nth(0)).toHaveAttribute("aria-expanded", "true");
+
+    await questions.nth(1).click();
+    await expect(questions.nth(0)).toHaveAttribute("aria-expanded", "false");
+    await expect(questions.nth(1)).toHaveAttribute("aria-expanded", "true");
+    const panelId = await questions.nth(1).getAttribute("aria-controls");
+    await expect(page.locator(`[id="${panelId}"]`)).toHaveAttribute("aria-hidden", "false");
   }
 });
 
