@@ -46,7 +46,10 @@ export const fixtureMenus: readonly MenuRecord[] = [
     sections: [{
       id: 'spirits',
       title: 'Cocktails & Spirits',
-      items: [{name: 'Salt Marsh', price: '$15', description: 'Tequila, lime, sea bean cordial, smoked sea salt rim.', featuredOnLanding: true}],
+      items: [
+        {name: 'Salt Marsh', price: '$15', description: 'Tequila, lime, sea bean cordial, smoked sea salt rim.', featuredOnLanding: true},
+        {name: 'Ember Old Fashioned', price: '$16', description: 'Hickory-smoked bourbon, charred orange peel oil, aromatic bitters.', featuredOnLanding: true},
+      ],
     }],
   },
   {
@@ -56,7 +59,15 @@ export const fixtureMenus: readonly MenuRecord[] = [
     summary: 'Bottles and pours carefully curated to match Lowcountry salinity, smoke, and rich Southern textures.',
     displayOrder: 40,
     hasDetailPage: false,
-    sections: [],
+    sections: [{
+      id: 'wine',
+      title: 'Wine List',
+      items: [
+        {name: 'Wines by the Glass', description: 'Lively sparkling, white, rosé, and red selections.', featuredOnLanding: true},
+        {name: 'Half & Full Bottles', description: 'Family estates and coastal vineyards selected for sharing.', featuredOnLanding: true},
+        {name: 'Dessert Pours', description: 'Sweet wines chosen to close the meal.', featuredOnLanding: true},
+      ],
+    }],
   },
 ]
 

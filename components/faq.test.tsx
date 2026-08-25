@@ -9,19 +9,26 @@ const items = [
 ] as const;
 
 describe("Faq", () => {
-  it("lets each question open independently", async () => {
+  it("starts closed and keeps only one question open at a time", async () => {
     const user = userEvent.setup();
     render(<Faq items={items} />);
 
     const first = screen.getByRole("button", { name: /First question/ });
     const second = screen.getByRole("button", { name: /Second question/ });
+    expect(first).toHaveAttribute("aria-expanded", "false");
+    expect(second).toHaveAttribute("aria-expanded", "false");
+
+    await user.click(first);
     expect(first).toHaveAttribute("aria-expanded", "true");
     expect(second).toHaveAttribute("aria-expanded", "false");
 
     await user.click(second);
-
-    expect(first).toHaveAttribute("aria-expanded", "true");
+    expect(first).toHaveAttribute("aria-expanded", "false");
     expect(second).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByText("First answer.").closest("[role=region]")).toHaveAttribute("aria-hidden", "true");
     expect(screen.getByText("Second answer.").closest("[role=region]")).toHaveAttribute("aria-hidden", "false");
+
+    await user.click(second);
+    expect(second).toHaveAttribute("aria-expanded", "false");
   });
 });

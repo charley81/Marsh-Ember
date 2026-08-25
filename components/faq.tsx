@@ -7,23 +7,18 @@ export type FaqItem = {
   answer: string;
 };
 
-export function Faq({ items, firstOpen = true }: { items: readonly FaqItem[]; firstOpen?: boolean }) {
+export function Faq({ items }: { items: readonly FaqItem[] }) {
   const id = useId();
-  const [openItems, setOpenItems] = useState<Set<number>>(() => firstOpen ? new Set([0]) : new Set());
+  const [openItem, setOpenItem] = useState<number | null>(null);
 
   function toggle(index: number) {
-    setOpenItems((current) => {
-      const next = new Set(current);
-      if (next.has(index)) next.delete(index);
-      else next.add(index);
-      return next;
-    });
+    setOpenItem((current) => current === index ? null : index);
   }
 
   return (
     <div className="faq">
       {items.map((item, index) => {
-        const open = openItems.has(index);
+        const open = openItem === index;
         const buttonId = `${id}-question-${index}`;
         const panelId = `${id}-answer-${index}`;
         return (

@@ -107,6 +107,7 @@ main { overflow: clip; }
 .story-copy-row h1 { margin: 0; font-family: var(--font-display), serif; font-size: clamp(3rem, 4.2vw, 3.75rem); font-weight: 400; line-height: 1.1; }
 .story-section-intro { margin-bottom: 3.5rem; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 3rem; }
 .story-section-intro > div { max-width: 42rem; }
+.story-team .section-heading .lede { padding-bottom: clamp(2.5rem, 5vw, 5rem); }
 .story-wide-media { display: grid; gap: 1rem; }
 .editorial-quote { margin: 2rem 0 0; padding-left: 1.5rem; border-left: 3px solid var(--ember); font-family: var(--font-display), serif; font-size: 1.5rem; }
 
@@ -168,9 +169,13 @@ main { overflow: clip; }
 .menu-pathway .button { margin-top: 1rem; }
 .menu-preview .menu-item { padding-inline: 1rem; background: transparent; border: 0; border-radius: var(--radius); }
 .menus-page #brunch .section-heading,
-.menus-page #spirits .section-heading { padding-bottom: 1.25rem; }
+.menus-page #spirits .section-heading,
+.menus-page #cellar .section-heading { padding-bottom: 1.25rem; }
 .menus-page #brunch .section-heading .lede,
-.menus-page #spirits .section-heading .lede { margin-bottom: 0; }
+.menus-page #spirits .section-heading .lede,
+.menus-page #cellar .section-heading .lede { margin-bottom: 0; }
+.menus-drinks__items { display: grid; }
+.menus-drinks__items .menu-item { padding: 1rem 0; background: transparent; border-width: 0 0 1px; border-radius: 0; }
 .menus-page .dietary-grid { padding-block: clamp(1.5rem, 3vw, 2.5rem); }
 #brunch .menu-item + .button,
 .menus-drinks .menu-item + .button,
