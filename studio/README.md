@@ -37,10 +37,7 @@ The singleton Restaurant settings document controls shared restaurant details, i
 - address, map, telephone, and email values;
 - event and Private Dining contact values;
 - opening hours;
-- generic social destinations;
-- announcement content, link, dismissal version, and enabled state.
-
-Increment the announcement dismissal version when an updated campaign should reappear for visitors who dismissed an earlier version.
+- generic social destinations.
 
 ### Menus
 

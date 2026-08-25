@@ -1,5 +1,5 @@
 import type {RestaurantSettings} from '@/lib/content-types'
-import {booleanValue, cleanText, record, records, text} from './common'
+import {cleanText, record, records, text} from './common'
 
 export function mapSiteSettings(value: unknown): RestaurantSettings | null {
   const source = record(value)
@@ -32,18 +32,6 @@ export function mapSiteSettings(value: unknown): RestaurantSettings | null {
   })
   if (!hours.length) return null
 
-  const rawAnnouncement = record(source?.announcement)
-  const announcementMessage = text(rawAnnouncement?.message)
-  const dismissalVersion = cleanText(rawAnnouncement?.dismissalVersion)
-  const announcement = rawAnnouncement && booleanValue(rawAnnouncement.enabled) && announcementMessage && dismissalVersion
-    ? {
-        message: announcementMessage,
-        linkLabel: text(rawAnnouncement.linkLabel) ?? undefined,
-        linkPath: cleanText(rawAnnouncement.linkPath) ?? undefined,
-        dismissalVersion,
-      }
-    : undefined
-
   return {
     name,
     descriptor,
@@ -63,6 +51,5 @@ export function mapSiteSettings(value: unknown): RestaurantSettings | null {
     hours,
     instagramUrl: cleanText(source.instagramUrl) ?? 'https://instagram.com',
     facebookUrl: cleanText(source.facebookUrl) ?? 'https://facebook.com',
-    announcement,
   }
 }

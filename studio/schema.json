@@ -396,57 +396,6 @@
     }
   },
   {
-    "name": "announcement",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "announcement"
-          }
-        },
-        "enabled": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "boolean"
-          },
-          "optional": true
-        },
-        "message": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        },
-        "linkLabel": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        },
-        "linkPath": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        },
-        "dismissalVersion": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": false
-        }
-      }
-    }
-  },
-  {
     "name": "address",
     "type": "type",
     "value": {
@@ -948,14 +897,6 @@
           }
         },
         "optional": false
-      },
-      "announcement": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "announcement"
-        },
-        "optional": true
       },
       "featuredEvent": {
         "type": "objectAttribute",

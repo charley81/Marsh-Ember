@@ -4,10 +4,10 @@ import { ReservationProvider } from "@/components/reservations/reservation-provi
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
 import type { RestaurantSettings } from "@/lib/content-types";
 import { navigation } from "@/lib/site-data";
-import { Announcement, SiteHeader } from "./site-interactions";
+import { SiteHeader } from "./site-interactions";
 
 export function SiteShell({ children, settings }: { children: ReactNode; settings: RestaurantSettings }) {
-  return <ReservationProvider settings={settings}><Announcement announcement={settings.announcement} /><SiteHeader name={settings.name} descriptor={settings.descriptor} /><main id="main-content">{children}</main><SiteFooter settings={settings} /></ReservationProvider>;
+  return <ReservationProvider settings={settings}><SiteHeader name={settings.name} descriptor={settings.descriptor} /><main id="main-content">{children}</main><SiteFooter settings={settings} /></ReservationProvider>;
 }
 
 function SiteFooter({ settings: restaurant }: { settings: RestaurantSettings }) {

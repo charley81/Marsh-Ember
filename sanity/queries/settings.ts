@@ -21,7 +21,6 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     instagramUrl,
     facebookUrl,
     hours[]{_key, days, time},
-    announcement{enabled, message, linkLabel, linkPath, dismissalVersion},
     "featuredEventSlug": featuredEvent->slug.current
   }
 `)

@@ -3,7 +3,7 @@ import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
   title: "Privacy",
-  description: "Learn how the fictional Marsh & Ember portfolio preview handles form values and local browser storage.",
+  description: "Learn how the fictional Marsh & Ember portfolio preview handles reservation and form values.",
   path: "/privacy",
 });
 
@@ -29,15 +29,6 @@ export default function PrivacyPage() {
             free-text values are cleared when a form preview is completed.
           </p>
           <p>Use fictional information only when trying the forms.</p>
-        </section>
-
-        <section>
-          <h2>Local browser storage</h2>
-          <p>
-            Dismissing the announcement stores a small versioned preference in your browser&apos;s local
-            storage so the same announcement can remain hidden. The preference contains no contact
-            information and can be removed by clearing site data in your browser.
-          </p>
         </section>
 
         <section>

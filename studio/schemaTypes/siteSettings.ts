@@ -8,7 +8,6 @@ export const siteSettings = defineType({
     {name: 'identity', title: 'Identity', default: true},
     {name: 'contact', title: 'Contact & location'},
     {name: 'hours', title: 'Hours'},
-    {name: 'announcement', title: 'Announcement'},
     {name: 'events', title: 'Events'},
   ],
   fields: [
@@ -29,7 +28,6 @@ export const siteSettings = defineType({
     defineField({name: 'instagramUrl', title: 'Instagram URL', type: 'url', group: 'contact', validation: (rule) => rule.uri({scheme: ['https']})}),
     defineField({name: 'facebookUrl', title: 'Facebook URL', type: 'url', group: 'contact', validation: (rule) => rule.uri({scheme: ['https']})}),
     defineField({name: 'hours', title: 'Service hours', type: 'array', group: 'hours', of: [defineArrayMember({type: 'serviceHours'})], validation: (rule) => rule.required().min(1)}),
-    defineField({name: 'announcement', type: 'announcement', group: 'announcement'}),
     defineField({name: 'featuredEvent', title: 'Featured event', type: 'reference', to: [{type: 'event'}], group: 'events'}),
   ],
   preview: {prepare: () => ({title: 'Restaurant settings'})},

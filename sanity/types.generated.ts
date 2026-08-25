@@ -94,15 +94,6 @@ export type ServiceHours = {
   time: string
 }
 
-export type Announcement = {
-  _type: 'announcement'
-  enabled?: boolean
-  message?: string
-  linkLabel?: string
-  linkPath?: string
-  dismissalVersion: string
-}
-
 export type Address = {
   _type: 'address'
   street: string
@@ -188,7 +179,6 @@ export type SiteSettings = {
       _key: string
     } & ServiceHours
   >
-  announcement?: Announcement
   featuredEvent?: EventReference
 }
 
@@ -360,7 +350,6 @@ export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | EditorialImage
   | ServiceHours
-  | Announcement
   | Address
   | DietaryMarker
   | Menu
@@ -615,7 +604,7 @@ export type MENU_BY_SLUG_QUERY_RESULT = {
 
 // Source: ../sanity/queries/settings.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[_type == "siteSettings" && _id == "siteSettings"][0]{    _id,    _updatedAt,    name,    descriptor,    tagline,    address{street, city, region, postalCode, country},    mapUrl,    phone,    phoneHref,    email,    eventEmail,    eventPhone,    eventPhoneHref,    privateDiningEmail,    privateDiningPhone,    privateDiningPhoneHref,    instagramUrl,    facebookUrl,    hours[]{_key, days, time},    announcement{enabled, message, linkLabel, linkPath, dismissalVersion},    "featuredEventSlug": featuredEvent->slug.current  }
+// Query: *[_type == "siteSettings" && _id == "siteSettings"][0]{    _id,    _updatedAt,    name,    descriptor,    tagline,    address{street, city, region, postalCode, country},    mapUrl,    phone,    phoneHref,    email,    eventEmail,    eventPhone,    eventPhoneHref,    privateDiningEmail,    privateDiningPhone,    privateDiningPhoneHref,    instagramUrl,    facebookUrl,    hours[]{_key, days, time},    "featuredEventSlug": featuredEvent->slug.current  }
 export type SITE_SETTINGS_QUERY_RESULT = {
   _id: 'siteSettings'
   _updatedAt: string
@@ -646,13 +635,6 @@ export type SITE_SETTINGS_QUERY_RESULT = {
     days: string
     time: string
   }>
-  announcement: {
-    enabled: boolean | null
-    message: string | null
-    linkLabel: string | null
-    linkPath: string | null
-    dismissalVersion: string
-  } | null
   featuredEventSlug: string | null
 } | null
 
@@ -666,6 +648,6 @@ declare module '@sanity/client' {
     '\n  *[_type == "event" && defined(slug.current) && defined(heroImage.asset)] | order(startsAt asc){\n    "slug": slug.current\n  }\n': EVENT_DETAIL_SLUGS_QUERY_RESULT
     '\n  *[_type == "menu" && defined(slug.current)] | order(displayOrder asc, title asc){\n    \n  _id,\n  title,\n  "slug": slug.current,\n  category,\n  summary,\n  service,\n  displayOrder,\n  hasDetailPage,\n  updatedAt,\n  listingImage{asset, crop, hotspot, alt},\n  detailImage{asset, crop, hotspot, alt},\n  sections[]{\n    _key,\n    title,\n    anchor,\n    image{asset, crop, hotspot, alt},\n    items[]{\n      _key,\n      name,\n      price,\n      description,\n      editorialTag,\n      featuredOnLanding,\n      dietaryMarkers[]->{code, label}\n    }\n  }\n\n  }\n': MENU_LIST_QUERY_RESULT
     '\n  *[_type == "menu" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  category,\n  summary,\n  service,\n  displayOrder,\n  hasDetailPage,\n  updatedAt,\n  listingImage{asset, crop, hotspot, alt},\n  detailImage{asset, crop, hotspot, alt},\n  sections[]{\n    _key,\n    title,\n    anchor,\n    image{asset, crop, hotspot, alt},\n    items[]{\n      _key,\n      name,\n      price,\n      description,\n      editorialTag,\n      featuredOnLanding,\n      dietaryMarkers[]->{code, label}\n    }\n  }\n\n  }\n': MENU_BY_SLUG_QUERY_RESULT
-    '\n  *[_type == "siteSettings" && _id == "siteSettings"][0]{\n    _id,\n    _updatedAt,\n    name,\n    descriptor,\n    tagline,\n    address{street, city, region, postalCode, country},\n    mapUrl,\n    phone,\n    phoneHref,\n    email,\n    eventEmail,\n    eventPhone,\n    eventPhoneHref,\n    privateDiningEmail,\n    privateDiningPhone,\n    privateDiningPhoneHref,\n    instagramUrl,\n    facebookUrl,\n    hours[]{_key, days, time},\n    announcement{enabled, message, linkLabel, linkPath, dismissalVersion},\n    "featuredEventSlug": featuredEvent->slug.current\n  }\n': SITE_SETTINGS_QUERY_RESULT
+    '\n  *[_type == "siteSettings" && _id == "siteSettings"][0]{\n    _id,\n    _updatedAt,\n    name,\n    descriptor,\n    tagline,\n    address{street, city, region, postalCode, country},\n    mapUrl,\n    phone,\n    phoneHref,\n    email,\n    eventEmail,\n    eventPhone,\n    eventPhoneHref,\n    privateDiningEmail,\n    privateDiningPhone,\n    privateDiningPhoneHref,\n    instagramUrl,\n    facebookUrl,\n    hours[]{_key, days, time},\n    "featuredEventSlug": featuredEvent->slug.current\n  }\n': SITE_SETTINGS_QUERY_RESULT
   }
 }

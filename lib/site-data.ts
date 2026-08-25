@@ -27,12 +27,6 @@ export const restaurant = {
   privateDiningPhoneHref: "tel:+18435550180",
   instagramUrl: "https://instagram.com",
   facebookUrl: "https://facebook.com",
-  announcement: {
-    message: "Reservations are now open — reserve your table online.",
-    linkLabel: "Book now",
-    linkPath: "/visit#contact",
-    dismissalVersion: "1",
-  },
   hours: [
     { days: "Sunday–Thursday", time: "5:00 PM–10:00 PM" },
     { days: "Friday–Saturday", time: "5:00 PM–11:00 PM" },

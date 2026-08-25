@@ -200,7 +200,6 @@ async function runWrite(sanity: SanityClient) {
     instagramUrl: fixtureSettings.instagramUrl,
     facebookUrl: fixtureSettings.facebookUrl,
     hours: fixtureSettings.hours.map((hours) => ({_type: 'serviceHours', _key: key(`hours:${hours.days}`), ...hours})),
-    announcement: fixtureSettings.announcement ? {_type: 'announcement', enabled: true, ...fixtureSettings.announcement} : undefined,
     featuredEvent: ref(eventIds.get('harvest-at-the-hearth')!),
   })
 

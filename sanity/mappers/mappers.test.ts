@@ -101,17 +101,16 @@ describe('Sanity menu mapping', () => {
 })
 
 describe('Sanity settings mapping', () => {
-  it('omits a disabled announcement and normalizes address lines', () => {
+  it('normalizes address lines', () => {
     const settings = mapSiteSettings({
       name: 'Marsh & Ember', descriptor: 'lowcountry culinary fire', tagline: 'Seasonal cooking.',
       address: {street: '184 King Street', city: 'Charleston', region: 'SC', postalCode: '29401'},
       mapUrl: 'https://maps.google.com/', phone: '843-555-0148', phoneHref: 'tel:+18435550148', email: 'hello@example.com',
       eventEmail: 'events@example.com', eventPhone: '(843) 555-0100', eventPhoneHref: 'tel:+18435550100',
       privateDiningEmail: 'events@example.com', privateDiningPhone: '(843) 555-0180', privateDiningPhoneHref: 'tel:+18435550180',
-      hours: [{days: 'Sunday–Thursday', time: '5–10 PM'}], announcement: {enabled: false},
+      hours: [{days: 'Sunday–Thursday', time: '5–10 PM'}],
     })
 
     expect(settings?.addressLines).toEqual(['184 King Street', 'Charleston, SC 29401'])
-    expect(settings?.announcement).toBeUndefined()
   })
 })
