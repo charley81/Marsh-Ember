@@ -98,6 +98,25 @@ test("menu pathways lead to distinct previews without redundant actions", async 
   await expect(spirits).toContainText("Ember Old Fashioned");
 });
 
+test("mobile dinner preview matches the brunch image-to-title spacing", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith("mobile"), "Mobile menu preview layout");
+  await page.goto("/menus");
+
+  const dinnerGap = await page.locator("#dinner").evaluate((section) => {
+    const image = section.querySelector(".mobile-only")?.getBoundingClientRect();
+    const heading = section.querySelector(".section-heading")?.getBoundingClientRect();
+    return image && heading ? heading.top - image.bottom : 0;
+  });
+  const brunchGap = await page.locator("#brunch").evaluate((section) => {
+    const image = section.querySelector(".menus-brunch-media")?.getBoundingClientRect();
+    const heading = section.querySelector(".section-heading")?.getBoundingClientRect();
+    return image && heading ? heading.top - image.bottom : 0;
+  });
+
+  expect(dinnerGap).toBeGreaterThan(0);
+  expect(dinnerGap).toBeCloseTo(brunchGap, 0);
+});
+
 test("header links always return destination pages to the top", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.startsWith("mobile"), "Desktop header navigation behavior");
   await page.goto("/");
@@ -115,14 +134,11 @@ test("header links always return destination pages to the top", async ({ page },
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThanOrEqual(1);
 });
 
-test("announcement dismissal persists and moves focus safely", async ({ page }) => {
+test("the site does not render a reservations-open notification", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Dismiss announcement" }).click();
-  await expect(page.getByRole("link", { name: "Marsh and Ember home" })).toBeFocused();
-  await expect(page.getByRole("complementary", { name: "Restaurant announcement" })).toHaveCount(0);
 
-  await page.reload();
   await expect(page.getByRole("complementary", { name: "Restaurant announcement" })).toHaveCount(0);
+  await expect(page.getByText(/reservations are now open/i)).toHaveCount(0);
 });
 
 test("common questions start closed and keep one answer open", async ({ page }) => {
@@ -334,7 +350,22 @@ test("the mobile menu supports Escape and restores trigger focus", async ({ page
   const trigger = page.getByRole("button", { name: "Open menu" });
   await trigger.click();
 
-  await expect(page.locator("#mobile-menu").getByRole("link", { name: "Our Story" })).toBeFocused();
+  const menu = page.locator("#mobile-menu");
+  await expect(menu.getByRole("link", { name: "Our Story" })).toBeFocused();
+  const metrics = await menu.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
+    return {
+      backgroundColor: getComputedStyle(element).backgroundColor,
+      opacity: getComputedStyle(element).opacity,
+      height: rect.height,
+      expectedHeight: window.innerHeight - headerHeight,
+    };
+  });
+  expect(metrics.backgroundColor).toBe("rgb(250, 248, 245)");
+  expect(metrics.opacity).toBe("1");
+  expect(metrics.height).toBeCloseTo(metrics.expectedHeight, 0);
+
   await page.keyboard.press("Escape");
 
   await expect(trigger).toBeFocused();

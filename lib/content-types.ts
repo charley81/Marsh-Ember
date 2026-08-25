@@ -24,12 +24,6 @@ export type RestaurantSettings = {
   hours: readonly {days: string; time: string}[]
   instagramUrl: string
   facebookUrl: string
-  announcement?: {
-    message: string
-    linkLabel?: string
-    linkPath?: string
-    dismissalVersion: string
-  }
 }
 
 export type DietaryMarker = {

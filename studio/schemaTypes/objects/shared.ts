@@ -24,40 +24,6 @@ export const serviceHours = defineType({
   preview: {select: {title: 'days', subtitle: 'time'}},
 })
 
-export const announcement = defineType({
-  name: 'announcement',
-  title: 'Announcement',
-  type: 'object',
-  fields: [
-    defineField({name: 'enabled', title: 'Enabled', type: 'boolean', initialValue: false}),
-    defineField({
-      name: 'message',
-      title: 'Message',
-      type: 'string',
-      validation: (rule) => rule.custom((value, context) => {
-        const enabled = (context.parent as {enabled?: boolean} | undefined)?.enabled
-        return !enabled || value ? true : 'Message is required when the announcement is enabled'
-      }),
-    }),
-    defineField({name: 'linkLabel', title: 'Link label', type: 'string'}),
-    defineField({
-      name: 'linkPath',
-      title: 'Internal link path',
-      description: 'A site-relative path such as /visit#contact.',
-      type: 'string',
-      validation: (rule) => rule.custom((value) => !value || /^\/(?!\/)/.test(value) || 'Use a site-relative path beginning with one slash'),
-    }),
-    defineField({
-      name: 'dismissalVersion',
-      title: 'Dismissal version',
-      description: 'Change this short value when an updated announcement should be shown again.',
-      type: 'string',
-      initialValue: '1',
-      validation: (rule) => rule.required().max(32),
-    }),
-  ],
-})
-
 export const editorialImage = defineType({
   name: 'editorialImage',
   title: 'Editorial image',

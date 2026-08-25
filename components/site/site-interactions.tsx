@@ -2,47 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ReservationTrigger } from "@/components/reservations/reservation-trigger";
-import { getAnnouncementStorageKey } from "@/lib/announcement";
-import type { RestaurantSettings } from "@/lib/content-types";
 import { navigation } from "@/lib/site-data";
-
-const announcementDismissedEvent = "marsh-ember-announcement-dismissed";
-
-function subscribeToAnnouncementDismissal(callback: () => void) {
-  window.addEventListener("storage", callback);
-  window.addEventListener(announcementDismissedEvent, callback);
-  return () => {
-    window.removeEventListener("storage", callback);
-    window.removeEventListener(announcementDismissedEvent, callback);
-  };
-}
-
-export function Announcement({ announcement }: { announcement: RestaurantSettings["announcement"] }) {
-  const announcementKey = announcement ? getAnnouncementStorageKey(announcement.dismissalVersion) : null;
-  const dismissed = useSyncExternalStore(
-    subscribeToAnnouncementDismissal,
-    () => announcementKey ? window.localStorage.getItem(announcementKey) === "true" : false,
-    () => false,
-  );
-
-  if (!announcement || !announcementKey || dismissed) return null;
-
-  return (
-    <aside className="announcement" aria-label="Restaurant announcement">
-      <div className="announcement__copy">
-        <span>{announcement.message}</span>
-        {announcement.linkPath && announcement.linkLabel ? <Link href={announcement.linkPath}>{announcement.linkLabel} <span aria-hidden="true">→</span></Link> : null}
-      </div>
-      <button type="button" aria-label="Dismiss announcement" onClick={() => {
-        window.localStorage.setItem(announcementKey, "true");
-        window.dispatchEvent(new Event(announcementDismissedEvent));
-        window.requestAnimationFrame(() => document.getElementById("site-brand")?.focus());
-      }}>×</button>
-    </aside>
-  );
-}
 
 export function SiteHeader({ name, descriptor }: { name: string; descriptor: string }) {
   const pathname = usePathname();

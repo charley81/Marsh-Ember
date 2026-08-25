@@ -4,7 +4,7 @@ The source is the committed fixture boundary in `lib/content-fixtures.ts`, `lib/
 
 | Source | Sanity target | Identity / relationships |
 | --- | --- | --- |
-| `restaurant` and announcement | `siteSettings` singleton | Fixed ID `siteSettings`; featured event patched after event upsert. |
+| `restaurant` | `siteSettings` singleton | Fixed ID `siteSettings`; featured event patched after event upsert. |
 | `dietaryMarkers` | `dietaryMarker` documents | Located by `sourceKey=fixture:dietary:<code>`; referenced by menu items and event courses. |
 | `fixtureMenus` | `menu` documents | Located by `sourceKey=fixture:menu:<slug>`; sections/items remain embedded with stable keys. |
 | `events` | `event` documents | Located by `sourceKey=fixture:event:<slug>`; facts, intro, expectations, and courses remain embedded. |
