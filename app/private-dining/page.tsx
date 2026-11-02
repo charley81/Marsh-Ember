@@ -29,7 +29,7 @@ export default async function PrivateDiningPage() {
 
     <section className="section"><div className="section__inner"><SectionHeading eyebrow="Planning" title="From inquiry to gathering" /><div className="numbered-grid"><article><h3>Tell us about the occasion</h3><p>Share your preferred date, estimated guest count, event type, and what you have in mind.</p></article><article><h3>Plan with our team</h3><p>We&apos;ll discuss availability, space, menu direction, beverage options, and the details that matter to your gathering.</p></article><article><h3>Confirm the experience</h3><p>Once the details are agreed upon, your event is confirmed through a separate agreement and required payment.</p></article></div><p className="meta">Submitting the inquiry does not hold a date or confirm an event.</p></div></section>
 
-    <section className="section section--sand"><div className="section__inner"><SectionHeading title="Common questions" intro="Details about private dining at Marsh & Ember." centered /><Faq items={questions} /></div></section>
+    <section className="section section--sand private-dining-faq"><div className="section__inner"><SectionHeading title="Common questions" intro="Details about private dining at Marsh & Ember." centered /><Faq items={questions} /></div></section>
 
     <section id="inquiry" className="section section--sand form-section private-form-section"><DemoPrivateDiningForm privateDiningEmail={settings.privateDiningEmail} privateDiningPhone={settings.privateDiningPhone} privateDiningPhoneHref={settings.privateDiningPhoneHref} /></section>
 

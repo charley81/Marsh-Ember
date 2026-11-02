@@ -124,6 +124,7 @@ main { overflow: clip; }
 .events-empty__copy > p:last-child { margin: 0; color: var(--slate); }
 .events-upcoming .card-grid { grid-template-columns: 1fr; gap: 0; }
 .events-upcoming .editorial-card { display: grid; grid-template-columns: 1fr 1fr; align-items: center; background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: var(--radius); }
+.events-upcoming .editorial-card:last-child { border-bottom: 0; }
 .events-upcoming .editorial-card:nth-child(even) .media-frame { order: 2; }
 .events-upcoming .editorial-card .media-frame { min-height: 22rem; border-radius: var(--radius); }
 .events-upcoming .editorial-card__body { padding: clamp(2rem, 5vw, 5rem); }
@@ -172,6 +173,7 @@ main { overflow: clip; }
 .menus-page #cellar .section-heading .lede { margin-bottom: 0; }
 .menus-drinks__items { display: grid; }
 .menus-drinks__items .menu-item { padding: 1rem 0; background: transparent; border-width: 0 0 1px; border-radius: 0; }
+.menus-drinks__items .menu-item:last-child { border-bottom-width: 0; }
 .menus-page .dietary-grid { padding-block: clamp(1.5rem, 3vw, 2.5rem); }
 #brunch .menu-item + .button,
 .menus-drinks .menu-item + .button,
@@ -244,10 +246,12 @@ main { overflow: clip; }
 .section--navy .fact-grid dt { color: rgba(255, 255, 255, .72); }
 .events-featured__facts { grid-template-columns: 1fr; border: 0; }
 .events-featured__facts > div { padding-block: .75rem; display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; border-bottom: 1px solid var(--line); }
+.events-featured__facts > div:last-child { border-bottom: 0; }
 .events-featured__facts dt { margin: 0; }
 .events-featured__facts dd { font-family: var(--font-body), sans-serif; font-size: 1rem; }
 .visit-details .section-heading { margin-bottom: 3.5rem; }
-.visit-details .fact-grid { align-items: start; }
+.visit-details .fact-grid { align-items: start; border-bottom: 0; }
+.visit-details .fact-grid > div:last-child { border-bottom: 0; }
 .home-visit .section-heading { margin-bottom: 4rem; }
 .list-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 3rem; }
 .list-grid article { padding: 1.25rem 0; border-top: 1px solid var(--line); }
@@ -255,6 +259,7 @@ main { overflow: clip; }
 .list-grid p { color: var(--slate); }
 .visit-accessibility .section-heading { margin-bottom: 2.5rem; }
 .visit-accessibility .list-grid article:nth-child(-n + 2) { padding-top: 0; border-top: 0; }
+.visit-accessibility .list-grid article:last-child { border-top: 0; }
 .numbered-grid { counter-reset: steps; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
 .numbered-grid article { counter-increment: steps; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .numbered-grid article::before { content: counter(steps); color: var(--ember); font-weight: 700; }
@@ -262,6 +267,9 @@ main { overflow: clip; }
 
 .faq { width: min(100%, 54rem); margin: 2.5rem auto 0; border-top: 1px solid var(--line); }
 .faq__item { border-bottom: 1px solid var(--line); }
+.private-dining-faq .faq { border-top: 0; }
+.private-dining-faq .faq__item:last-child,
+.visit-faq .faq__item:last-child { border-bottom: 0; }
 .faq__item h3 { margin: 0; font-family: var(--font-body), sans-serif; font-size: 1rem; }
 .faq__item button { width: 100%; min-height: 4rem; padding: 1.2rem 0; display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: var(--ink); background: transparent; border: 0; font-weight: 600; text-align: left; cursor: pointer; }
 .faq__indicator { color: var(--ember-text); font-size: 1.4rem; font-weight: 400; }
